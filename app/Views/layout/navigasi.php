@@ -31,8 +31,8 @@
         </li>
 
         <!-- data user -->
-        <li class="nav-item <?= (current_url() == base_url('user')) || (current_url() == base_url('user/login')) ? 'menu-open' : '' ?> ">
-            <a href="#" class="nav-link <?= (current_url() == base_url('user')) || (current_url() == base_url('user/login')) ? 'active' : '' ?>">
+        <li class="nav-item <?= (current_url() == base_url('user')) || (current_url() == base_url('user/login')) || (current_url() == base_url('user/profil')) ? 'menu-open' : '' ?> ">
+            <a href="#" class="nav-link <?= (current_url() == base_url('user')) || (current_url() == base_url('user/login')) || (current_url() == base_url('user/profil')) ? 'active' : '' ?>">
                 <i class="nav-icon fas fa-user-circle"></i>
                 <p>Data User<i class="fas fa-angle-left right"></i></p>
             </a>
@@ -49,14 +49,13 @@
                         <p>User Login</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="<?= base_url('user/profil'); ?>" class="nav-link <?= (current_url() == base_url('user/profil')) ? 'active' : '' ?>">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>User Profil</p>
+                    </a>
+                </li>
             </ul>
-        </li>
-
-        <li class="nav-item">
-            <a href="<?= base_url('konsumen'); ?>" class="nav-link <?= (current_url() == base_url('konsumen')) ? 'active' : '' ?>">
-                <i class="nav-icon fas fa-table"></i>
-                <p> Data Konsumen </p>
-            </a>
         </li>
 
         <li class="nav-item">

@@ -38,7 +38,7 @@
                 <div class="card card-primary card-outline">
                     <div class="card-body box-profile">
                         <div class="text-center">
-                            <i class="text-muted fas fa-tools fa-7x"></i>
+                            <i class="text-muted fas fa-car fa-7x"></i>
                             <form id="add-form">
                                 <div class="input-group form-group mt-4">
                                     <input type="hidden" id="idMobil" name="idMobil" class="form-control">

@@ -8,7 +8,6 @@ class User extends BaseController
     {
         $this->db = db_connect();
         $this->builder = $this->db->table('users');
-        // $this->builder = $this->db->table('users');
     }
 
     public function index()
@@ -48,11 +47,7 @@ class User extends BaseController
 
     public function profil()
     {
-        // $userInfo = new \Myth\Auth\Models\UserModel();
-        $data = [
-            'pageTitle' => 'Profile User',
-            'userInfo' => $userInfo->findAll()
-        ];
-        return view('profil/index', $data);
+        $data = ['pageTitle' => 'Profil User'];
+        return view('user/profil', $data);
     }
 }

@@ -9,7 +9,6 @@
                     <div class="card-header">
                         <h3 class="card-title">Data Kategori Stall</h3>
                         <button type="button" class="btn btn-primary btn-sm float-right" onclick="add()" title="Tambah Data"><i class="fas fa-database"></i> &nbsp; Tambah Data</button>
-                        <button type="reset" id="reset" class="btn btn-primary btn-sm float-right" title="Tambah Data"><i class="fas fa-database"></i> &nbsp; Tambah Data</button>
                     </div>
                     <div class="card-body">
                         <table id="data_table" class="table table-bordered table-striped">

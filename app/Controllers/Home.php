@@ -5,6 +5,6 @@ class Home extends BaseController
     public function index()
     {
         $data = ['pageTitle' => 'Home Dashboard'];
-        return view('admin/index', $data);
+        return view('dashboard/index', $data);
     }
 }

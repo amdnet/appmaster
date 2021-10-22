@@ -97,7 +97,7 @@
 
 					<div class="info">
 						<span class="d-block text-white"> hi, <?= user()->username; ?> </span>
-						<small><a href="<?= base_url('profil'); ?>" class="<?= (current_url() == base_url('profil')) ? 'text-warning' : '' ?>"><i class="far fa-user-circle"></i> Profil</a> <a href="<?= base_url('logout'); ?>" class="ml-3"><i class="fas fa-sign-out-alt"></i> Logout</a></small>
+						<small><a href="<?= base_url('user/profil'); ?>" class="<?= (current_url() == base_url('user/profil')) ? 'text-warning' : '' ?>"><i class="far fa-user-circle"></i> Profil</a> <a href="<?= base_url('logout'); ?>" class="ml-3"><i class="fas fa-sign-out-alt"></i> Logout</a></small>
 					</div>
 				</div>
 
@@ -135,7 +135,7 @@
 
 		<footer class="main-footer">
 			<div class="float-right d-none d-sm-block"> Version 3.1.0 </div>
-			<span class="">Copyright &copy; <?= date("Y"); ?> <a href="https://adminlte.io">AdminLTE.io</a>. All rights reserved.</span>
+			<span class="">Copyright &copy; <?= date("Y"); ?> <a href="#">AdminLTE.io</a>. All rights reserved.</span>
 		</footer>
 
 		<aside class="control-sidebar control-sidebar-dark">
