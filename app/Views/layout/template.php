@@ -18,8 +18,12 @@
 	<link rel="stylesheet" href="<?= base_url() ?>/public/css/bootstrap-4.min.css">
 
 	<style>
-		.content-header h1 {
+		.h1, h1 {
 			font-size: 1.5rem !important;
+		}
+
+		.h4, h4 {
+    		font-size: 1.2rem;
 		}
 
 		button.dt-button,

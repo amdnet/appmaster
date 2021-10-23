@@ -31,26 +31,26 @@
         </li>
 
         <!-- data user -->
-        <li class="nav-item <?= (current_url() == base_url('user')) || (current_url() == base_url('user/login')) || (current_url() == base_url('user/profil')) ? 'menu-open' : '' ?> ">
-            <a href="#" class="nav-link <?= (current_url() == base_url('user')) || (current_url() == base_url('user/login')) || (current_url() == base_url('user/profil')) ? 'active' : '' ?>">
+        <li class="nav-item <?= (current_url() == base_url('users')) || (current_url() == base_url('users/login')) || (current_url() == base_url('users/profil')) ? 'menu-open' : '' ?> ">
+            <a href="#" class="nav-link <?= (current_url() == base_url('users')) || (current_url() == base_url('users/login')) || (current_url() == base_url('users/profil')) ? 'active' : '' ?>">
                 <i class="nav-icon fas fa-user-circle"></i>
                 <p>Data User<i class="fas fa-angle-left right"></i></p>
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="<?= base_url('user'); ?>" class="nav-link <?= (current_url() == base_url('user')) ? 'active' : '' ?>">
+                    <a href="<?= base_url('users'); ?>" class="nav-link <?= (current_url() == base_url('users')) ? 'active' : '' ?>">
                         <i class="far fa-circle nav-icon"></i>
                         <p>User List</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= base_url('user/login'); ?>" class="nav-link <?= (current_url() == base_url('user/login')) ? 'active' : '' ?>">
+                    <a href="<?= base_url('users/login'); ?>" class="nav-link <?= (current_url() == base_url('users/login')) ? 'active' : '' ?>">
                         <i class="far fa-circle nav-icon"></i>
                         <p>User Login</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= base_url('user/profil'); ?>" class="nav-link <?= (current_url() == base_url('user/profil')) ? 'active' : '' ?>">
+                    <a href="<?= base_url('users/profil'); ?>" class="nav-link <?= (current_url() == base_url('users/profil')) ? 'active' : '' ?>">
                         <i class="far fa-circle nav-icon"></i>
                         <p>User Profil</p>
                     </a>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 22 Okt 2021 pada 22.03
+-- Waktu pembuatan: 23 Okt 2021 pada 22.21
 -- Versi server: 10.4.21-MariaDB
 -- Versi PHP: 7.4.24
 
@@ -107,7 +107,11 @@ INSERT INTO `auth_logins` (`id`, `ip_address`, `email`, `user_id`, `date`, `succ
 (16, '127.0.0.1', 'admin1@gmail.com', NULL, '2021-10-23 02:13:25', 0),
 (17, '127.0.0.1', 'admin1@gmail.com', 1, '2021-10-23 02:13:35', 1),
 (18, '127.0.0.1', 'admin satu', NULL, '2021-10-23 02:14:55', 0),
-(19, '127.0.0.1', 'admin1@gmail.com', 1, '2021-10-23 02:15:31', 1);
+(19, '127.0.0.1', 'admin1@gmail.com', 1, '2021-10-23 02:15:31', 1),
+(20, '127.0.0.1', 'admin1@gmail.com', 1, '2021-10-23 19:24:22', 1),
+(21, '127.0.0.1', 'admin1@gmail.com', 1, '2021-10-24 01:15:16', 1),
+(22, '127.0.0.1', 'admin1@gmail.com', 1, '2021-10-24 02:29:51', 1),
+(23, '127.0.0.1', 'admin1@gmail.com', 1, '2021-10-24 02:48:34', 1);
 
 -- --------------------------------------------------------
 
@@ -170,7 +174,7 @@ CREATE TABLE `auth_users_permissions` (
 CREATE TABLE `kat_mobil` (
   `id_mobil` int(11) NOT NULL,
   `mobil` varchar(35) NOT NULL,
-  `username` varchar(35) DEFAULT NULL,
+  `username` varchar(35) NOT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -180,7 +184,9 @@ CREATE TABLE `kat_mobil` (
 --
 
 INSERT INTO `kat_mobil` (`id_mobil`, `mobil`, `username`, `created_at`, `updated_at`) VALUES
-(1, 'mobil saja', NULL, '2021-10-22 16:06:50', '2021-10-22 23:07:00');
+(1, 'mobil ok', 'admin satu', '2021-10-22 16:06:50', '2021-10-23 21:46:38'),
+(2, 'mobil dua', 'admin satu', '2021-10-23 13:43:44', '2021-10-23 20:43:44'),
+(3, 'mobil saja 3', 'admin satu', '2021-10-23 13:59:01', '2021-10-23 20:59:01');
 
 -- --------------------------------------------------------
 
@@ -191,7 +197,7 @@ INSERT INTO `kat_mobil` (`id_mobil`, `mobil`, `username`, `created_at`, `updated
 CREATE TABLE `kat_stall` (
   `id_stall` int(11) NOT NULL,
   `stall` varchar(35) NOT NULL,
-  `username` varchar(35) DEFAULT NULL,
+  `username` varchar(35) NOT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -201,13 +207,18 @@ CREATE TABLE `kat_stall` (
 --
 
 INSERT INTO `kat_stall` (`id_stall`, `stall`, `username`, `created_at`, `updated_at`) VALUES
-(2, 'satu dua 2', NULL, NULL, '2021-10-22 21:26:02'),
-(4, 'satu empat', NULL, NULL, '2021-10-22 03:19:30'),
-(5, 'stall kelima', NULL, NULL, '2021-10-22 03:36:29'),
-(6, 'rfes4t t4refes', NULL, NULL, '2021-10-22 03:44:14'),
-(7, 'dwa d wadwa', NULL, NULL, '2021-10-22 03:54:38'),
-(8, 'delapan', NULL, '2021-10-21 20:56:50', '2021-10-22 03:56:19'),
-(9, 'sembilan 9', NULL, '2021-10-21 20:59:17', '2021-10-22 03:59:37');
+(4, 'satu empat', '', NULL, '2021-10-22 03:19:30'),
+(5, 'stall kelima', '', NULL, '2021-10-22 03:36:29'),
+(6, 'rfes4t t4refes', '', NULL, '2021-10-22 03:44:14'),
+(7, 'dwa d wadwa', '', NULL, '2021-10-22 03:54:38'),
+(8, 'delapan', '', '2021-10-21 20:56:50', '2021-10-22 03:56:19'),
+(9, 'sembilan 9', '', '2021-10-21 20:59:17', '2021-10-22 03:59:37'),
+(10, 'satu dua 2222', '', '2021-10-23 13:23:44', '2021-10-23 20:23:44'),
+(11, 'delapan', '', '2021-10-23 13:34:38', '2021-10-23 20:34:38'),
+(12, 'stall yang keberapa', '', '2021-10-23 13:36:25', '2021-10-23 20:36:25'),
+(13, 'stall sepuluh', '', '2021-10-23 13:38:59', '2021-10-23 20:38:59'),
+(14, 'satu satu', '', '2021-10-23 13:42:39', '2021-10-23 20:42:39'),
+(15, 'dwad wadwa', 'admin satu', '2021-10-23 14:11:53', '2021-10-23 21:11:53');
 
 -- --------------------------------------------------------
 
@@ -376,7 +387,7 @@ ALTER TABLE `auth_groups`
 -- AUTO_INCREMENT untuk tabel `auth_logins`
 --
 ALTER TABLE `auth_logins`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT untuk tabel `auth_permissions`
@@ -400,13 +411,13 @@ ALTER TABLE `auth_tokens`
 -- AUTO_INCREMENT untuk tabel `kat_mobil`
 --
 ALTER TABLE `kat_mobil`
-  MODIFY `id_mobil` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_mobil` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT untuk tabel `kat_stall`
 --
 ALTER TABLE `kat_stall`
-  MODIFY `id_stall` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_stall` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT untuk tabel `migrations`
