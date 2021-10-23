@@ -15,12 +15,11 @@
 	<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
 	<link rel="stylesheet" href="https://cdn.datatables.net/select/1.3.3/css/select.dataTables.min.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.1.0/dist/css/adminlte.min.css">
-	<link rel="stylesheet" href="https://adminlte.io/themes/v3/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+	<link rel="stylesheet" href="<?= base_url() ?>/public/css/bootstrap-4.min.css">
 
 	<style>
 		.content-header h1 {
 			font-size: 1.5rem !important;
-			;
 		}
 
 		button.dt-button,
@@ -144,24 +143,22 @@
 	</div> <!-- end wrapper setelah body -->
 
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-	<script src="https://adminlte.io/themes/v3/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-	<script src="https://adminlte.io/themes/v3/plugins/jquery-validation/jquery.validate.min.js"></script>
-	<script src="https://adminlte.io/themes/v3/plugins/jquery-validation/additional-methods.min.js"></script>
+	<script src="<?= base_url() ?>/public/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/additional-methods.min.js"></script>
 
 	<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+	<script src="https://cdn.datatables.net/select/1.3.3/js/dataTables.select.min.js"></script>
+
 	<script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
 	<script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
 	<script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
-
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
-	<script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
-	<script src="https://cdn.datatables.net/select/1.3.3/js/dataTables.select.min.js"></script>
-
-	<script src="https://adminlte.io/themes/v3/plugins/sweetalert2/sweetalert2.min.js"></script>
+	<script src="<?= base_url() ?>/public/js/sweetalert2.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1.0/dist/js/adminlte.min.js"></script>
 	<script src="<?= base_url() ?>/public/js/dashboard.js"></script>
 

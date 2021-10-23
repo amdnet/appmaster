@@ -42,7 +42,8 @@
                             <form id="add-form">
                                 <div class="input-group form-group mt-4">
                                     <input type="hidden" id="idStall" name="idStall" class="form-control">
-                                    <input type="text" id="stall" name="stall" class="form-control" placeholder="Kategori Stall" maxlength="25" required>
+                                    <input type="text" id="stall" name="stall" class="form-control" placeholder="Kategori Stall" maxlength="35" required>
+                                    <input type="hidden" id="username" name="username" class="form-control" maxlength="35" value="<?= user()->username; ?>">
                                 </div>
                                 <div class="btn-group btn-block">
                                     <button type="submit" class="btn d-inline btn-success" id="add-form-btn">Add</button>
@@ -70,7 +71,8 @@
                             <form id="edit-form">
                                 <div class="input-group form-group mt-4">
                                     <input type="hidden" id="idStall" name="idStall" class="form-control">
-                                    <input type="text" id="stall" name="stall" class="form-control" placeholder="" maxlength="25" required>
+                                    <input type="text" id="stall" name="stall" class="form-control" placeholder="" maxlength="35" required>
+                                    <input type="hidden" id="username" name="username" class="form-control" maxlength="35" value="<?= user()->username; ?>">
                                 </div>
                                 <div class="btn-group btn-block">
                                     <button type="submit" class="btn d-inline btn-success" id="edit-form-btn">Update</button>
@@ -226,7 +228,7 @@
 
                 $("#edit-form #idStall").val(response.id_stall);
                 $("#edit-form #stall").val(response.stall);
-                $("#edit-form #username").val(response.username);
+                // $("#edit-form #username").val(response.username);
                 $("#edit-form #updateAt").val(response.update_at);
 
                 // submit the edit from 

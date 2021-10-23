@@ -64,10 +64,10 @@ class Stall extends BaseController
 		$fields['id_stall'] = $this->request->getPost('idStall');
 		$fields['stall'] = $this->request->getPost('stall');
 		$fields['username'] = $this->request->getPost('username');
-		// $fields['created_at'] = date('Y-m-d\TH:i:s');
+
 		$this->validation->setRules([
-			'stall' => ['label' => 'Stall', 'rules' => 'required|max_length[25]'],
-			'username' => ['label' => 'Username', 'rules' => 'permit_empty|max_length[25]'],
+			'stall' => ['label' => 'Stall', 'rules' => 'required|max_length[35]'],
+			'username' => ['label' => 'Username', 'rules' => 'permit_empty|max_length[35]'],
 		]);
 
 		if ($this->validation->run($fields) == FALSE) {
@@ -90,9 +90,11 @@ class Stall extends BaseController
 		$response = array();
 		$fields['id_stall'] = $this->request->getPost('idStall');
 		$fields['stall'] = $this->request->getPost('stall');
+		$fields['username'] = $this->request->getPost('username');
 
 		$this->validation->setRules([
 			'stall' => ['label' => 'Stall', 'rules' => 'required|max_length[25]'],
+			'username' => ['label' => 'Username', 'rules' => 'required|max_length[35]']
 		]);
 
 		if ($this->validation->run($fields) == FALSE) {

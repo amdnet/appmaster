@@ -42,7 +42,8 @@
                             <form id="add-form">
                                 <div class="input-group form-group mt-4">
                                     <input type="hidden" id="idMobil" name="idMobil" class="form-control">
-                                    <input type="text" id="mobil" name="mobil" class="form-control" placeholder="Kategori Mobil" maxlength="25" required>
+                                    <input type="text" id="mobil" name="mobil" class="form-control" placeholder="Kategori Mobil" maxlength="35" required>
+                                    <input type="hidden" id="username" name="username" class="form-control" maxlength="35" value="<?= user()->username; ?>">
                                 </div>
                                 <div class="btn-group btn-block">
                                     <button type="submit" class="btn d-inline btn-success" id="add-form-btn">Add</button>
@@ -71,6 +72,7 @@
                                 <div class="input-group form-group mt-4">
                                     <input type="hidden" id="idMobil" name="idMobil" class="form-control">
                                     <input type="text" id="mobil" name="mobil" class="form-control" placeholder="" maxlength="25" required>
+                                    <input type="hidden" id="username" name="username" class="form-control" maxlength="35" value="<?= user()->username; ?>">
                                 </div>
                                 <div class="btn-group btn-block">
                                     <button type="submit" class="btn d-inline btn-success" id="edit-form-btn">Update</button>
@@ -220,7 +222,7 @@
 
                 $("#edit-form #idMobil").val(response.id_mobil);
                 $("#edit-form #mobil").val(response.mobil);
-                $("#edit-form #username").val(response.username);
+                // $("#edit-form #username").val(response.username);
                 $("#edit-form #updateAt").val(response.update_at);
 
                 // submit the edit from 

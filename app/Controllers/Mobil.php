@@ -61,13 +61,13 @@ class Mobil extends BaseController
 	public function add()
 	{
 		$response = array();
-		$fields['id_mobil'] = $this->request->getPost('idStall');
+		$fields['id_mobil'] = $this->request->getPost('idMobil');
 		$fields['mobil'] = $this->request->getPost('mobil');
 		$fields['username'] = $this->request->getPost('username');
-		// $fields['created_at'] = date('Y-m-d\TH:i:s');
+
 		$this->validation->setRules([
-			'mobil' => ['label' => 'Stall', 'rules' => 'required|max_length[25]'],
-			'username' => ['label' => 'Username', 'rules' => 'permit_empty|max_length[25]'],
+			'mobil' => ['label' => 'Kategori Mobil', 'rules' => 'required|max_length[35]'],
+			'username' => ['label' => 'Username', 'rules' => 'permit_empty|max_length[35]']
 		]);
 
 		if ($this->validation->run($fields) == FALSE) {
@@ -78,7 +78,6 @@ class Mobil extends BaseController
 				$response['success'] = true;
 				$response['messages'] = 'Data has been inserted successfully';
 			} else {
-
 				$response['messages'] = 'Insertion error!';
 			}
 		}
@@ -88,11 +87,13 @@ class Mobil extends BaseController
 	public function edit()
 	{
 		$response = array();
-		$fields['id_mobil'] = $this->request->getPost('idStall');
+		$fields['id_mobil'] = $this->request->getPost('idMobil');
 		$fields['mobil'] = $this->request->getPost('mobil');
+		$fields['username'] = $this->request->getPost('username');
 
 		$this->validation->setRules([
-			'mobil' => ['label' => 'Stall', 'rules' => 'required|max_length[25]'],
+			'mobil' => ['label' => 'Mobil', 'rules' => 'required|max_length[25]'],
+			'username' => ['label' => 'Username', 'rules' => 'permit_empty|max_length[35]']
 		]);
 
 		if ($this->validation->run($fields) == FALSE) {
