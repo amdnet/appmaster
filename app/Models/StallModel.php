@@ -11,7 +11,7 @@ class StallModel extends Model
 	protected $returnType = 'object';
 	protected $useSoftDeletes = false;
 	protected $allowedFields = ['stall', 'username', 'update_at'];
-	protected $useTimestamps = false;
+	protected $useTimestamps = true;
 	protected $updatedField  = 'updated_at';
 	protected $validationRules    = [];
 	protected $validationMessages = [];

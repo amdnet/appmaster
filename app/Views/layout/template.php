@@ -18,12 +18,14 @@
 	<link rel="stylesheet" href="<?= base_url() ?>/public/css/bootstrap-4.min.css">
 
 	<style>
-		.h1, h1 {
+		.h1,
+		h1 {
 			font-size: 1.5rem !important;
 		}
 
-		.h4, h4 {
-    		font-size: 1.2rem;
+		.h4,
+		h4 {
+			font-size: 1.2rem;
 		}
 
 		button.dt-button,
@@ -100,7 +102,7 @@
 
 					<div class="info">
 						<span class="d-block text-white"> hi, <?= user()->username; ?> </span>
-						<small><a href="<?= base_url('user/profil'); ?>" class="<?= (current_url() == base_url('user/profil')) ? 'text-warning' : '' ?>"><i class="far fa-user-circle"></i> Profil</a> <a href="<?= base_url('logout'); ?>" class="ml-3"><i class="fas fa-sign-out-alt"></i> Logout</a></small>
+						<small><a href="<?= base_url('users/profil'); ?>" class="<?= (current_url() == base_url('user/profil')) ? 'text-warning' : '' ?>"><i class="far fa-user-circle"></i> Profil</a> <a href="<?= base_url('logout'); ?>" class="ml-3"><i class="fas fa-sign-out-alt"></i> Logout</a></small>
 					</div>
 				</div>
 

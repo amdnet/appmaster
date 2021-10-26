@@ -1,4 +1,6 @@
-<?php namespace App\Controllers;
+<?php
+
+namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\UsersModel;
@@ -12,7 +14,7 @@ class Users extends BaseController
         $this->db = db_connect();
         $this->builder = $this->db->table('users');
         // $this->userModel = new UserModel();
-		// $this->validation =  \Config\Services::validation();
+        // $this->validation =  \Config\Services::validation();
     }
 
     public function index()
@@ -22,7 +24,7 @@ class Users extends BaseController
         // $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
         // $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
         $query = $this->builder->get();
-        
+
         $data['pageTitle'] = 'User List';
         $data['users'] = $query->getResult();
         return view('user/index', $data);
@@ -31,28 +33,28 @@ class Users extends BaseController
     public function add()
     {
         $response = array();
-		$fields['id'] = $this->request->getPost('idSUsers');
-		$fields['email'] = $this->request->getPost('email');
-		$fields['username'] = $this->request->getPost('username');
+        $fields['id'] = $this->request->getPost('idSUsers');
+        $fields['email'] = $this->request->getPost('email');
+        $fields['username'] = $this->request->getPost('username');
 
-		$this->validation->setRules([
-			'email' => ['label' => 'Stall', 'rules' => 'required|max_length[35]'],
-			'username' => ['label' => 'Username', 'rules' => 'permit_empty|max_length[35]'],
-		]);
+        $this->validation->setRules([
+            'email' => ['label' => 'Stall', 'rules' => 'required|max_length[35]'],
+            'username' => ['label' => 'Username', 'rules' => 'permit_empty|max_length[35]'],
+        ]);
 
-		if ($this->validation->run($fields) == FALSE) {
-			$response['success'] = false;
-			$response['messages'] = $this->validation->listErrors();
-		} else {
-			if ($this->stallModel->insert($fields)) {
-				$response['success'] = true;
-				$response['messages'] = 'Data has been inserted successfully';
-			} else {
+        if ($this->validation->run($fields) == FALSE) {
+            $response['success'] = false;
+            $response['messages'] = $this->validation->listErrors();
+        } else {
+            if ($this->stallModel->insert($fields)) {
+                $response['success'] = true;
+                $response['messages'] = 'Data has been inserted successfully';
+            } else {
 
-				$response['messages'] = 'Insertion error!';
-			}
-		}
-		return $this->response->setJSON($response);
+                $response['messages'] = 'Insertion error!';
+            }
+        }
+        return $this->response->setJSON($response);
     }
 
     public function detail($id)
@@ -62,7 +64,7 @@ class Users extends BaseController
         $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = userid');
         $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
         $query = $this->builder->get();
-        
+
         $data['users'] = $query->getResult();
         return view('user/detail', $data);
     }
