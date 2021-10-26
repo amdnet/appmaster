@@ -66,8 +66,10 @@ class Stall extends BaseController
 		$fields['username'] = $this->request->getPost('username');
 
 		$this->validation->setRules([
+			// 'stall' => ['required|max_length[35]'],
+			// 'username' => ['permit_empty|max_length[35]'],
 			'stall' => ['label' => 'Stall', 'rules' => 'required|max_length[35]'],
-			'username' => ['label' => 'Username', 'rules' => 'permit_empty|max_length[35]'],
+			// 'username' => ['label' => 'Username', 'rules' => 'permit_empty|max_length[35]'],
 		]);
 
 		if ($this->validation->run($fields) == FALSE) {

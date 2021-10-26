@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 23 Okt 2021 pada 22.21
+-- Waktu pembuatan: 26 Okt 2021 pada 22.09
 -- Versi server: 10.4.21-MariaDB
 -- Versi PHP: 7.4.24
 
@@ -111,7 +111,8 @@ INSERT INTO `auth_logins` (`id`, `ip_address`, `email`, `user_id`, `date`, `succ
 (20, '127.0.0.1', 'admin1@gmail.com', 1, '2021-10-23 19:24:22', 1),
 (21, '127.0.0.1', 'admin1@gmail.com', 1, '2021-10-24 01:15:16', 1),
 (22, '127.0.0.1', 'admin1@gmail.com', 1, '2021-10-24 02:29:51', 1),
-(23, '127.0.0.1', 'admin1@gmail.com', 1, '2021-10-24 02:48:34', 1);
+(23, '127.0.0.1', 'admin1@gmail.com', 1, '2021-10-24 02:48:34', 1),
+(24, '127.0.0.1', 'admin1@gmail.com', 1, '2021-10-26 21:08:22', 1);
 
 -- --------------------------------------------------------
 
@@ -175,8 +176,8 @@ CREATE TABLE `kat_mobil` (
   `id_mobil` int(11) NOT NULL,
   `mobil` varchar(35) NOT NULL,
   `username` varchar(35) NOT NULL,
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -184,9 +185,10 @@ CREATE TABLE `kat_mobil` (
 --
 
 INSERT INTO `kat_mobil` (`id_mobil`, `mobil`, `username`, `created_at`, `updated_at`) VALUES
-(1, 'mobil ok', 'admin satu', '2021-10-22 16:06:50', '2021-10-23 21:46:38'),
-(2, 'mobil dua', 'admin satu', '2021-10-23 13:43:44', '2021-10-23 20:43:44'),
-(3, 'mobil saja 3', 'admin satu', '2021-10-23 13:59:01', '2021-10-23 20:59:01');
+(1, 'mobil ok', 'admin satu', '2021-10-22 23:06:50', '2021-10-23 21:46:38'),
+(2, 'mobil dua', 'admin satu', '2021-10-23 20:43:44', '2021-10-23 20:43:44'),
+(3, 'mobil saja 3', 'admin satu', '2021-10-23 20:59:01', '2021-10-26 21:38:53'),
+(4, 'dws dwda', 'admin satu', '2021-10-26 21:38:45', '2021-10-26 21:38:45');
 
 -- --------------------------------------------------------
 
@@ -198,8 +200,8 @@ CREATE TABLE `kat_stall` (
   `id_stall` int(11) NOT NULL,
   `stall` varchar(35) NOT NULL,
   `username` varchar(35) NOT NULL,
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -207,18 +209,14 @@ CREATE TABLE `kat_stall` (
 --
 
 INSERT INTO `kat_stall` (`id_stall`, `stall`, `username`, `created_at`, `updated_at`) VALUES
-(4, 'satu empat', '', NULL, '2021-10-22 03:19:30'),
-(5, 'stall kelima', '', NULL, '2021-10-22 03:36:29'),
-(6, 'rfes4t t4refes', '', NULL, '2021-10-22 03:44:14'),
-(7, 'dwa d wadwa', '', NULL, '2021-10-22 03:54:38'),
-(8, 'delapan', '', '2021-10-21 20:56:50', '2021-10-22 03:56:19'),
-(9, 'sembilan 9', '', '2021-10-21 20:59:17', '2021-10-22 03:59:37'),
-(10, 'satu dua 2222', '', '2021-10-23 13:23:44', '2021-10-23 20:23:44'),
-(11, 'delapan', '', '2021-10-23 13:34:38', '2021-10-23 20:34:38'),
-(12, 'stall yang keberapa', '', '2021-10-23 13:36:25', '2021-10-23 20:36:25'),
-(13, 'stall sepuluh', '', '2021-10-23 13:38:59', '2021-10-23 20:38:59'),
-(14, 'satu satu', '', '2021-10-23 13:42:39', '2021-10-23 20:42:39'),
-(15, 'dwad wadwa', 'admin satu', '2021-10-23 14:11:53', '2021-10-23 21:11:53');
+(8, 'delapan', 'admin satu', '2021-10-22 03:56:50', '2021-10-26 21:32:24'),
+(9, 'sembilan 9', 'admin satu', '2021-10-22 03:59:17', '2021-10-26 21:32:32'),
+(10, 'satu dua 2222', 'admin satu', '2021-10-23 20:23:44', '2021-10-26 23:06:47'),
+(12, 'stall yang keberapa', '', '2021-10-23 20:36:25', '2021-10-23 20:36:25'),
+(13, 'stall sepuluh', '', '2021-10-23 20:38:59', '2021-10-23 20:38:59'),
+(14, 'satu satu', '', '2021-10-23 20:42:39', '2021-10-23 20:42:39'),
+(15, 'dwad wadwa', 'admin satu', '2021-10-23 21:11:53', '2021-10-23 21:11:53'),
+(16, 'satall ', 'admin satu', '2021-10-26 21:33:08', '2021-10-26 21:33:40');
 
 -- --------------------------------------------------------
 
@@ -274,7 +272,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `email`, `username`, `images`, `password_hash`, `reset_hash`, `reset_at`, `reset_expires`, `activate_hash`, `status`, `status_message`, `active`, `force_pass_reset`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 'admin1@gmail.com', 'admin satu', 'default.svg', '$2y$10$0S1DSGWUTUAf53go7ccHQOy5MuJ9TSicPlsbzr0cn9fZBwXljfQfa', NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, '2021-10-18 10:49:12', '2021-10-18 10:49:53', NULL),
-(2, 'admin2@gmail.com', 'admin dua', 'default.svg', '$2y$10$0S1DSGWUTUAf53go7ccHQOy5MuJ9TSicPlsbzr0cn9fZBwXljfQfa', NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, '2021-10-20 17:47:13', '2021-10-20 17:47:13', NULL);
+(2, 'admin2@gmail.com', 'admin dua', 'default.svg', '$2y$10$0S1DSGWUTUAf53go7ccHQOy5MuJ9TSicPlsbzr0cn9fZBwXljfQfa', NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, '2021-10-20 17:47:13', '2021-10-20 17:47:13', NULL),
+(3, 'admin3@gmail.com', 'admin tiga3', 'select1', '123456', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, '2021-10-27 02:11:44', NULL);
 
 --
 -- Indexes for dumped tables
@@ -387,7 +386,7 @@ ALTER TABLE `auth_groups`
 -- AUTO_INCREMENT untuk tabel `auth_logins`
 --
 ALTER TABLE `auth_logins`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT untuk tabel `auth_permissions`
@@ -411,13 +410,13 @@ ALTER TABLE `auth_tokens`
 -- AUTO_INCREMENT untuk tabel `kat_mobil`
 --
 ALTER TABLE `kat_mobil`
-  MODIFY `id_mobil` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_mobil` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT untuk tabel `kat_stall`
 --
 ALTER TABLE `kat_stall`
-  MODIFY `id_stall` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id_stall` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT untuk tabel `migrations`
@@ -429,7 +428,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)

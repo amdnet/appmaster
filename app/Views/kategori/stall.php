@@ -34,26 +34,34 @@
 <div id="add-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
-            <div class="modal-body">
-                <div class="card card-primary card-outline">
-                    <div class="card-body box-profile">
-                        <div class="text-center">
-                            <i class="text-muted fas fa-tools fa-7x"></i>
-                            <form id="add-form">
-                                <div class="input-group form-group mt-4">
-                                    <input type="hidden" id="idStall" name="idStall" class="form-control">
-                                    <input type="text" id="stall" name="stall" class="form-control" placeholder="Kategori Stall" maxlength="35" required>
-                                    <input type="hidden" id="username" name="username" class="form-control" maxlength="35" value="<?= user()->username; ?>">
-                                </div>
-                                <div class="btn-group btn-block">
-                                    <button type="submit" class="btn d-inline btn-success" id="add-form-btn">Add</button>
-                                    <button type="button" class="btn d-inline btn-danger" data-dismiss="modal">Cancel</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div> <!-- card-body box-profile -->
-                </div> <!-- card -->
+            <div class="text-center bg-dark p-2">
+                <h5 class="modal-title text-white" id="info-header-modalLabel">Add Category Stall</h5>
             </div>
+
+            <div class="modal-body">
+                <div class="text-center">
+                    <i class="text-muted fas fa-tools fa-7x"></i>
+                </div>
+                <form id="add-form" class="pl-2 pr-2">
+                    <div class="row">
+                        <input type="hidden" id="idStall" name="idStall" class="form-control">
+                        <input type="hidden" id="username" name="username" class="form-control" maxlength="35" value="<?= user()->username; ?>">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <label for="stall"> Stall: </label>
+                            <input type="text" id="stall" name="stall" class="form-control" placeholder="Kategori Stall" maxlength="35" required>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer mt-3">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-success" id="add-form-btn">Simpan</button>
+                    </div>
+                </form>
+            </div>
+
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
@@ -108,7 +116,7 @@
                 [0, "asc"]
             ],
             "ajax": {
-                "url": '<?php echo base_url($controller . '/getAll') ?>',
+                "url": '<?= base_url($controller . '/getAll') ?>',
                 "type": "POST",
                 "dataType": "json",
                 "async": "true"
@@ -151,7 +159,6 @@
             },
 
             submitHandler: function(form) {
-
                 var form = $('#add-form');
                 // remove the text-danger
                 $(".text-danger").remove();
@@ -178,9 +185,7 @@
                                 $('#data_table').DataTable().ajax.reload(null, false).draw(false);
                                 $('#add-modal').modal('hide');
                             })
-
                         } else {
-
                             if (response.messages instanceof Object) {
                                 $.each(response.messages, function(index, value) {
                                     var id = $("#" + index);
@@ -191,7 +196,6 @@
                                         .addClass(value.length > 0 ? 'is-invalid' : 'is-valid');
 
                                     id.after(value);
-
                                 });
                             } else {
                                 Swal.fire({
@@ -270,7 +274,6 @@
                             success: function(response) {
 
                                 if (response.success === true) {
-
                                     Swal.fire({
                                         position: 'bottom-end',
                                         icon: 'success',
@@ -281,20 +284,15 @@
                                         $('#data_table').DataTable().ajax.reload(null, false).draw(false);
                                         $('#edit-modal').modal('hide');
                                     })
-
                                 } else {
-
                                     if (response.messages instanceof Object) {
                                         $.each(response.messages, function(index, value) {
                                             var id = $("#" + index);
-
                                             id.closest('.form-control')
                                                 .removeClass('is-invalid')
                                                 .removeClass('is-valid')
                                                 .addClass(value.length > 0 ? 'is-invalid' : 'is-valid');
-
                                             id.after(value);
-
                                         });
                                     } else {
                                         Swal.fire({
@@ -304,7 +302,6 @@
                                             showConfirmButton: false,
                                             timer: 1500
                                         })
-
                                     }
                                 }
                                 $('#edit-form-btn').html('Update');
@@ -324,12 +321,11 @@
             text: "You cannot back after confirmation",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Confirm',
-            cancelButtonText: 'Cancel'
+            confirmButtonColor: '#3085d6',
+            cancelButtonText: 'Batal',
+            confirmButtonText: 'Hapus Data'
         }).then((result) => {
-
             if (result.value) {
                 $.ajax({
                     url: '<?php echo base_url($controller . '/remove') ?>',
@@ -339,7 +335,6 @@
                     },
                     dataType: 'json',
                     success: function(response) {
-
                         if (response.success === true) {
                             Swal.fire({
                                 position: 'bottom-end',
