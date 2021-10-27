@@ -25,7 +25,7 @@
                         <table id="data_table" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Id</th>
+                                    <th>No</th>
                                     <th>Images</th>
                                     <th>Email</th>
                                     <th>Username</th>
@@ -50,22 +50,23 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="text-center bg-dark p-2">
-                <h5 class="modal-title text-white" id="info-header-modalLabel">Add User Login</h5>
+                <h5 class="modal-title text-white" id="info-header-modalLabel">Add New User Account</h5>
             </div>
 
             <div class="modal-body">
                 <form id="add-form" class="pl-2 pr-2">
                     <div class="row">
-                        <input type="hidden" id="id" name="id" class="form-control" placeholder="Id" maxlength="11" required>
+                        <input type="hidden" id="id" name="id" class="form-control" placeholder="Id" required>
                     </div>
 
                     <div class="form-row">
                         <div class="col-md-12">
-                            <label for="images"> User Role: </label>
-                            <select id="images" name="images" class="custom-select">
-                                <option value="select1">Admin</option>
-                                <option value="select2">Asuransi</option>
-                                <option value="select3">Member</option>
+                            <label for="role"> User Role: </label>
+                            <select id="role" name="role" class="custom-select">
+                                <option value="" selected disabled required>Pilih Role</option>
+                                <?php foreach ($role as $rule) : ?>
+                                    <option value="<?= $rule->id ?>"> <?= $rule->name ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                     </div>
@@ -81,7 +82,7 @@
                         <div class="col-md-6 mt-3">
                             <div class="form-group">
                                 <label for="email"> Email: <span class="text-danger">*</span> </label>
-                                <input type="text" id="email" name="email" class="form-control" placeholder="Email" maxlength="30" required>
+                                <input type="email" id="email" name="email" class="form-control" placeholder="Email" required>
                             </div>
                         </div>
                     </div>
@@ -89,15 +90,15 @@
                     <div class="form-row">
                         <div class="col-md-6 mt-2">
                             <div class="form-group">
-                                <label for="passwordHash"> Password: <span class="text-danger">*</span> </label>
-                                <input type="password" id="password" name="password" class="form-control" placeholder="Password" maxlength="30" required>
+                                <label for="password_hash"> Password: <span class="text-danger">*</span> </label>
+                                <input type="password" id="password_hash" name="password_hash" class="form-control" placeholder="Input Password">
                             </div>
                         </div>
 
                         <div class="col-md-6 mt-2">
                             <div class="form-group">
-                                <label for="passwordHash"> Password confirm: <span class="text-danger">*</span> </label>
-                                <input type="password" id="passwordHash" name="passwordHash" class="form-control" placeholder="Konfirmasi Password" maxlength="30" required>
+                                <label for="pass_confirm"> Password confirm: <span class="text-danger">*</span> </label>
+                                <input type="password" name="pass_confirm" class="form-control" placeholder="Konfirmasi Password">
                             </div>
                         </div>
                     </div>
@@ -156,15 +157,15 @@
                     <div class="form-row">
                         <div class="col-md-6 mt-2">
                             <div class="form-group">
-                                <label for="passwordHash"> Password: <span class="text-danger">*</span> </label>
-                                <input type="password" id="password" name="password" class="form-control" placeholder="Password" maxlength="30" required>
+                                <label for="password_hash"> Password: <span class="text-danger">*</span> </label>
+                                <input type="password" id="password_hash" name="password_hash" class="form-control" placeholder="Password" maxlength="30" required>
                             </div>
                         </div>
 
                         <div class="col-md-6 mt-2">
                             <div class="form-group">
-                                <label for="passwordHash"> Password confirm: <span class="text-danger">*</span> </label>
-                                <input type="password" id="passwordHash" name="passwordHash" class="form-control" placeholder="Konfirmasi Password" maxlength="30" required>
+                                <label for="password_confirm"> Password confirm: <span class="text-danger">*</span> </label>
+                                <input type="password" id="password_confirm" name="password_confirm" class="form-control" placeholder="Konfirmasi Password" maxlength="30" required>
                             </div>
                         </div>
                     </div>
@@ -211,7 +212,7 @@
         $("#add-form")[0].reset();
         $(".form-control").removeClass('is-invalid').removeClass('is-valid');
         $('#add-modal').modal('show');
-        // submit the add from 
+
         $.validator.setDefaults({
             highlight: function(element) {
                 $(element).addClass('is-invalid').removeClass('is-valid');
@@ -224,13 +225,10 @@
             errorPlacement: function(error, element) {
                 if (element.parent('.input-group').length) {
                     error.insertAfter(element.parent());
-                } else if ($(element).is('.select')) {
-                    element.next().after(error);
-                } else if (element.hasClass('select2')) {
-                    //error.insertAfter(element);
-                    error.insertAfter(element.next());
-                } else if (element.hasClass('selectpicker')) {
-                    error.insertAfter(element.next());
+                    // } else if ($(element).is('.select')) {
+                    //     element.next().after(error);
+                    // } else if (element.hasClass('select2')) {
+                    //     error.insertAfter(element.next());
                 } else {
                     error.insertAfter(element);
                 }
@@ -333,13 +331,7 @@
                     errorPlacement: function(error, element) {
                         if (element.parent('.input-group').length) {
                             error.insertAfter(element.parent());
-                        } else if ($(element).is('.select')) {
-                            element.next().after(error);
-                        } else if (element.hasClass('select2')) {
-                            //error.insertAfter(element);
-                            error.insertAfter(element.next());
-                        } else if (element.hasClass('selectpicker')) {
-                            error.insertAfter(element.next());
+
                         } else {
                             error.insertAfter(element);
                         }
@@ -411,8 +403,8 @@
 
     function remove(id) {
         Swal.fire({
-            title: 'Are you sure of the deleting process?',
-            text: "You cannot back after confirmation",
+            title: 'Apakah Anda yakin dengan proses penghapusan?',
+            text: 'Data akan dihapus secara permanen setelah konfirmasi!',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',

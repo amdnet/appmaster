@@ -1,4 +1,6 @@
-<?php namespace Myth\Auth\Config;
+<?php
+
+namespace Myth\Auth\Config;
 
 use CodeIgniter\Config\BaseConfig;
 
@@ -148,7 +150,7 @@ class Auth extends BaseConfig
 	 * @var string|null Name of the ActivatorInterface class
 	 */
 	// public $requireActivation = 'Myth\Auth\Authentication\Activators\EmailActivator';
-	public $requireActivation = null;
+	public $requireActivation = false;
 
 	/**
 	 * --------------------------------------------------------------------
@@ -175,7 +177,7 @@ class Auth extends BaseConfig
 	 *
 	 * @var bool
 	 */
-	public $allowRemembering = true;
+	public $allowRemembering = false;
 
 	/**
 	 * --------------------------------------------------------------------
