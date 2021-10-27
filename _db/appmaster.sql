@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 26 Okt 2021 pada 22.09
+-- Waktu pembuatan: 27 Okt 2021 pada 21.53
 -- Versi server: 10.4.21-MariaDB
 -- Versi PHP: 7.4.24
 
@@ -47,6 +47,16 @@ CREATE TABLE `auth_groups` (
   `description` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data untuk tabel `auth_groups`
+--
+
+INSERT INTO `auth_groups` (`id`, `name`, `description`) VALUES
+(1, 'Super Admin', 'Super Administrator'),
+(2, 'Admin', 'administrator'),
+(3, 'Asuransi', 'User Asuransi'),
+(4, 'Client', 'User Client');
+
 -- --------------------------------------------------------
 
 --
@@ -58,6 +68,20 @@ CREATE TABLE `auth_groups_permissions` (
   `permission_id` int(11) UNSIGNED NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data untuk tabel `auth_groups_permissions`
+--
+
+INSERT INTO `auth_groups_permissions` (`group_id`, `permission_id`) VALUES
+(1, 1),
+(1, 1),
+(2, 2),
+(2, 2),
+(3, 3),
+(3, 3),
+(4, 4),
+(4, 4);
+
 -- --------------------------------------------------------
 
 --
@@ -68,6 +92,14 @@ CREATE TABLE `auth_groups_users` (
   `group_id` int(11) UNSIGNED NOT NULL DEFAULT 0,
   `user_id` int(11) UNSIGNED NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data untuk tabel `auth_groups_users`
+--
+
+INSERT INTO `auth_groups_users` (`group_id`, `user_id`) VALUES
+(1, 1),
+(2, 2);
 
 -- --------------------------------------------------------
 
@@ -112,7 +144,11 @@ INSERT INTO `auth_logins` (`id`, `ip_address`, `email`, `user_id`, `date`, `succ
 (21, '127.0.0.1', 'admin1@gmail.com', 1, '2021-10-24 01:15:16', 1),
 (22, '127.0.0.1', 'admin1@gmail.com', 1, '2021-10-24 02:29:51', 1),
 (23, '127.0.0.1', 'admin1@gmail.com', 1, '2021-10-24 02:48:34', 1),
-(24, '127.0.0.1', 'admin1@gmail.com', 1, '2021-10-26 21:08:22', 1);
+(24, '127.0.0.1', 'admin1@gmail.com', 1, '2021-10-26 21:08:22', 1),
+(25, '127.0.0.1', 'admin1@gmail.com', NULL, '2021-10-27 16:39:11', 0),
+(26, '127.0.0.1', 'admin1@gmail.com', 1, '2021-10-27 16:39:22', 1),
+(27, '127.0.0.1', 'admin1@gmail.com', 1, '2021-10-27 18:53:28', 1),
+(28, '127.0.0.1', 'admin1@gmail.com', 1, '2021-10-27 19:02:12', 1);
 
 -- --------------------------------------------------------
 
@@ -125,6 +161,16 @@ CREATE TABLE `auth_permissions` (
   `name` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data untuk tabel `auth_permissions`
+--
+
+INSERT INTO `auth_permissions` (`id`, `name`, `description`) VALUES
+(1, 'panel-superadmin', 'panel grup super admin'),
+(2, 'panel-admin', 'panel grup admin'),
+(3, 'panel-asuransi', 'panel user asuransi'),
+(4, 'panel-client', 'panel user client');
 
 -- --------------------------------------------------------
 
@@ -187,7 +233,6 @@ CREATE TABLE `kat_mobil` (
 INSERT INTO `kat_mobil` (`id_mobil`, `mobil`, `username`, `created_at`, `updated_at`) VALUES
 (1, 'mobil ok', 'admin satu', '2021-10-22 23:06:50', '2021-10-23 21:46:38'),
 (2, 'mobil dua', 'admin satu', '2021-10-23 20:43:44', '2021-10-23 20:43:44'),
-(3, 'mobil saja 3', 'admin satu', '2021-10-23 20:59:01', '2021-10-26 21:38:53'),
 (4, 'dws dwda', 'admin satu', '2021-10-26 21:38:45', '2021-10-26 21:38:45');
 
 -- --------------------------------------------------------
@@ -209,8 +254,7 @@ CREATE TABLE `kat_stall` (
 --
 
 INSERT INTO `kat_stall` (`id_stall`, `stall`, `username`, `created_at`, `updated_at`) VALUES
-(8, 'delapan', 'admin satu', '2021-10-22 03:56:50', '2021-10-26 21:32:24'),
-(9, 'sembilan 9', 'admin satu', '2021-10-22 03:59:17', '2021-10-26 21:32:32'),
+(8, '123 4', 'admin satu', '2021-10-22 03:56:50', '2021-10-27 17:34:54'),
 (10, 'satu dua 2222', 'admin satu', '2021-10-23 20:23:44', '2021-10-26 23:06:47'),
 (12, 'stall yang keberapa', '', '2021-10-23 20:36:25', '2021-10-23 20:36:25'),
 (13, 'stall sepuluh', '', '2021-10-23 20:38:59', '2021-10-23 20:38:59'),
@@ -250,7 +294,7 @@ INSERT INTO `migrations` (`id`, `version`, `class`, `group`, `namespace`, `time`
 CREATE TABLE `users` (
   `id` int(11) UNSIGNED NOT NULL,
   `email` varchar(255) NOT NULL,
-  `username` varchar(30) DEFAULT NULL,
+  `username` varchar(30) NOT NULL,
   `images` varchar(255) NOT NULL DEFAULT 'default.svg',
   `password_hash` varchar(255) NOT NULL,
   `reset_hash` varchar(255) DEFAULT NULL,
@@ -273,7 +317,16 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `email`, `username`, `images`, `password_hash`, `reset_hash`, `reset_at`, `reset_expires`, `activate_hash`, `status`, `status_message`, `active`, `force_pass_reset`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 'admin1@gmail.com', 'admin satu', 'default.svg', '$2y$10$0S1DSGWUTUAf53go7ccHQOy5MuJ9TSicPlsbzr0cn9fZBwXljfQfa', NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, '2021-10-18 10:49:12', '2021-10-18 10:49:53', NULL),
 (2, 'admin2@gmail.com', 'admin dua', 'default.svg', '$2y$10$0S1DSGWUTUAf53go7ccHQOy5MuJ9TSicPlsbzr0cn9fZBwXljfQfa', NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, '2021-10-20 17:47:13', '2021-10-20 17:47:13', NULL),
-(3, 'admin3@gmail.com', 'admin tiga3', 'select1', '123456', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, '2021-10-27 02:11:44', NULL);
+(3, 'admin3@gmail.com', 'admin tiga3', 'select1', '123456', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, '2021-10-27 02:11:44', NULL),
+(7, 'admin5@gmail.com', 'webmaster', '1', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-10-27 22:46:23', '2021-10-27 22:46:23', NULL),
+(10, 'client@gmai.com', 'cliuent1', 'default.svg', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-10-28 00:38:37', '2021-10-28 00:38:37', NULL),
+(11, 'client1@gmai.com', 'admin satu1', 'default.svg', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-10-28 00:46:17', '2021-10-28 00:46:17', NULL),
+(12, 'dwa@dwad.com', 'admin sat', 'default.svg', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-10-28 00:47:02', '2021-10-28 00:47:02', NULL),
+(13, 'client54@gmai.com', 'admin', 'default.svg', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-10-28 00:51:33', '2021-10-28 00:51:33', NULL),
+(14, 'dwadwa@fewafd.co', 'dwawdad', 'default.svg', '$2y$10$tR5JUbR8w3VB1Az41McYd.Ei59d4Fblb6HE4mE/f0nDGmHhIeJ1lO', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-10-28 01:05:36', '2021-10-28 01:05:36', NULL),
+(15, 'fehtre@hgfd.uy', 'asytesre', 'default.svg', '$2y$10$7SPg7/Emsv8iwJFtH6qjAe3RfHmLzXRRMICiQV0p.ouuL2NU3tfnq', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-10-28 01:10:17', '2021-10-28 01:10:17', NULL),
+(16, 'addwamin10@gmail.com', 'admin satdwau', 'default.svg', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-10-28 02:04:10', '2021-10-28 02:04:10', NULL),
+(17, 'adwadmin10@gmail.com', 'clwaiuent1', 'default.svg', '$2y$10$sAwx0n1mnvAaIG8RF1ItHO5v2WHY.3Ry6teudO5vakJhZ5CzytKou', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-10-28 02:05:31', '2021-10-28 02:05:31', NULL);
 
 --
 -- Indexes for dumped tables
@@ -380,19 +433,19 @@ ALTER TABLE `auth_activation_attempts`
 -- AUTO_INCREMENT untuk tabel `auth_groups`
 --
 ALTER TABLE `auth_groups`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT untuk tabel `auth_logins`
 --
 ALTER TABLE `auth_logins`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT untuk tabel `auth_permissions`
 --
 ALTER TABLE `auth_permissions`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT untuk tabel `auth_reset_attempts`
@@ -404,13 +457,13 @@ ALTER TABLE `auth_reset_attempts`
 -- AUTO_INCREMENT untuk tabel `auth_tokens`
 --
 ALTER TABLE `auth_tokens`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT untuk tabel `kat_mobil`
 --
 ALTER TABLE `kat_mobil`
-  MODIFY `id_mobil` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_mobil` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT untuk tabel `kat_stall`
@@ -428,7 +481,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
