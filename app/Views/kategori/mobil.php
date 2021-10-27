@@ -34,26 +34,32 @@
 <div id="add-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
-            <div class="modal-body">
-                <div class="card card-primary card-outline">
-                    <div class="card-body box-profile">
-                        <div class="text-center">
-                            <i class="text-muted fas fa-car fa-7x"></i>
-                            <form id="add-form">
-                                <div class="input-group form-group mt-4">
-                                    <input type="hidden" id="idMobil" name="idMobil" class="form-control">
-                                    <input type="text" id="mobil" name="mobil" class="form-control" placeholder="Kategori Mobil" maxlength="35" required>
-                                    <input type="hidden" id="username" name="username" class="form-control" maxlength="35" value="<?= user()->username; ?>">
-                                </div>
-                                <div class="btn-group btn-block">
-                                    <button type="submit" class="btn d-inline btn-success" id="add-form-btn">Add</button>
-                                    <button type="button" class="btn d-inline btn-danger" data-dismiss="modal">Cancel</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div> <!-- card-body box-profile -->
-                </div> <!-- card -->
+            <div class="text-center bg-dark p-2">
+                <h5 class="modal-title text-white" id="info-header-modalLabel">Add Category Mobil</h5>
             </div>
+
+            <div class="modal-body">
+                <div class="text-center">
+                    <i class="text-muted fas fa-car fa-7x"></i>
+                </div>
+                <form id="add-form" class="pl-2 pr-2">
+                    <div class="row">
+                        <input type="hidden" id="idMobil" name="idMobil" class="form-control">
+                        <input type="hidden" id="username" name="username" class="form-control" value="<?= user()->username; ?>">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="stall"> Mobil: </label>
+                            <input type="text" id="mobil" name="mobil" class="form-control" placeholder="Kategori Mobil" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer mt-3">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-success" id="add-form-btn">Simpan</button>
+                    </div>
+                </form>
+            </div>
+
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
@@ -63,26 +69,34 @@
 <div id="edit-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
-            <div class="modal-body">
-                <div class="card card-primary card-outline">
-                    <div class="card-body box-profile">
-                        <div class="text-center">
-                            <i class="text-muted fas fa-tools fa-7x"></i>
-                            <form id="edit-form">
-                                <div class="input-group form-group mt-4">
-                                    <input type="hidden" id="idMobil" name="idMobil" class="form-control">
-                                    <input type="text" id="mobil" name="mobil" class="form-control" placeholder="" maxlength="25" required>
-                                    <input type="hidden" id="username" name="username" class="form-control" maxlength="35" value="<?= user()->username; ?>">
-                                </div>
-                                <div class="btn-group btn-block">
-                                    <button type="submit" class="btn d-inline btn-success" id="edit-form-btn">Update</button>
-                                    <button type="button" class="btn d-inline btn-danger" data-dismiss="modal">Cancel</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div> <!-- card-body box-profile -->
-                </div> <!-- card -->
+            <div class="text-center bg-dark p-2">
+                <h5 class="modal-title text-white" id="info-header-modalLabel">Add Category Mobil</h5>
             </div>
+
+            <div class="modal-body">
+                <div class="text-center">
+                    <i class="text-muted fas fa-car fa-7x"></i>
+                </div>
+                <form id="edit-form" class="pl-2 pr-2">
+                    <div class="row">
+                        <input type="hidden" id="idMobil" name="idMobil" class="form-control">
+                        <input type="hidden" id="username" name="username" class="form-control" value="<?= user()->username; ?>">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <label for="stall"> Mobil: </label>
+                            <input type="text" id="mobil" name="mobil" class="form-control" placeholder="Kategori Mobil" required>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer mt-3">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-success" id="edit-form-btn">Update</button>
+                    </div>
+                </form>
+            </div>
+
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
@@ -238,13 +252,13 @@
                     errorPlacement: function(error, element) {
                         if (element.parent('.input-group').length) {
                             error.insertAfter(element.parent());
-                        } else if ($(element).is('.select')) {
-                            element.next().after(error);
-                        } else if (element.hasClass('select2')) {
-                            //error.insertAfter(element);
-                            error.insertAfter(element.next());
-                        } else if (element.hasClass('selectpicker')) {
-                            error.insertAfter(element.next());
+                            // } else if ($(element).is('.select')) {
+                            //     element.next().after(error);
+                            // } else if (element.hasClass('select2')) {
+                            //     //--error.insertAfter(element);
+                            //     error.insertAfter(element.next());
+                            // } else if (element.hasClass('selectpicker')) {
+                            //     error.insertAfter(element.next());
                         } else {
                             error.insertAfter(element);
                         }
@@ -314,8 +328,8 @@
 
     function remove(id_mobil) {
         swal.fire({
-            title: 'Are you sure of the deleting process?',
-            text: "You cannot back after confirmation",
+            title: 'Apakah Anda yakin dengan proses penghapusan?',
+            text: 'Data akan dihapus secara permanen setelah konfirmasi!',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',

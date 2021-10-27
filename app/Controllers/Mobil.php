@@ -33,7 +33,6 @@ class Mobil extends BaseController
 
 		foreach ($result as $key => $value) {
 			$ops = '<button type="button" class="btn btn-sm btn-success" onclick="edit(' . $value->id_mobil . ')"><i class="fa fa-pencil-alt"></i></button> <button type="button" class="btn btn-sm btn-danger" onclick="remove(' . $value->id_mobil . ')"><i class="fa fa-trash-alt"></i></button>';
-
 			$data['data'][$key] = array(
 				$value->id_mobil,
 				$value->mobil,
@@ -66,8 +65,15 @@ class Mobil extends BaseController
 		$fields['username'] = $this->request->getPost('username');
 
 		$this->validation->setRules([
-			'mobil' => ['label' => 'Kategori Mobil', 'rules' => 'required|max_length[35]'],
-			'username' => ['label' => 'Username', 'rules' => 'permit_empty|max_length[35]']
+			'mobil' => [
+				'label'  => 'Mobil',
+				'rules'  => 'required|is_unique[kat_mobil.mobil]|min_length[5]|max_length[35]',
+				'errors' => [
+					'is_unique' => 'Nama {field} tidak boleh sama dengan yang sudah ada',
+					'min_length' => 'Minimal karakter {field} adalah 5 termasuk spasi',
+					'max_length' => 'Maksimal karakter {field} adalah 35 termasuk spasi'
+				]
+			]
 		]);
 
 		if ($this->validation->run($fields) == FALSE) {
@@ -92,8 +98,16 @@ class Mobil extends BaseController
 		$fields['username'] = $this->request->getPost('username');
 
 		$this->validation->setRules([
-			'mobil' => ['label' => 'Mobil', 'rules' => 'required|max_length[25]'],
-			'username' => ['label' => 'Username', 'rules' => 'permit_empty|max_length[35]']
+			'username' => ['label' => 'Username', 'rules' => 'required|max_length[35]'],
+			'mobil' => [
+				'label'  => 'Mobil',
+				'rules'  => 'required|is_unique[kat_mobil.mobil]|min_length[5]|max_length[35]',
+				'errors' => [
+					'is_unique' => 'Nama {field} tidak boleh sama dengan yang sudah ada',
+					'min_length' => 'Minimal karakter {field} adalah 5 termasuk spasi',
+					'max_length' => 'Maksimal karakter {field} adalah 35 termasuk spasi'
+				]
+			]
 		]);
 
 		if ($this->validation->run($fields) == FALSE) {

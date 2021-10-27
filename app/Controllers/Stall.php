@@ -66,10 +66,15 @@ class Stall extends BaseController
 		$fields['username'] = $this->request->getPost('username');
 
 		$this->validation->setRules([
-			// 'stall' => ['required|max_length[35]'],
-			// 'username' => ['permit_empty|max_length[35]'],
-			'stall' => ['label' => 'Stall', 'rules' => 'required|max_length[35]'],
-			// 'username' => ['label' => 'Username', 'rules' => 'permit_empty|max_length[35]'],
+			'stall' => [
+				'label'  => 'Stall',
+				'rules'  => 'required|is_unique[kat_stall.stall]|min_length[5]|max_length[35]',
+				'errors' => [
+					'is_unique' => 'Nama {field} tidak boleh sama dengan yang sudah ada',
+					'min_length' => 'Minimal karakter {field} adalah 5 termasuk spasi',
+					'max_length' => 'Maksimal karakter {field} adalah 35 termasuk spasi'
+				]
+			]
 		]);
 
 		if ($this->validation->run($fields) == FALSE) {
@@ -80,7 +85,6 @@ class Stall extends BaseController
 				$response['success'] = true;
 				$response['messages'] = 'Data has been inserted successfully';
 			} else {
-
 				$response['messages'] = 'Insertion error!';
 			}
 		}
@@ -95,8 +99,16 @@ class Stall extends BaseController
 		$fields['username'] = $this->request->getPost('username');
 
 		$this->validation->setRules([
-			'stall' => ['label' => 'Stall', 'rules' => 'required|max_length[25]'],
-			'username' => ['label' => 'Username', 'rules' => 'required|max_length[35]']
+			'username' => ['label' => 'Username', 'rules' => 'required|max_length[35]'],
+			'stall' => [
+				'label'  => 'Stall',
+				'rules'  => 'required|is_unique[kat_stall.stall]|min_length[5]|max_length[35]',
+				'errors' => [
+					'is_unique' => 'Nama {field} tidak boleh sama dengan yang sudah ada',
+					'min_length' => 'Minimal karakter {field} adalah 5 termasuk spasi',
+					'max_length' => 'Maksimal karakter {field} adalah 35 termasuk spasi'
+				]
+			]
 		]);
 
 		if ($this->validation->run($fields) == FALSE) {
