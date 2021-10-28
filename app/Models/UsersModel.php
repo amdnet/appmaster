@@ -7,7 +7,6 @@ use CodeIgniter\Model;
 class UsersModel extends Model
 {
     protected $table = 'users';
-    protected $primaryKey = 'id';
     protected $returnType = 'object';
     protected $useSoftDeletes = false;
     protected $allowedFields = ['email', 'username', 'images', 'password_hash'];
