@@ -6,7 +6,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
-                <form action="<?= base_url('akun/proses'); ?>" method="POST" enctype="multipart/form-data">
+                <form action="<?= base_url('users/proses'); ?>" method="POST" enctype="multipart/form-data">
                     <?= csrf_field(); ?>
 
                     <div class="row">

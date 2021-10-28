@@ -10,12 +10,13 @@
 
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+	<link rel="stylesheet" href="<?= base_url() ?>/public/css/bootstrap-4.min.css">
 	<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
 	<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
 	<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
 	<link rel="stylesheet" href="https://cdn.datatables.net/select/1.3.3/css/select.dataTables.min.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.1.0/dist/css/adminlte.min.css">
-	<link rel="stylesheet" href="<?= base_url() ?>/public/css/bootstrap-4.min.css">
+
 
 	<style>
 		.h1,
@@ -53,6 +54,14 @@
 			margin-left: 2px;
 			border: 1px solid #aaa;
 			border-radius: 3px;
+		}
+
+		.errors ul {
+			padding-left: 15px;
+		}
+
+		label:not(.form-check-label):not(.custom-file-label) {
+			font-weight: 400;
 		}
 	</style>
 </head>
@@ -97,7 +106,7 @@
 				<!-- Sidebar user panel (optional) -->
 				<div class="user-panel mt-3 pb-3 mb-3 d-flex">
 					<div class="image pt-2">
-						<img src="<?= base_url() ?>/public/img/user2-160x160.jpg" class="img-circle elevation-2">
+						<img src="<?= user()->photo; ?>" class="img-circle elevation-2">
 					</div>
 
 					<div class="info">

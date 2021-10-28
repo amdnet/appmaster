@@ -14,13 +14,12 @@
                             <div class="card card-primary card-outline">
                                 <div class="card-body box-profile">
                                     <div class="text-center mb-3">
-                                        <img src="<?= base_url() ?>/public/img/avatar.png" id="avatar" class="img-fluid">
+                                        <img src="<?= $detail['photo'] ?>" id="avatar" class="img-fluid">
                                     </div>
                                     <div class="custom-file form-control-sm mb-3">
-                                        <input type="file" class="custom-file-input <?= ($validation->hasError('photo')) ? 'is-invalid' : ''; ?>" id="photo" name="photo" onchange="photoPreview()">
+                                        <input type="file" class="custom-file-input" id="photo" name="photo" onchange="photoPreview()">
                                         <label class="custom-file-label" for="Photo">Upload photo ...</label>
                                         <div class="invalid-feedback">
-                                            <?= $validation->getError('photo'); ?>
                                         </div>
                                     </div>
 
@@ -45,34 +44,30 @@
                                                 <label for="role"> User Role: <span class="text-danger">*</span></label>
                                                 <select id="role" name="role" class="custom-select">
                                                     <option value="" selected disabled required>Pilih Role</option>
-                                                    <?php foreach ($role as $rule) : ?>
-                                                        <option value="<?= $rule->id ?>"> <?= $rule->name ?></option>
-                                                    <?php endforeach; ?>
+
                                                 </select>
                                             </div>
 
                                             <div class="col-md-6 mb-3">
                                                 <label for="email"> Email: <span class="text-danger">*</span></label>
                                                 <div class="input-group">
-                                                    <input type="email" id="email" name="email" class="form-control <?= ($validation->hasError('email')) ? 'is-invalid' : ''; ?>" placeholder="Email" value="<?= old('email'); ?>">
+                                                    <input type="email" id="email" name="email" class="form-control" placeholder="Email" value="<?= old('email'); ?>">
                                                     <div class="input-group-prepend">
                                                         <div class="input-group-text"><i class="fas fa-envelope"></i></div>
                                                     </div>
                                                     <div class="invalid-feedback">
-                                                        <?= $validation->getError('email'); ?>
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div class="col-md-6 mb-3">
-                                                <label for="username"> Username: <span class="text-danger">*</span></label>
+                                                <label for="username"> Username: <?= $detail['username'] ?><span class="text-danger">*</span></label>
                                                 <div class="input-group">
-                                                    <input type="text" id="username" name="username" class="form-control <?= ($validation->hasError('username')) ? 'is-invalid' : ''; ?>" placeholder="Username" value="<?= old('username'); ?>">
+                                                    <input type="text" id="username" name="username" class="form-control" placeholder="Username" value="<?= old('username'); ?>">
                                                     <div class="input-group-prepend">
                                                         <div class="input-group-text"><i class="fas fa-user-circle"></i></div>
                                                     </div>
                                                     <div class="invalid-feedback">
-                                                        <?= $validation->getError('username'); ?>
                                                     </div>
                                                 </div>
                                             </div>
@@ -80,12 +75,11 @@
                                             <div class="col-md-6 mb-3">
                                                 <label for="alamat"> Alamat: <span class="text-danger">*</span></label>
                                                 <div class="input-group">
-                                                    <input type="text" id="alamat" name="alamat" class="form-control <?= ($validation->hasError('alamat')) ? 'is-invalid' : ''; ?>" placeholder="Alamat lengkap" value="<?= old('alamat'); ?>">
+                                                    <input type="text" id="alamat" name="alamat" class="form-control" placeholder="Alamat lengkap" value="<?= old('alamat'); ?>">
                                                     <div class="input-group-prepend">
                                                         <div class="input-group-text"><i class="fas fa-address-card"></i></div>
                                                     </div>
                                                     <div class="invalid-feedback">
-                                                        <?= $validation->getError('alamat'); ?>
                                                     </div>
                                                 </div>
                                             </div>
@@ -93,12 +87,11 @@
                                             <div class="col-md-6 mb-3">
                                                 <label for="telp"> No Hp: <span class="text-danger">*</span></label>
                                                 <div class="input-group">
-                                                    <input type="text" id="telp" name="telp" class="form-control <?= ($validation->hasError('telp')) ? 'is-invalid' : ''; ?>" placeholder="Nomor handphone" value="<?= old('telp'); ?>">
+                                                    <input type="text" id="telp" name="telp" class="form-control " placeholder="Nomor handphone" value="<?= old('telp'); ?>">
                                                     <div class="input-group-prepend">
                                                         <div class="input-group-text"><i class="fas fa-mobile-alt"></i></div>
                                                     </div>
                                                     <div class="invalid-feedback">
-                                                        <?= $validation->getError('telp'); ?>
                                                     </div>
                                                 </div>
                                             </div>
@@ -106,7 +99,7 @@
                                             <div class="col-md-6 mb-3">
                                                 <label for="password"> Password: <span class="text-danger">*</span></label>
                                                 <div class="input-group">
-                                                    <input type="password" class="form-control <?= ($validation->hasError('password')) ? 'is-invalid' : ''; ?>" name="password" id="password" placeholder="input password" value="<?= old('password'); ?>">
+                                                    <input type="password" class="form-control" name="password" id="password" placeholder="input password" value="<?= old('password'); ?>">
                                                     <div class="input-group-prepend">
                                                         <div class="input-group-text">
                                                             <a href="#" id="show_password" onclick="change1()">
@@ -115,7 +108,6 @@
                                                         </div>
                                                     </div>
                                                     <div class="invalid-feedback">
-                                                        <?= $validation->getError('password'); ?>
                                                     </div>
                                                 </div>
                                             </div>
@@ -123,7 +115,7 @@
                                             <div class="col-md-6 mb-3">
                                                 <label for="pass_confirm"> Konfirmasi Password: <span class="text-danger">*</span> </label>
                                                 <div class="input-group">
-                                                    <input type="password" class="form-control <?= ($validation->hasError('pass_confirm')) ? 'is-invalid' : ''; ?>" name="pass_confirm" id="pass_confirm" placeholder="konfirmasi password" value="<?= old('pass_confirm'); ?>">
+                                                    <input type="password" class="form-control" name="pass_confirm" id="pass_confirm" placeholder="konfirmasi password" value="<?= old('pass_confirm'); ?>">
                                                     <div class="input-group-prepend">
                                                         <div class="input-group-text">
                                                             <a href="#" id="show_password2" onclick="change2()">
@@ -132,7 +124,6 @@
                                                         </div>
                                                     </div>
                                                     <div class="invalid-feedback">
-                                                        <?= $validation->getError('pass_confirm'); ?>
                                                     </div>
                                                 </div>
                                             </div>

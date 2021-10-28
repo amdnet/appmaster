@@ -32,6 +32,8 @@ $routes->setAutoRoute(true);
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::index');
+// $routes->post('/user/proses', 'Users::proses');
+$routes->get('/user/(:num)', 'Users::detail/$1');
 // $routes->get('/', '\Myth\Auth\Controllers\AuthController::login');
 // $routes->get('/user/(:num)', 'User::detail/$1', ['filter' => 'role:admin']);
 

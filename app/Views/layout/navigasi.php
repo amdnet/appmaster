@@ -31,7 +31,7 @@
         </li>
 
         <!-- data user -->
-        <li class="nav-item <?= (current_url() == base_url('users')) || (current_url() == base_url('users/login')) || (current_url() == base_url('users/profil')) ? 'menu-open' : '' ?> ">
+        <li class="nav-item <?= (current_url() == base_url('users')) || (current_url() == base_url('users/add')) || (current_url() == base_url('users/login')) || (current_url() == base_url('users/profil')) ? 'menu-open' : '' ?> ">
             <a href="#" class="nav-link <?= (current_url() == base_url('users')) || (current_url() == base_url('users/login')) || (current_url() == base_url('users/profil')) ? 'active' : '' ?>">
                 <i class="nav-icon fas fa-user-circle"></i>
                 <p>Data User<i class="fas fa-angle-left right"></i></p>
@@ -41,6 +41,12 @@
                     <a href="<?= base_url('users'); ?>" class="nav-link <?= (current_url() == base_url('users')) ? 'active' : '' ?>">
                         <i class="far fa-circle nav-icon"></i>
                         <p>User List</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= base_url('users/add'); ?>" class="nav-link <?= (current_url() == base_url('users/add')) ? 'active' : '' ?>">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>User Add</p>
                     </a>
                 </li>
                 <li class="nav-item">
