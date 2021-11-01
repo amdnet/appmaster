@@ -1,7 +1,4 @@
 <?= $this->extend('layout/template.php') ?>
-<?= $this->section('css') ?>
-<?php include_once "app/views/layout/tabelcss.php"; ?>
-<?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
 <section class="content">
@@ -10,7 +7,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Data Kategori Stall</h3>
+                        <h3 class="card-title">Data Kategori Mobil</h3>
                         <button type="button" class="btn btn-primary btn-sm float-right" onclick="add()" title="Tambah Data"><i class="fas fa-database"></i> &nbsp; Tambah Data</button>
                     </div>
                     <div class="card-body">
@@ -18,7 +15,7 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Kategori Stall</th>
+                                    <th>Kategori Mobil</th>
                                     <th>User Update</th>
                                     <th>Time Created</th>
                                     <th>Time Updated</th>
@@ -38,22 +35,22 @@
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
             <div class="text-center bg-dark p-2">
-                <h5 class="modal-title text-white" id="info-header-modalLabel">Add Category Stall</h5>
+                <h5 class="modal-title text-white" id="info-header-modalLabel">Add Category Mobil</h5>
             </div>
 
             <div class="modal-body">
                 <div class="text-center">
-                    <i class="text-muted fas fa-tools fa-7x"></i>
+                    <i class="text-muted fas fa-car fa-7x"></i>
                 </div>
                 <form id="add-form" class="pl-2 pr-2">
                     <div class="row">
-                        <input type="hidden" id="idStall" name="idStall" class="form-control">
+                        <input type="hidden" id="idMobil" name="idMobil" class="form-control">
                         <input type="hidden" id="username" name="username" class="form-control" value="<?= user()->username; ?>">
                     </div>
-                    <div class="form-row">
+                    <div class="row">
                         <div class="col-md-12">
-                            <label for="stall"> Stall: </label>
-                            <input type="text" id="stall" name="stall" class="form-control" placeholder="Kategori Stall" required>
+                            <label for="stall"> Mobil: </label>
+                            <input type="text" id="mobil" name="mobil" class="form-control" placeholder="Kategori Mobil" required>
                         </div>
                     </div>
                     <div class="modal-footer mt-3">
@@ -68,28 +65,28 @@
 </div>
 <!-- End add modal content -->
 
-<!-- Start update modal content -->
+<!-- Start edit modal content -->
 <div id="edit-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
             <div class="text-center bg-dark p-2">
-                <h5 class="modal-title text-white" id="info-header-modalLabel">Add Category Stall</h5>
+                <h5 class="modal-title text-white" id="info-header-modalLabel">Add Category Mobil</h5>
             </div>
 
             <div class="modal-body">
                 <div class="text-center">
-                    <i class="text-muted fas fa-tools fa-7x"></i>
+                    <i class="text-muted fas fa-car fa-7x"></i>
                 </div>
                 <form id="edit-form" class="pl-2 pr-2">
                     <div class="row">
-                        <input type="hidden" id="idStall" name="idStall" class="form-control">
+                        <input type="hidden" id="idMobil" name="idMobil" class="form-control">
                         <input type="hidden" id="username" name="username" class="form-control" value="<?= user()->username; ?>">
                     </div>
 
                     <div class="form-row">
                         <div class="col-md-12">
-                            <label for="stall"> Stall: </label>
-                            <input type="text" id="stall" name="stall" class="form-control" placeholder="Kategori Stall" required>
+                            <label for="stall"> Mobil: </label>
+                            <input type="text" id="mobil" name="mobil" class="form-control" placeholder="Kategori Mobil" required>
                         </div>
                     </div>
 
@@ -108,7 +105,6 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('script') ?>
-<?php include_once "app/views/layout/tabeljs.php"; ?>
 <script>
     $(function() {
         $('#data_table').DataTable({
@@ -169,6 +165,7 @@
             },
 
             submitHandler: function(form) {
+
                 var form = $('#add-form');
                 // remove the text-danger
                 $(".text-danger").remove();
@@ -195,7 +192,9 @@
                                 $('#data_table').DataTable().ajax.reload(null, false).draw(false);
                                 $('#add-modal').modal('hide');
                             })
+
                         } else {
+
                             if (response.messages instanceof Object) {
                                 $.each(response.messages, function(index, value) {
                                     var id = $("#" + index);
@@ -204,7 +203,9 @@
                                         .removeClass('is-invalid')
                                         .removeClass('is-valid')
                                         .addClass(value.length > 0 ? 'is-invalid' : 'is-valid');
+
                                     id.after(value);
+
                                 });
                             } else {
                                 Swal.fire({
@@ -225,12 +226,12 @@
         $('#add-form').validate();
     }
 
-    function edit(id_stall) {
+    function edit(id_mobil) {
         $.ajax({
             url: '<?php echo base_url($controller . '/getOne') ?>',
             type: 'post',
             data: {
-                id_stall: id_stall
+                id_mobil: id_mobil
             },
             dataType: 'json',
             success: function(response) {
@@ -239,8 +240,8 @@
                 $(".form-control").removeClass('is-invalid').removeClass('is-valid');
                 $('#edit-modal').modal('show');
 
-                $("#edit-form #idStall").val(response.id_stall);
-                $("#edit-form #stall").val(response.stall);
+                $("#edit-form #idMobil").val(response.id_mobil);
+                $("#edit-form #mobil").val(response.mobil);
                 // $("#edit-form #username").val(response.username);
                 $("#edit-form #updateAt").val(response.update_at);
 
@@ -257,13 +258,8 @@
                     errorPlacement: function(error, element) {
                         if (element.parent('.input-group').length) {
                             error.insertAfter(element.parent());
-                            // } else if ($(element).is('.select')) {
-                            //     element.next().after(error);
-                            // } else if (element.hasClass('select2')) {
-                            //error.insertAfter(element);
-                            //     error.insertAfter(element.next());
-                            // } else if (element.hasClass('selectpicker')) {
-                            //     error.insertAfter(element.next());
+                        } else if (element.hasClass('selectpicker')) {
+                            error.insertAfter(element.next());
                         } else {
                             error.insertAfter(element);
                         }
@@ -280,9 +276,10 @@
                             beforeSend: function() {
                                 $('#edit-form-btn').html('<i class="fa fa-spinner fa-spin"></i>');
                             },
-
                             success: function(response) {
+
                                 if (response.success === true) {
+
                                     Swal.fire({
                                         position: 'bottom-end',
                                         icon: 'success',
@@ -293,15 +290,20 @@
                                         $('#data_table').DataTable().ajax.reload(null, false).draw(false);
                                         $('#edit-modal').modal('hide');
                                     })
+
                                 } else {
+
                                     if (response.messages instanceof Object) {
                                         $.each(response.messages, function(index, value) {
                                             var id = $("#" + index);
+
                                             id.closest('.form-control')
                                                 .removeClass('is-invalid')
                                                 .removeClass('is-valid')
                                                 .addClass(value.length > 0 ? 'is-invalid' : 'is-valid');
+
                                             id.after(value);
+
                                         });
                                     } else {
                                         Swal.fire({
@@ -311,6 +313,7 @@
                                             showConfirmButton: false,
                                             timer: 1500
                                         })
+
                                     }
                                 }
                                 $('#edit-form-btn').html('Update');
@@ -324,26 +327,28 @@
         });
     }
 
-    function remove(id_stall) {
+    function remove(id_mobil) {
         swal.fire({
             title: 'Apakah Anda yakin dengan proses penghapusan?',
             text: 'Data akan dihapus secara permanen setelah konfirmasi!',
             icon: 'warning',
             showCancelButton: true,
-            cancelButtonColor: '#d33',
             confirmButtonColor: '#3085d6',
-            cancelButtonText: 'Batal',
-            confirmButtonText: 'Hapus Data'
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Confirm',
+            cancelButtonText: 'Cancel'
         }).then((result) => {
+
             if (result.value) {
                 $.ajax({
                     url: '<?php echo base_url($controller . '/remove') ?>',
                     type: 'post',
                     data: {
-                        id_stall: id_stall
+                        id_mobil: id_mobil
                     },
                     dataType: 'json',
                     success: function(response) {
+
                         if (response.success === true) {
                             Swal.fire({
                                 position: 'bottom-end',

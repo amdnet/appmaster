@@ -6,7 +6,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
-                <form action="<?= base_url('users/proses'); ?>" method="POST" enctype="multipart/form-data">
+                <form action="<?= base_url('users/addsave'); ?>" method="POST" enctype="multipart/form-data">
                     <?= csrf_field(); ?>
 
                     <div class="row">
@@ -41,14 +41,30 @@
                                     <div class="card-body">
                                         <div class="row">
 
-                                            <div class="col-md-12 mb-3">
+                                            <div class="col-md-6 mb-3">
                                                 <label for="role"> User Role: <span class="text-danger">*</span></label>
-                                                <select id="role" name="role" class="custom-select">
-                                                    <option value="" selected disabled required>Pilih Role</option>
+                                                <select id="role" name="role" class="form-control <?= ($validation->hasError('role')) ? 'is-invalid' : ''; ?>">
+                                                    <option value="" disabled selected>-- pilih opsi role akun user --</option>
                                                     <?php foreach ($role as $rule) : ?>
-                                                        <option value="<?= $rule->id ?>"> <?= $rule->name ?></option>
+                                                        <option value="<?= $rule->id ?>"> <?= $rule->name ?> | <?= $rule->description ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
+                                                <div class="invalid-feedback">
+                                                    <?= $validation->getError('role'); ?>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="fullname"> Nama: <span class="text-danger">*</span> <small>(nama advisor, pic, surveyor, client)</small></label>
+                                                <div class="input-group">
+                                                    <input type="text" id="fullname" name="fullname" class="form-control <?= ($validation->hasError('fullname')) ? 'is-invalid' : ''; ?>" placeholder="nama lengkap" value="<?= old('fullname'); ?>">
+                                                    <div class="input-group-prepend">
+                                                        <div class="input-group-text"><i class="fas fa-user-circle"></i></div>
+                                                    </div>
+                                                    <div class="invalid-feedback">
+                                                        <?= $validation->getError('fullname'); ?>
+                                                    </div>
+                                                </div>
                                             </div>
 
                                             <div class="col-md-6 mb-3">
@@ -65,7 +81,7 @@
                                             </div>
 
                                             <div class="col-md-6 mb-3">
-                                                <label for="username"> Username: <span class="text-danger">*</span></label>
+                                                <label for="username"> Username: <span class="text-danger">*</span> <small>(nama asuransi, user login)</small></label>
                                                 <div class="input-group">
                                                     <input type="text" id="username" name="username" class="form-control <?= ($validation->hasError('username')) ? 'is-invalid' : ''; ?>" placeholder="Username" value="<?= old('username'); ?>">
                                                     <div class="input-group-prepend">

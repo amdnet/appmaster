@@ -1,22 +1,17 @@
 <?php
-// ADEL CODEIGNITER 4 CRUD GENERATOR
 
 namespace App\Models;
+
 use CodeIgniter\Model;
 
-class MemberModel extends Model {
-    
-	protected $table = 'users';
-	protected $primaryKey = 'id';
-	protected $returnType = 'object';
-	protected $useSoftDeletes = false;
-	protected $allowedFields = ['email', 'username', 'photo', 'alamat', 'telp', 'password_hash', 'created_at', 'updated_at'];
-	protected $useTimestamps = false;
-	protected $createdField  = 'created_at';
-	protected $updatedField  = 'updated_at';
-	protected $deletedField  = 'deleted_at';
-	protected $validationRules    = [];
-	protected $validationMessages = [];
-	protected $skipValidation     = true;    
-	
+class MemberModel extends Model
+{
+	public function getData()
+	{
+		return $this->db->table('users')
+			->select('users.id as userid, email, username, telp, alamat, name')
+			->join('auth_groups_users', 'auth_groups_users.user_id = users.id')
+			->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id')
+			->get()->getResult();
+	}
 }

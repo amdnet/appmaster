@@ -32,10 +32,22 @@ $routes->setAutoRoute(true);
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::index');
-// $routes->post('/user/proses', 'Users::proses');
-$routes->get('/user/(:num)', 'Users::detail/$1');
+// $routes->post('/users/proses', 'Users::proses');
+
+// role user
+$routes->get('/users', 'Users::index', ['filter' => 'role:Admin,Advisor']);
+$routes->get('/users/index', 'Users::index', ['filter' => 'role:Admin,Advisor']);
+$routes->get('/users/add', 'Users::add', ['filter' => 'role:Admin,Advisor']);
+$routes->post('/users/addsave', 'Users::addsave');
+// $routes->get('/users/detail', 'Users::index', ['filter' => 'role:Admin,Advisor']);
+// $routes->get('/users/detail/(:any)', 'Users::detail/$1', ['filter' => 'role:Admin,Advisor']);
+$routes->get('/users/update/(:segment)', 'Users::update/$1', ['filter' => 'role:Admin,Advisor']);
+$routes->delete('/users/delete/(:num)', 'Users::delete/$1');
 // $routes->get('/', '\Myth\Auth\Controllers\AuthController::login');
 // $routes->get('/user/(:num)', 'User::detail/$1', ['filter' => 'role:admin']);
+// $routes->match(["get", "post"], "users/add", "Users::addMember");
+
+// $routes->get('/detail/(:alpha)','Home::detail/$1');
 
 /*
  * --------------------------------------------------------------------

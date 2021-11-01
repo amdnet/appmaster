@@ -7,13 +7,8 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Dashboard</h3>
+                        <h3 class="card-title">Dashboard Client</h3>
                     </div>
-
-                    Service advisor = menerima customer <br>
-                    PIC = bagian bengkel belakang <br>
-                    Surveyor = perwakilan asuransi <br>
-                    Client
 
                 </div> <!-- card -->
             </div> <!-- col-12 -->

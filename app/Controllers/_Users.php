@@ -9,6 +9,7 @@ class Users extends BaseController
 {
     protected $usersModel;
     protected $validation;
+
     public function __construct()
     {
         $this->usersModel = new UsersModel();
@@ -17,15 +18,11 @@ class Users extends BaseController
 
     public function index()
     {
-        $db = db_connect();
-        $query   = $db->query('SELECT id, name FROM auth_groups')->getResult();
-
         $data = [
             'controller' => 'users',
             'pageTitle' => 'List User Account',
-            'role' => $query
         ];
-        return view('user/index', $data);
+        return view('users/index', $data);
     }
 
     public function login()
@@ -35,7 +32,7 @@ class Users extends BaseController
             'pageTitle' => 'User Login Information',
             'userLogin' => $userLogin->findAll()
         ];
-        return view('user/login', $data);
+        return view('users/login', $data);
     }
 
     public function profil()
@@ -44,175 +41,203 @@ class Users extends BaseController
         $data['pageTitle'] = 'Profil User';
         $data['ip'] = $this->request->getIPAddress();
         $data['browser'] = $agent->getBrowser();
-        return view('user/profil', $data);
-    }
-
-    public function akun()
-    {
-        $data['pageTitle'] = 'Detail Akun User';
-        return view('user/akun', $data);
-    }
-
-    public function getAll()
-    {
-        $response = array();
-        $data['data'] = array();
-        $db = db_connect();
-        $builder = $db->table('users');
-        $builder->select('users.id as userid, email, username, photo, created_at, updated_at, name');
-        $builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
-        $builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
-        $result = $builder->get()->getResult();
-        $no = 1;
-
-        foreach ($result as $key => $value) {
-            $ops = '<button type="button" class="btn btn-sm btn-info" onclick="view(' . $value->userid . ')"><i class="fa fa-eye"></i></button> <button type="button" class="btn btn-sm btn-success" onclick="edit(' . $value->userid . ')"><i class="fa fa-pencil-alt"></i></button> <button type="button" class="btn btn-sm btn-danger" onclick="remove(' . $value->userid . ')"><i class="fa fa-trash-alt"></i></button>';
-            $data['data'][$key] = array(
-                // $no++,
-                $value->userid,
-                $value->photo,
-                $value->email,
-                $value->username,
-                $value->name,
-                $value->created_at,
-                $value->updated_at,
-                $ops,
-            );
-        }
-        return $this->response->setJSON($data);
-    }
-
-    public function getOne()
-    {
-        $response = array();
-        $id = $this->request->getPost('id');
-        if ($this->validation->check($id, 'required|numeric')) {
-            $data = $this->usersModel->where('id', $id)->first();
-            return $this->response->setJSON($data);
-        } else {
-            throw new \CodeIgniter\Exceptions\PageNotFoundException();
-        }
+        return view('users/profil', $data);
     }
 
     public function add()
     {
-        $response = array();
-        // $db = db_connect();
-        // $builder = $db->table('users');
-        // $builder->select('users.id as userid, email, username, password_hash, created_at, updated_at, name');
-        // $builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
-        // $builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
-
-        $fields['role'] = $this->request->getPost('role');
-        $fields['id'] = $this->request->getPost('id');
-        // $fields['images'] = $this->request->getPost('images');
-        $fields['username'] = $this->request->getPost('username');
-        $fields['email'] = $this->request->getPost('email');
-        $fields['password_hash'] = password_hash($this->request->getPost('password_hash'), PASSWORD_DEFAULT);
-
-        $this->validation->setRules([
-            // 'images' => ['label' => 'Images', 'rules' => 'permit_empty|max_length[255]'],
-            // 'userid' => ['label' => 'User id', 'rules' => 'required|max_length[30]'],
-            'role' => [
-                'label' => 'Role',
-                'rules' => 'required',
-            ],
-            'email' => [
-                'label'  => 'Email',
-                'rules'  => 'required|is_unique[users.email]|valid_email',
-                'errors' => [
-                    'is_unique' => 'Nama {field} tidak boleh sama dengan yang sudah ada',
-                    'valid_email' => 'Format {field} tidak valid'
-                ]
-            ],
-            'username' => [
-                'label'  => 'Username',
-                'rules'  => 'required|is_unique[users.username]|min_length[5]|max_length[15]',
-                'errors' => [
-                    'is_unique' => 'Nama {field} tidak boleh sama dengan yang sudah ada',
-                    'min_length' => 'Minimal karakter {field} adalah 5 termasuk spasi',
-                    'max_length' => 'Maksimal karakter {field} adalah 15 termasuk spasi'
-                ]
-            ],
-            // 'password_hash' => ['label' => 'Password hash', 'rules' => 'required|min_length[8]'],
-            'password_hash' => [
-                'label' => 'Password',
-                'rules' => 'required|min_length[8]',
-                'error' => [
-                    'min_length' => 'Minimal karakter {field} adalah 8 termasuk spasi'
-                ]
-            ],
-
-            'password_confirm' => [
-                'label' => 'Konfirmasi Password',
-                'rules' => 'matches[password_hash]',
-                'error' => [
-                    'matches' => '{field} tidak sama'
-                ]
-            ]
-        ]);
-
-        if ($this->validation->run($fields) == FALSE) {
-            $response['success'] = false;
-            $response['messages'] = $this->validation->listErrors();
-        } else {
-            if ($this->usersModel->insert($fields)) {
-                $response['success'] = true;
-                $response['messages'] = 'Data has been inserted successfully';
-            } else {
-                $response['success'] = false;
-                $response['messages'] = 'Insertion error!';
-            }
-        }
-        return $this->response->setJSON($response);
+        $db = db_connect();
+        $query   = $db->query('SELECT id, name FROM auth_groups')->getResult();
+        $data = [
+            'pageTitle' => 'Form Tambah User Akun',
+            'role' => $query,
+            'validation' => $this->validation
+        ];
+        return view('users/add', $data);
     }
 
-    public function edit()
+    // buat user akun baru
+    public function addsave()
     {
-        $response = array();
-        $fields['id'] = $this->request->getPost('id');
-        $fields['images'] = $this->request->getPost('images');
-        $fields['username'] = $this->request->getPost('username');
-        $fields['email'] = $this->request->getPost('email');
-        // $fields['password_hash'] = $this->request->getPost('passwordHash');
+        if (!$this->validate([
+            'role' => 'required',
+            'email' => 'trim|required|valid_email|is_unique[users.email]',
+            'username' => 'trim|required|min_length[5]|max_length[30]|is_unique[users.username]',
+            'fullname' => 'trim|required|min_length[3]|max_length[30]',
+            'photo' => 'max_size[photo,2048]|is_image[photo]|mime_in[photo,image/jpg,image/jpeg,image/gif,image/png]',
+            'telp' => 'required|min_length[6]|max_length[15]|is_unique[users.telp]|numeric',
+            'alamat' => 'required|min_length[10]|max_length[100]',
+            'password' => 'required|min_length[8]|max_length[30]',
+            'pass_confirm' => 'matches[password]'
+        ])) {
+            session()->setFlashdata('error', $this->validator->listErrors());
+            return redirect()->back()->withInput();
+        }
 
-        $this->validation->setRules([
-            'images' => ['label' => 'Images', 'rules' => 'permit_empty|max_length[255]'],
-            'username' => ['label' => 'Username', 'rules' => 'required|max_length[30]'],
-            'email' => ['label' => 'Email', 'rules' => 'required|max_length[30]'],
-            'password_hash' => ['label' => 'Password hash', 'rules' => 'required|max_length[30]'],
+        // ambil photo
+        $filePhoto = $this->request->getFile('photo');
+
+        // cek tidak ada photo
+        if ($filePhoto->getError() == 4) {
+            $namaPhoto = 'default.svg';
+        } else {
+            $filePhoto->move('public/profil');
+            $namaPhoto = $filePhoto->getName();
+        }
+
+        $this->usersModel->insert([
+            'email' => $this->request->getVar('email'),
+            'username' => $this->request->getVar('username'),
+            'fullname' => $this->request->getVar('fullname'),
+            'photo' => $namaPhoto,
+            'telp' => $this->request->getVar('telp'),
+            'alamat' => $this->request->getVar('alamat'),
+            'password_hash' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT)
         ]);
 
-        if ($this->validation->run($fields) == FALSE) {
-            $response['success'] = false;
-            $response['messages'] = $this->validation->listErrors();
-        } else {
-            if ($this->usersModel->update($fields['id'], $fields)) {
-                $response['success'] = true;
-                $response['messages'] = 'Successfully updated';
-            } else {
-                $response['success'] = false;
-                $response['messages'] = 'Update error!';
-            }
-        }
-        return $this->response->setJSON($response);
+        $userID = $this->usersModel->insertID();
+
+        $db = db_connect();
+        $builder = $db->table('auth_groups_users');
+        $builder->insert([
+            'group_id' => $this->request->getVar('role'),
+            'user_id' => $userID
+        ]);
+        session()->setFlashdata('pesan', 'Data akun user berhasil disimpan!');
+        return redirect()->to('/users');
+        // return redirect()->back()->withInput();
     }
 
+    public function detail($id)
+    {
+        $db = db_connect();
+        $query = $db->query('SELECT id, name FROM auth_groups')->getResult();
+        $data = [
+            'controller' => 'users',
+            'pageTitle' => 'Detail User Account',
+            'role' => $query,
+            'detail' => $this->usersModel->getUsers($id),
+            'validation' => $this->validation
+        ];
+        return view('users/detail', $data);
+    }
+
+    public function update($id)
+    {
+        // single update database
+        // $this->usersModel->save([
+        //     'id' => $id,
+        //     'email' => $this->request->getVar('email'),
+        //     'username' => $this->request->getVar('username'),
+        //     // 'photo' => $namaPhoto,
+        //     'telp' => $this->request->getVar('telp'),
+        //     'alamat' => $this->request->getVar('alamat'),
+        //     // 'password_hash' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT)
+        // ]);
+
+        $emailLama = $this->usersModel->getUser($this->request->getVar('email'));
+        if ($emailLama == $this->request->getVar('email')) {
+            $emailRule = 'trim|required|valid_email';
+        } else {
+            $emailRule = 'trim|required|valid_email|is_unique[users.email,id,{id}]';
+        }
+
+        if (!$this->validate([
+            'role' => 'required',
+            // 'email' => $emailRule,
+            'email' => 'trim|required|valid_email',
+            'username' => 'required|min_length[5]|max_length[30]|is_unique[users.username]',
+            'photo' => 'max_size[photo,2048]|is_image[photo]|mime_in[photo,image/jpg,image/jpeg,image/gif,image/png]',
+            'telp' => 'required|min_length[6]|max_length[15]|is_unique[users.telp]|numeric',
+            'alamat' => 'required|min_length[10]|max_length[100]',
+            'password' => 'required|min_length[8]|max_length[30]',
+            'pass_confirm' => 'matches[password]'
+        ])) {
+            session()->setFlashdata('error', $this->validator->listErrors());
+            return redirect()->back()->withInput();
+        }
+
+        // // ambil photo
+        // $filePhoto = $this->request->getFile('photo');
+
+        // // cek tidak ada photo
+        // if ($filePhoto->getError() == 4) {
+        //     $namaPhoto = 'default.svg';
+        // } else {
+        //     $filePhoto->move('public/profil');
+        //     $namaPhoto = $filePhoto->getName();
+        // }
+
+        $this->usersModel->save([
+            'id' => $id,
+            'email' => $this->request->getVar('email'),
+            'username' => $this->request->getVar('username'),
+            // 'photo' => $namaPhoto,
+            'telp' => $this->request->getVar('telp'),
+            'alamat' => $this->request->getVar('alamat'),
+            // 'password_hash' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT)
+        ]);
+
+        // $data = array(
+        //     'group_id' => $this->request->getVar('role')
+        // );
+        // $db = db_connect();
+        // $builder = $db->table('auth_groups_users');
+        // $builder->where('user_id', $id);
+        // $builder->update($data);
+
+        // session()->setFlashdata('pesan', 'Akun user berhasil diperbaharui!');
+        // // return redirect()->to('/users');
+        // return redirect()->back()->withInput();
+    }
+
+
+    // hapus user akun
     public function remove()
     {
+        // // single delete
+        // $userID = $this->usersModel->delete($id);
+        // $db = db_connect();
+        // $builder = $db->table('auth_groups_users');
+        // $builder->delete($userID);
+
         $response = array();
-        $id = $this->request->getPost('id');
+        $id = $this->request->getVar('userid');
+        $userID = $this->usersModel->delete($id);
         if (!$this->validation->check($id, 'required|numeric')) {
             throw new \CodeIgniter\Exceptions\PageNotFoundException();
         } else {
             if ($this->usersModel->where('id', $id)->delete()) {
                 $response['success'] = true;
                 $response['messages'] = 'Deletion succeeded';
+
+                $db = db_connect();
+                $builder = $db->table('auth_groups_users');
+                $builder->delete($userID);
             } else {
                 $response['success'] = false;
                 $response['messages'] = 'Deletion error!';
             }
         }
         return $this->response->setJSON($response);
+    }
+
+    public function getAll()
+    {
+        $result = $this->usersModel->getData();
+        foreach ($result as $key => $value) {
+            // $ops = '<a href="' . base_url('users/detail/' . $value->userid) . '" class="btn btn-sm bg-primary">detail</a> <a href="' . base_url('users/remove/' . $value->userid) . '" class="btn btn-sm btn-danger">hapus</a>';
+            $ops = '<a href="' . base_url('users/detail/' . $value->userid) . '" class="btn btn-sm bg-primary">detail</a> <button type="button" class="btn btn-sm btn-danger" onclick="remove(' . $value->userid . ')">hapus</button>';
+            $data['data'][$key] = array(
+                $value->userid,
+                $value->email,
+                $value->username,
+                $value->name,
+                $value->telp,
+                $value->alamat,
+                $ops,
+            );
+        }
+        return $this->response->setJSON($data);
     }
 }

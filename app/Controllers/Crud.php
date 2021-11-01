@@ -1,0 +1,17 @@
+<?php
+
+namespace App\Controllers;
+
+class Crud extends BaseController
+{
+    public function index()
+    {
+        $db = db_connect();
+        $query   = $db->query('SELECT id, name FROM auth_groups')->getResult();
+        $data = [
+            'pageTitle' => 'Form Tambah User Akun',
+            'role' => $query,
+        ];
+        return view('crud', $data);
+    }
+}

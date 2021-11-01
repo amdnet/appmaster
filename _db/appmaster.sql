@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 27 Okt 2021 pada 21.53
+-- Waktu pembuatan: 01 Nov 2021 pada 20.15
 -- Versi server: 10.4.21-MariaDB
 -- Versi PHP: 7.4.24
 
@@ -52,10 +52,11 @@ CREATE TABLE `auth_groups` (
 --
 
 INSERT INTO `auth_groups` (`id`, `name`, `description`) VALUES
-(1, 'Super Admin', 'Super Administrator'),
-(2, 'Admin', 'administrator'),
-(3, 'Asuransi', 'User Asuransi'),
-(4, 'Client', 'User Client');
+(1, 'Admin', 'Web Administrator'),
+(2, 'Advisor', 'Staff konsumen'),
+(3, 'PIC', 'Staff bengkel'),
+(4, 'Asuransi', 'Asuransi perusahaan'),
+(5, 'Surveyor', 'Asuransi perwakilan');
 
 -- --------------------------------------------------------
 
@@ -99,7 +100,14 @@ CREATE TABLE `auth_groups_users` (
 
 INSERT INTO `auth_groups_users` (`group_id`, `user_id`) VALUES
 (1, 1),
-(2, 2);
+(1, 25),
+(1, 26),
+(2, 23),
+(3, 2),
+(3, 21),
+(3, 22),
+(4, 20),
+(4, 24);
 
 -- --------------------------------------------------------
 
@@ -148,7 +156,13 @@ INSERT INTO `auth_logins` (`id`, `ip_address`, `email`, `user_id`, `date`, `succ
 (25, '127.0.0.1', 'admin1@gmail.com', NULL, '2021-10-27 16:39:11', 0),
 (26, '127.0.0.1', 'admin1@gmail.com', 1, '2021-10-27 16:39:22', 1),
 (27, '127.0.0.1', 'admin1@gmail.com', 1, '2021-10-27 18:53:28', 1),
-(28, '127.0.0.1', 'admin1@gmail.com', 1, '2021-10-27 19:02:12', 1);
+(28, '127.0.0.1', 'admin1@gmail.com', 1, '2021-10-27 19:02:12', 1),
+(29, '127.0.0.1', 'admin1@gmail.com', NULL, '2021-10-31 08:39:15', 0),
+(30, '127.0.0.1', 'admin1@gmail.com', 1, '2021-10-31 08:39:23', 1),
+(31, '127.0.0.1', 'admin1@gmail.com', 1, '2021-10-31 19:21:30', 1),
+(32, '127.0.0.1', 'admin1@gmail.com', 1, '2021-11-01 03:27:08', 1),
+(33, '127.0.0.1', 'admin1@gmail.com', 1, '2021-11-01 03:46:34', 1),
+(34, '127.0.0.1', 'admin1@gmail.com', 1, '2021-11-01 15:39:11', 1);
 
 -- --------------------------------------------------------
 
@@ -215,6 +229,27 @@ CREATE TABLE `auth_users_permissions` (
 -- --------------------------------------------------------
 
 --
+-- Struktur dari tabel `data_progress`
+--
+
+CREATE TABLE `data_progress` (
+  `pgs_id` int(11) UNSIGNED NOT NULL,
+  `pgs_kode` varchar(25) NOT NULL,
+  `pgs_client` varchar(30) NOT NULL,
+  `pgs_mobil` varchar(30) NOT NULL,
+  `pgs_polisi` varchar(30) NOT NULL,
+  `pgs_tgl` date NOT NULL,
+  `pgs_location` varchar(30) NOT NULL,
+  `pgs_progress` varchar(5) NOT NULL,
+  `pgs_note` varchar(255) NOT NULL,
+  `pgs_photo` varchar(255) NOT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Struktur dari tabel `kat_mobil`
 --
 
@@ -233,7 +268,7 @@ CREATE TABLE `kat_mobil` (
 INSERT INTO `kat_mobil` (`id_mobil`, `mobil`, `username`, `created_at`, `updated_at`) VALUES
 (1, 'mobil ok', 'admin satu', '2021-10-22 23:06:50', '2021-10-23 21:46:38'),
 (2, 'mobil dua', 'admin satu', '2021-10-23 20:43:44', '2021-10-23 20:43:44'),
-(4, 'dws dwda', 'admin satu', '2021-10-26 21:38:45', '2021-10-26 21:38:45');
+(4, 'dwst dwda', 'admin satu', '2021-10-26 21:38:45', '2021-10-31 09:41:09');
 
 -- --------------------------------------------------------
 
@@ -254,7 +289,7 @@ CREATE TABLE `kat_stall` (
 --
 
 INSERT INTO `kat_stall` (`id_stall`, `stall`, `username`, `created_at`, `updated_at`) VALUES
-(8, '123 4', 'admin satu', '2021-10-22 03:56:50', '2021-10-27 17:34:54'),
+(8, '1234a', 'admin satu', '2021-10-22 03:56:50', '2021-11-01 19:12:19'),
 (10, 'satu dua 2222', 'admin satu', '2021-10-23 20:23:44', '2021-10-26 23:06:47'),
 (12, 'stall yang keberapa', '', '2021-10-23 20:36:25', '2021-10-23 20:36:25'),
 (13, 'stall sepuluh', '', '2021-10-23 20:38:59', '2021-10-23 20:38:59'),
@@ -295,7 +330,10 @@ CREATE TABLE `users` (
   `id` int(11) UNSIGNED NOT NULL,
   `email` varchar(255) NOT NULL,
   `username` varchar(30) NOT NULL,
-  `images` varchar(255) NOT NULL DEFAULT 'default.svg',
+  `fullname` varchar(30) NOT NULL,
+  `photo` varchar(255) NOT NULL DEFAULT 'default.svg',
+  `telp` varchar(30) DEFAULT NULL,
+  `alamat` varchar(100) DEFAULT NULL,
   `password_hash` varchar(255) NOT NULL,
   `reset_hash` varchar(255) DEFAULT NULL,
   `reset_at` datetime DEFAULT NULL,
@@ -314,19 +352,24 @@ CREATE TABLE `users` (
 -- Dumping data untuk tabel `users`
 --
 
-INSERT INTO `users` (`id`, `email`, `username`, `images`, `password_hash`, `reset_hash`, `reset_at`, `reset_expires`, `activate_hash`, `status`, `status_message`, `active`, `force_pass_reset`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'admin1@gmail.com', 'admin satu', 'default.svg', '$2y$10$0S1DSGWUTUAf53go7ccHQOy5MuJ9TSicPlsbzr0cn9fZBwXljfQfa', NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, '2021-10-18 10:49:12', '2021-10-18 10:49:53', NULL),
-(2, 'admin2@gmail.com', 'admin dua', 'default.svg', '$2y$10$0S1DSGWUTUAf53go7ccHQOy5MuJ9TSicPlsbzr0cn9fZBwXljfQfa', NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, '2021-10-20 17:47:13', '2021-10-20 17:47:13', NULL),
-(3, 'admin3@gmail.com', 'admin tiga3', 'select1', '123456', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, '2021-10-27 02:11:44', NULL),
-(7, 'admin5@gmail.com', 'webmaster', '1', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-10-27 22:46:23', '2021-10-27 22:46:23', NULL),
-(10, 'client@gmai.com', 'cliuent1', 'default.svg', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-10-28 00:38:37', '2021-10-28 00:38:37', NULL),
-(11, 'client1@gmai.com', 'admin satu1', 'default.svg', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-10-28 00:46:17', '2021-10-28 00:46:17', NULL),
-(12, 'dwa@dwad.com', 'admin sat', 'default.svg', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-10-28 00:47:02', '2021-10-28 00:47:02', NULL),
-(13, 'client54@gmai.com', 'admin', 'default.svg', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-10-28 00:51:33', '2021-10-28 00:51:33', NULL),
-(14, 'dwadwa@fewafd.co', 'dwawdad', 'default.svg', '$2y$10$tR5JUbR8w3VB1Az41McYd.Ei59d4Fblb6HE4mE/f0nDGmHhIeJ1lO', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-10-28 01:05:36', '2021-10-28 01:05:36', NULL),
-(15, 'fehtre@hgfd.uy', 'asytesre', 'default.svg', '$2y$10$7SPg7/Emsv8iwJFtH6qjAe3RfHmLzXRRMICiQV0p.ouuL2NU3tfnq', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-10-28 01:10:17', '2021-10-28 01:10:17', NULL),
-(16, 'addwamin10@gmail.com', 'admin satdwau', 'default.svg', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-10-28 02:04:10', '2021-10-28 02:04:10', NULL),
-(17, 'adwadmin10@gmail.com', 'clwaiuent1', 'default.svg', '$2y$10$sAwx0n1mnvAaIG8RF1ItHO5v2WHY.3Ry6teudO5vakJhZ5CzytKou', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-10-28 02:05:31', '2021-10-28 02:05:31', NULL);
+INSERT INTO `users` (`id`, `email`, `username`, `fullname`, `photo`, `telp`, `alamat`, `password_hash`, `reset_hash`, `reset_at`, `reset_expires`, `activate_hash`, `status`, `status_message`, `active`, `force_pass_reset`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'admin1@gmail.com', 'admin satu', '', 'default.svg', '', '', '$2y$10$0S1DSGWUTUAf53go7ccHQOy5MuJ9TSicPlsbzr0cn9fZBwXljfQfa', NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, '2021-10-18 10:49:12', '2021-10-18 10:49:53', NULL),
+(2, 'admin2@gmail.com', 'admin dua', '', 'default.svg', '9097865645', 'jalan kanggraksan no 950 cirebon', '$2y$10$0S1DSGWUTUAf53go7ccHQOy5MuJ9TSicPlsbzr0cn9fZBwXljfQfa', NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, '2021-10-20 17:47:13', '2021-11-01 03:23:56', NULL),
+(11, 'client1@gmai.com', 'admin satu1', '', 'default.svg', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-10-28 00:46:17', '2021-10-28 00:46:17', NULL),
+(12, 'dwa@dwad.com', 'admin sat', '', 'default.svg', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-10-28 00:47:02', '2021-10-28 00:47:02', NULL),
+(13, 'client54@gmai.com', 'admin', '', 'default.svg', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-10-28 00:51:33', '2021-10-28 00:51:33', NULL),
+(14, 'dwadwa@fewafd.co', 'dwawdad', '', 'default.svg', '', '', '$2y$10$tR5JUbR8w3VB1Az41McYd.Ei59d4Fblb6HE4mE/f0nDGmHhIeJ1lO', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-10-28 01:05:36', '2021-10-28 01:05:36', NULL),
+(15, 'fehtre@hgfd.uy', 'asytesre', '', 'default.svg', '', '', '$2y$10$7SPg7/Emsv8iwJFtH6qjAe3RfHmLzXRRMICiQV0p.ouuL2NU3tfnq', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-10-28 01:10:17', '2021-10-28 01:10:17', NULL),
+(16, 'addwamin10@gmail.com', 'admin satdwau', '', 'default.svg', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-10-28 02:04:10', '2021-10-28 02:04:10', NULL),
+(17, 'adwadmin10@gmail.com', 'clwaiuent1', '', 'default.svg', '', '', '$2y$10$sAwx0n1mnvAaIG8RF1ItHO5v2WHY.3Ry6teudO5vakJhZ5CzytKou', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-10-28 02:05:31', '2021-10-28 02:05:31', NULL),
+(19, '', '', '', 'default.svg', NULL, 'jalan kanggraksan no 950 cirebon', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-11-01 01:59:55', '2021-11-01 01:59:55', NULL),
+(20, 'client00@gmai.com', 'cliunt1', '', 'default.svg', '', '', '$2y$10$Rq3CZNRgCG6vseYblrwMJeu0hDTbTEcA6OafQkX4.v5/3Anlhymqq', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-11-01 04:46:15', '2021-11-01 05:06:43', NULL),
+(21, 'mailasi@yaho.com', 'asuransi pertama', '', 'bfb5cc0872b444917fc7dc4e252d25ff.jpg', '0096554', 'tuparev barat', '$2y$10$mIhH22ReIQoc5P7xAY486.LSV6/vqs1GPjZod4EV9zLJPlHU06Vn.', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-11-01 06:07:42', '2021-11-01 21:06:25', NULL),
+(22, 'ransi@gmail.com', 'asuransi abc', 'nama surveyor', 'rujak-kangkung-sambel-asem-foto-resep-utama.jpg', '089784496', 'fatahillah jabar', '$2y$10$G6778OcNxfA9/ra3VZu/ceoK7iWmuU3TOkRMFeOZHrfmmlefXYQve', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-11-01 21:21:26', '2021-11-01 21:21:42', NULL),
+(23, 'picbengkel@gm.com', 'pic nama user', 'nama advisor', '1635778558_f8ef36f1946cb12ced3c.jpg', '785785685', 'nama alamanar', '$2y$10$ZGfk5ocrQoUso9eV6/ZmqOBLMPF9EUFkzmORyfW218binPWGQVIty', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-11-01 21:53:47', '2021-11-01 21:55:58', NULL),
+(24, 'clien5t@gmai.com', 'fuytrr gtree', 'nar iku', '1635779286_f95959f7b36293e52ce2.jpg', '258569866', 'yfyuiui mkuhny', '$2y$10$i.8i.aXruwZ5bBnYsAr1iOWZux48hVd69eIEBuVSQ2zKyBZJ1Mf9a', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-11-01 22:06:33', '2021-11-01 22:08:06', NULL),
+(25, 'adm954@yahu.com', 'adm 954', 'admin 954', '1635782416_c143efbeba38667fabd9.png', '987498565', 'jalan kalibata', '$2y$10$N9seziHylqWS8bMwRAtn/uWZtjWJ57WMCEaQm2B9uqSrpF/kjIRG.', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-11-01 22:31:28', '2021-11-01 23:00:16', NULL),
+(26, 'aaddrfd@fttg.byfd', 'useruser', 'adsawu', '1635789446_013c8b442b57be5e6051.jpg', '123456789', 'gyjiuhygygt', '$2y$10$7nYPjl9NhDEaHND49PhboOO/rE4og.gu82SqipI6f0EiolhTLgTeO', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-11-01 23:00:50', '2021-11-02 01:41:20', NULL);
 
 --
 -- Indexes for dumped tables
@@ -394,6 +437,13 @@ ALTER TABLE `auth_users_permissions`
   ADD KEY `user_id_permission_id` (`user_id`,`permission_id`);
 
 --
+-- Indeks untuk tabel `data_progress`
+--
+ALTER TABLE `data_progress`
+  ADD PRIMARY KEY (`pgs_id`),
+  ADD KEY `pgs_kode` (`pgs_kode`);
+
+--
 -- Indeks untuk tabel `kat_mobil`
 --
 ALTER TABLE `kat_mobil`
@@ -433,13 +483,13 @@ ALTER TABLE `auth_activation_attempts`
 -- AUTO_INCREMENT untuk tabel `auth_groups`
 --
 ALTER TABLE `auth_groups`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT untuk tabel `auth_logins`
 --
 ALTER TABLE `auth_logins`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT untuk tabel `auth_permissions`
@@ -458,6 +508,12 @@ ALTER TABLE `auth_reset_attempts`
 --
 ALTER TABLE `auth_tokens`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT untuk tabel `data_progress`
+--
+ALTER TABLE `data_progress`
+  MODIFY `pgs_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `kat_mobil`
@@ -481,7 +537,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)

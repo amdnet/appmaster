@@ -1,4 +1,7 @@
 <?= $this->extend('layout/template.php') ?>
+<?= $this->section('css') ?>
+<?php include_once "app/views/layout/tabelcss.php"; ?>
+<?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
 <section class="content">
@@ -65,7 +68,7 @@
 </div>
 <!-- End add modal content -->
 
-<!-- Start update modal content -->
+<!-- Start edit modal content -->
 <div id="edit-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
@@ -105,6 +108,7 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('script') ?>
+<?php include_once "app/views/layout/tabeljs.php"; ?>
 <script>
     $(function() {
         $('#data_table').DataTable({
@@ -114,17 +118,23 @@
             "searching": true,
             "ordering": true,
             "info": true,
-            "autoWidth": true,
+            "autoWidth": false,
             "responsive": true,
+            language: {
+                emptyTable: "Tidak ada data di dalam tabel",
+                info: "Menampilkan _START_ hingga _END_ dari _TOTAL_ data entri",
+                lengthMenu: "Lihat _MENU_ entri",
+                loadingRecords: "Loading data...",
+                processing: "Memproses data...",
+                search: "Pencarian: ",
+                searchPlaceholder: "Cari kategori mobil",
+            },
             "ajax": {
                 "url": '<?php echo base_url($controller . '/getAll') ?>',
                 "type": "POST",
                 "dataType": "json",
                 async: "true"
             }
-        });
-        $('mobil').keyup(function() {
-            table.draw();
         });
     });
 
@@ -252,13 +262,8 @@
                     errorPlacement: function(error, element) {
                         if (element.parent('.input-group').length) {
                             error.insertAfter(element.parent());
-                            // } else if ($(element).is('.select')) {
-                            //     element.next().after(error);
-                            // } else if (element.hasClass('select2')) {
-                            //     //--error.insertAfter(element);
-                            //     error.insertAfter(element.next());
-                            // } else if (element.hasClass('selectpicker')) {
-                            //     error.insertAfter(element.next());
+                        } else if (element.hasClass('selectpicker')) {
+                            error.insertAfter(element.next());
                         } else {
                             error.insertAfter(element);
                         }

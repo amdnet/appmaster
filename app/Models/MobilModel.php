@@ -10,7 +10,7 @@ class MobilModel extends Model
 	protected $primaryKey = 'id_mobil';
 	protected $returnType = 'object';
 	protected $useSoftDeletes = false;
-	protected $allowedFields = ['mobil', 'username', 'created_at', 'update_at'];
+	protected $allowedFields = ['mobil', 'username'];
 	protected $useTimestamps = true;
 	protected $createdField  = 'created_at';
 	protected $updatedField  = 'updated_at';
