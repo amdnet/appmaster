@@ -49,7 +49,6 @@ class Users extends BaseController
     // pembuatan user akun baru
     public function proses()
     {
-        // dd($this->request->getVar());
         if (!$this->validate([
             'email' => [
                 'label' => 'Email',
@@ -122,7 +121,6 @@ class Users extends BaseController
 
         // ambil photo
         $filePhoto = $this->request->getFile('photo');
-
         // cek tidak ada photo
         if ($filePhoto->getError() == 4) {
             $namaPhoto = 'avatar.png';
@@ -138,7 +136,6 @@ class Users extends BaseController
             'alamat' => $this->request->getVar('alamat'),
             'telp' => $this->request->getVar('telp'),
             'password_hash' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT)
-            // 'password_hash' => password_hash($this->request->getVar('password_hash'), PASSWORD_DEFAULT)
         ]);
         // return redirect()->to('/login');
         session()->setFlashdata('pesan', 'Data akun user berhasil disimpan!');

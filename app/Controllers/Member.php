@@ -36,11 +36,8 @@ class Member extends BaseController
     public function getAll()
     {
         $response = array();
-
         $data['data'] = array();
-
         $result = $this->memberModel->select('id, email, username, photo, alamat, telp')->findAll();
-
         foreach ($result as $key => $value) {
             $ops = '<button type="button" class="btn btn-sm btn-success" onclick="edit(' . $value->id . ')"><i class="fa fa-pencil-alt"></i></button> <button type="button" class="btn btn-sm btn-danger" onclick="remove(' . $value->id . ')"><i class="fa fa-trash-alt"></i></button>';
 
@@ -55,23 +52,17 @@ class Member extends BaseController
                 $ops,
             );
         }
-
         return $this->response->setJSON($data);
     }
 
     public function getOne()
     {
         $response = array();
-
         $id = $this->request->getPost('id');
-
         if ($this->validation->check($id, 'required|numeric')) {
-
             $data = $this->memberModel->where('id', $id)->first();
-
             return $this->response->setJSON($data);
         } else {
-
             throw new \CodeIgniter\Exceptions\PageNotFoundException();
         }
     }
@@ -101,21 +92,16 @@ class Member extends BaseController
             'password_hash' => ['label' => 'Password hash', 'rules' => 'required|max_length[255]'],
             'created_at' => ['label' => 'Created at', 'rules' => 'permit_empty|valid_date'],
             'updated_at' => ['label' => 'Updated at', 'rules' => 'permit_empty|valid_date'],
-
         ]);
 
         if ($this->validation->run($fields) == FALSE) {
-
             $response['success'] = false;
             $response['messages'] = $this->validation->listErrors();
         } else {
-
             if ($this->memberModel->insert($fields)) {
-
                 $response['success'] = true;
                 $response['messages'] = 'Data has been inserted successfully';
             } else {
-
                 $response['success'] = false;
                 $response['messages'] = 'Insertion error!';
             }
@@ -145,51 +131,38 @@ class Member extends BaseController
             'alamat' => ['label' => 'Alamat', 'rules' => 'required|max_length[100]'],
             'telp' => ['label' => 'Telp', 'rules' => 'required|max_length[15]'],
             'password_hash' => ['label' => 'Password hash', 'rules' => 'required|max_length[255]'],
-
         ]);
 
         if ($this->validation->run($fields) == FALSE) {
-
             $response['success'] = false;
             $response['messages'] = $this->validation->listErrors();
         } else {
-
             if ($this->memberModel->update($fields['id'], $fields)) {
-
                 $response['success'] = true;
                 $response['messages'] = 'Successfully updated';
             } else {
-
                 $response['success'] = false;
                 $response['messages'] = 'Update error!';
             }
         }
-
         return $this->response->setJSON($response);
     }
 
     public function remove()
     {
         $response = array();
-
         $id = $this->request->getPost('id');
-
         if (!$this->validation->check($id, 'required|numeric')) {
-
             throw new \CodeIgniter\Exceptions\PageNotFoundException();
         } else {
-
             if ($this->memberModel->where('id', $id)->delete()) {
-
                 $response['success'] = true;
                 $response['messages'] = 'Deletion succeeded';
             } else {
-
                 $response['success'] = false;
                 $response['messages'] = 'Deletion error!';
             }
         }
-
         return $this->response->setJSON($response);
     }
 }
