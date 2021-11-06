@@ -11,6 +11,7 @@ class Crud extends BaseController
         $data = [
             'pageTitle' => 'Form Tambah User Akun',
             'role' => $query,
+            'situs' => $this->situs
         ];
         return view('crud', $data);
     }

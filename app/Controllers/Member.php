@@ -26,7 +26,8 @@ class Member extends BaseController
             'controller' => 'member',
             'pageTitle' => 'Form Member User Akun',
             'role' => $query,
-            'validation' => \Config\Services::validation()
+            'validation' => \Config\Services::validation(),
+            'situs' => $this->situs
         ];
         return view('member', $data);
     }

@@ -20,134 +20,61 @@ class Progress extends BaseController
     {
         $data = [
             'controller' => 'progress',
-            'pageTitle' => 'Data Recent Progress'
+            'pageTitle' => 'Data Recent Progress',
+            'situs' => $this->situs
         ];
         return view('progress/index', $data);
+    }
+
+    public function add()
+    {
+        // $db = db_connect();
+        // $query = $db->query('SELECT * FROM auth_groups')->getResult();
+        // $mobilJenis = $Mobiljenis->getResult();
+        $mobilJenis = new \App\Models\MobilJenisModel;
+        $mobilMerk = new \App\Models\MobilMerkModel;
+        $mobilTipe = new \App\Models\MobilTipeModel;
+        $data = [
+            'controller' => 'progress',
+            'pageTitle' => 'Tambah Data Service Client',
+            'advisor' => $this->progressModel->getAdvisor(),
+            'client' => $this->progressModel->getClient(),
+            'asuransi' => $this->progressModel->getAsuransi(),
+            'pic' => $this->progressModel->getPIC(),
+            'mobilJenis' => $mobilJenis->findAll(),
+            'mobilMerk' => $mobilMerk->findAll(),
+            'mobilTipe' => $mobilTipe->findAll(),
+            'validation' => $this->validation,
+            'situs' => $this->situs
+        ];
+        return view('progress/add', $data);
     }
 
     public function getAll()
     {
         $response = array();
         $data['data'] = array();
-        $result = $this->progressModel->findAll();
-        $no = 1;
+        $result = $this->progressModel->getData();
+        // $result = $this->progressModel
+        //     ->select('*, stall')
+        //     ->join('data_stall', 'data_stall.id_stall = data_progress.id_stall')
+        //     ->findAll();
 
         foreach ($result as $key => $value) {
-            $ops = '<button type="button" class="btn btn-sm btn-success" onclick="edit(' . $value->pgs_id . ')"><i class="fa fa-pencil-alt"></i></button> <button type="button" class="btn btn-sm btn-danger" onclick="remove(' . $value->pgs_id . ')"><i class="fa fa-trash-alt"></i></button>';
+            $no = 1;
+            $poto = '<a href="' . base_url('public/progress/' . $value->pgs_photo) . '" data-toggle="modal" data-target="#photoProfil">
+        <img src="' . base_url('public/progress/' . $value->pgs_photo) . '" title="' . $value->pgs_note . '" class="img-fluid profile-user-img img-rounded"></a>';
+
             $data['data'][$key] = array(
                 $no++,
-                $value->pgs_kode,
-                $value->pgs_client,
-                $value->pgs_mobil,
-                $value->pgs_polisi,
-                $value->pgs_tgl,
-                $value->pgs_location,
-                $value->pgs_progress,
+                $value->id_servis,
+                $value->tgl_progress,
+                $value->stall,
+                $value->fullname,
                 $value->pgs_note,
-                $value->pgs_photo,
-                $value->created_at,
-                $value->updated_at,
-                $ops,
+                $poto
             );
         }
         return $this->response->setJSON($data);
-    }
-
-    public function getOne()
-    {
-        $response = array();
-        $id = $this->request->getPost('id_progress');
-        if ($this->validation->check($id, 'required|numeric')) {
-            $data = $this->progressModel->where('id_progress', $id)->first();
-            return $this->response->setJSON($data);
-        } else {
-            throw new \CodeIgniter\Exceptions\PageNotFoundException();
-        }
-    }
-
-    public function add()
-    {
-        $response = array();
-        $fields['id_progress'] = $this->request->getPost('idProgress');
-        $fields['progress'] = $this->request->getPost('progress');
-        $fields['username'] = $this->request->getPost('username');
-
-        $this->validation->setRules([
-            'progress' => [
-                'label'  => 'Progress',
-                'rules'  => 'required|is_unique[kat_progress.progress]|min_length[5]|max_length[35]',
-                'errors' => [
-                    'is_unique' => 'Nama {field} tidak boleh sama dengan yang sudah ada',
-                    'min_length' => 'Minimal karakter {field} adalah 5 termasuk spasi',
-                    'max_length' => 'Maksimal karakter {field} adalah 35 termasuk spasi'
-                ]
-            ]
-        ]);
-
-        if ($this->validation->run($fields) == FALSE) {
-            $response['success'] = false;
-            $response['messages'] = $this->validation->listErrors();
-        } else {
-            if ($this->progressModel->insert($fields)) {
-                $response['success'] = true;
-                $response['messages'] = 'Data has been inserted successfully';
-            } else {
-                $response['messages'] = 'Insertion error!';
-            }
-        }
-        return $this->response->setJSON($response);
-    }
-
-    public function edit()
-    {
-        $response = array();
-        $fields['id_progress'] = $this->request->getPost('idProgress');
-        $fields['progress'] = $this->request->getPost('progress');
-        $fields['username'] = $this->request->getPost('username');
-
-        $this->validation->setRules([
-            'username' => ['label' => 'Username', 'rules' => 'required|max_length[35]'],
-            'progress' => [
-                'label'  => 'Progress',
-                'rules'  => 'required|is_unique[kat_progress.progress]|min_length[5]|max_length[35]',
-                'errors' => [
-                    'is_unique' => 'Nama {field} tidak boleh sama dengan yang sudah ada',
-                    'min_length' => 'Minimal karakter {field} adalah 5 termasuk spasi',
-                    'max_length' => 'Maksimal karakter {field} adalah 35 termasuk spasi'
-                ]
-            ]
-        ]);
-
-        if ($this->validation->run($fields) == FALSE) {
-            $response['success'] = false;
-            $response['messages'] = $this->validation->listErrors();
-        } else {
-            if ($this->progressModel->update($fields['id_progress'], $fields)) {
-                $response['success'] = true;
-                $response['messages'] = 'Successfully updated';
-            } else {
-                $response['success'] = false;
-                $response['messages'] = 'Update error!';
-            }
-        }
-        return $this->response->setJSON($response);
-    }
-
-    public function remove()
-    {
-        $response = array();
-        $id = $this->request->getPost('id_progress');
-        if (!$this->validation->check($id, 'required|numeric')) {
-            throw new \CodeIgniter\Exceptions\PageNotFoundException();
-        } else {
-            if ($this->progressModel->where('id_progress', $id)->delete()) {
-                $response['success'] = true;
-                $response['messages'] = 'Deletion succeeded';
-            } else {
-                $response['success'] = false;
-                $response['messages'] = 'Deletion error!';
-            }
-        }
-        return $this->response->setJSON($response);
     }
 }

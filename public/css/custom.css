@@ -26,9 +26,9 @@ h4 {
   border: 0 !important;
 }
 
-#Imgavatar {
+/* #Imgavatar {
   max-height: 500px !important;
-}
+} */
 
 .myPhoto .modal-header {
   border: 0;
@@ -79,7 +79,6 @@ label:not(.form-check-label):not(.custom-file-label) {
   font-weight: 400;
 }
 
-/* Add Animation */
 .modal-content,
 #caption {
   -webkit-animation-name: zoom;
@@ -109,7 +108,7 @@ label:not(.form-check-label):not(.custom-file-label) {
 }
 
 button.close {
-  padding: 0.3rem 1rem !important;
+  padding: 0.7rem 1rem !important;
 }
 
 .modal-header .close {

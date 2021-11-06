@@ -6,13 +6,19 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<meta name="<?= csrf_token() ?>" content="<?= csrf_hash() ?>">
-	<title><?= $pageTitle; ?></title>
+	<title><?= $pageTitle . " - " . $situs ?></title>
 
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 	<link rel="stylesheet" href="<?= base_url() ?>/public/css/bootstrap-4.min.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.1.0/dist/css/adminlte.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css">
 	<link rel="stylesheet" href="<?= base_url() ?>/public/css/custom.css">
+	<style>
+		.select2-container .select2-selection--single {
+			height: 38px !important;
+		}
+	</style>
 
 	<?= $this->renderSection('css') ?>
 </head>
@@ -47,10 +53,10 @@
 		<!-- Main Sidebar Container -->
 		<aside class="main-sidebar sidebar-dark-primary elevation-4">
 			<!-- Brand Logo -->
-			<!-- <a href="index3.html" class="brand-link">
-				<img src="<?= base_url() ?>/public/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-				<span class="brand-text font-weight-light">AdminLTE 3</span>
-			</a> -->
+			<!-- <a href="index3.html" class="brand-link"> -->
+			<!-- <img src="<?= base_url() ?>/public/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+				<span class="brand-text font-weight-light">AdminLTE 3</span> -->
+			<!-- </a> -->
 
 			<!-- Sidebar -->
 			<div class="sidebar">
@@ -61,8 +67,8 @@
 					</div>
 
 					<div class="info">
-						<span class="d-block text-white"> hi, <?= user()->username; ?> </span>
-						<small><a href="<?= base_url('users/profil'); ?>" class="<?= (current_url() == base_url('user/profil')) ? 'text-warning' : '' ?>"><i class="far fa-user-circle"></i> Profil</a> <a href="<?= base_url('logout'); ?>" class="ml-3"><i class="fas fa-sign-out-alt"></i> Logout</a></small>
+						<span class="d-block text-white"> hi, <?= user()->fullname; ?> </span>
+						<small><a href="<?= base_url('users/profil/' . user()->id); ?>" class="<?= (current_url() == base_url('user/profil')) ? 'text-warning' : '' ?>"><i class="far fa-user-circle"></i> Profil</a> <a href="<?= base_url('logout'); ?>" class="ml-3"><i class="fas fa-sign-out-alt"></i> Logout</a></small>
 					</div>
 				</div>
 
@@ -115,6 +121,7 @@
 	<script src="<?= base_url() ?>/public/js/sweetalert2.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1.0/dist/js/adminlte.min.js"></script>
 	<script src="<?= base_url() ?>/public/js/dashboard.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 
 	<?= $this->renderSection('script') ?>
 

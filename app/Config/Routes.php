@@ -19,35 +19,78 @@ if (file_exists(SYSTEMPATH . 'Config/Routes.php')) {
 $routes->setDefaultNamespace('App\Controllers');
 $routes->setDefaultController('Home');
 $routes->setDefaultMethod('index');
-$routes->setTranslateURIDashes(false);
+$routes->setTranslateURIDashes(true);
 $routes->set404Override();
 $routes->setAutoRoute(true);
 
 /*
  * --------------------------------------------------------------------
  * Route Definitions
+     Metode GET = membuat daftar data sumber daya.
+     Metode POST = menyimpan data.
+     Metode PUT OR PATCH = memperbarui data yang ada di server.
+     Metode DELETE = menghapus data resource di server.
+* --------------------------------------------------------------------
+* Placeholders
+     'any'      => '.*',
+     'segment'  => '[^/]+',
+     'alphanum' => '[a-zA-Z0-9]+',
+     'num'      => '[0-9]+',
+     'alpha'    => '[a-zA-Z]+',
+     'hash'     => '[^/]+',
+* https://github.com/codeigniter4/CodeIgniter4/blob/develop/system/Router/RouteCollection.php
  * --------------------------------------------------------------------
  */
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
+// $routes->addPlaceholder('uuid', '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}');
 $routes->get('/', 'Home::index');
-// $routes->post('/users/proses', 'Users::proses');
+$routes->get('progress', 'Progress::index');
 
-// role user
-$routes->get('/users', 'Users::index', ['filter' => 'role:Admin,Advisor']);
-$routes->get('/users/index', 'Users::index', ['filter' => 'role:Admin,Advisor']);
-$routes->get('/users/add', 'Users::add', ['filter' => 'role:Admin,Advisor']);
-$routes->post('/users/addsave', 'Users::addsave');
-// $routes->get('/users/detail', 'Users::index', ['filter' => 'role:Admin,Advisor']);
-// $routes->get('/users/detail/(:any)', 'Users::detail/$1', ['filter' => 'role:Admin,Advisor']);
-$routes->get('/users/update/(:segment)', 'Users::update/$1', ['filter' => 'role:Admin,Advisor']);
-$routes->delete('/users/delete/(:num)', 'Users::delete/$1');
-// $routes->get('/', '\Myth\Auth\Controllers\AuthController::login');
-// $routes->get('/user/(:num)', 'User::detail/$1', ['filter' => 'role:admin']);
-// $routes->match(["get", "post"], "users/add", "Users::addMember");
+// $routes->get('/', 'Home::index', ['filter' => 'role:admin,advisor']);
+// $routes->get('/', 'Home::asuransi', ['as' => '/'], ['filter' => 'role:asuransi,surveyor']);
+// $routes->get('home', 'Home::client', ['as' => '/'], ['filter' => 'role:client']);
+$routes->get('users', 'Users::index', ['filter' => 'role:admin,advisor']);
 
-// $routes->get('/detail/(:alpha)','Home::detail/$1');
+$routes->group('users', ['filter' => 'role:admin,advisor'], function ($routes) {
+    // $routes->addRedirect('index', 'users');
+    //     $routes->addRedirect('detail', 'users');
+    // $routes->get('users', 'Users::index');
+    //     $routes->get('detail/(:num)', 'Users::detail/$1');
+    //     $routes->delete('delete/(:num)', 'Users::delete/$1');
+    $routes->get('add', 'Users::add');
+    //     $routes->post('addsave', 'Users::addsave');
+    //     $routes->get('login', 'Users::login');
+});
+
+$routes->group('users', ['filter' => 'role:admin,advisor,asuransi,surveyor,client'], function ($routes) {
+    //     $routes->addRedirect('index', 'users');
+    //     $routes->addRedirect('detail', 'users');
+    //     $routes->get('users', 'Users::index');
+    //     $routes->get('detail/(:num)', 'Users::detail/$1');
+    //     $routes->delete('delete/(:num)', 'Users::delete/$1');
+    //     $routes->get('add', 'Users::add');
+    //     $routes->post('addsave', 'Users::addsave');
+    $routes->get('profil/(:num)', 'Users::profil/$1');
+    // $routes->put('profil/gantipassword/(:num)', 'Users::gantipassword/$1');
+});
+
+$routes->group('mobil-jenis', ['filter' => 'role:admin,advisor'], function ($routes) {
+    $routes->get('index', 'Mobil_Jenis::index', ['as' => 'mobil-jenis']);
+    $routes->addRedirect('index', 'mobil-jenis/');
+    $routes->post('add', 'Mobil_Jenis::add');
+    $routes->put('edit/(:num)', 'Mobil_Jenis::edit');
+    $routes->delete('remove/(:num)', 'Mobil_Jenis::remove');
+});
+
+$routes->group('mobil-merk', ['filter' => 'role:admin,advisor'], function ($routes) {
+    $routes->get('index', 'Mobil_Merk::index', ['as' => 'mobil-merk']);
+    $routes->addRedirect('index', 'mobil-Merk/');
+    $routes->post('add', 'Mobil_Merk::add');
+    $routes->put('edit/(:num)', 'Mobil_Merk::edit');
+    $routes->delete('remove/(:num)', 'Mobil_Merk::remove');
+});
 
 /*
  * --------------------------------------------------------------------

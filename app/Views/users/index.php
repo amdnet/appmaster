@@ -30,10 +30,11 @@
                                 <tr class="text-center">
                                     <th>Id</th>
                                     <th>Email</th>
-                                    <th>Nama</th>
-                                    <th>Role</th>
+                                    <th>Username</th>
+                                    <th>Fullname</th>
                                     <th>Telp</th>
-                                    <th>Alamat</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>

@@ -26,8 +26,21 @@
 
                                     <!-- menampilkan pesan data berhasil disimpan -->
                                     <?php if (session()->getFlashdata('pesan')) : ?>
-                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <div class="alert alert-success alert-dismissible fade show position-absolute" role="alert">
                                             <?= session()->getFlashdata('pesan'); ?>
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                    <?php endif; ?>
+
+                                    <!-- menampilkan pesan data error disimpan -->
+                                    <?php if (session()->getFlashdata('error')) : ?>
+                                        <div class="alert alert-danger alert-dismissible fade show position-absolute" role="alert">
+                                            <?= session()->getFlashdata('error'); ?>
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
                                         </div>
                                     <?php endif; ?>
 
@@ -55,19 +68,6 @@
                                             </div>
 
                                             <div class="col-md-6 mb-3">
-                                                <label for="fullname"> Nama: <span class="text-danger">*</span> <small>(nama advisor, pic, surveyor, client)</small></label>
-                                                <div class="input-group">
-                                                    <input type="text" id="fullname" name="fullname" class="form-control <?= ($validation->hasError('fullname')) ? 'is-invalid' : ''; ?>" placeholder="nama lengkap" value="<?= old('fullname'); ?>">
-                                                    <div class="input-group-prepend">
-                                                        <div class="input-group-text"><i class="fas fa-user-circle"></i></div>
-                                                    </div>
-                                                    <div class="invalid-feedback">
-                                                        <?= $validation->getError('fullname'); ?>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-6 mb-3">
                                                 <label for="email"> Email: <span class="text-danger">*</span></label>
                                                 <div class="input-group">
                                                     <input type="email" id="email" name="email" class="form-control <?= ($validation->hasError('email')) ? 'is-invalid' : ''; ?>" placeholder="Email" value="<?= old('email'); ?>">
@@ -85,10 +85,23 @@
                                                 <div class="input-group">
                                                     <input type="text" id="username" name="username" class="form-control <?= ($validation->hasError('username')) ? 'is-invalid' : ''; ?>" placeholder="Username" value="<?= old('username'); ?>">
                                                     <div class="input-group-prepend">
-                                                        <div class="input-group-text"><i class="fas fa-user-circle"></i></div>
+                                                        <div class="input-group-text"><i class="fas fa-address-card"></i></div>
                                                     </div>
                                                     <div class="invalid-feedback">
                                                         <?= $validation->getError('username'); ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="fullname"> Nama Lengkap: <span class="text-danger">*</span> <small>(nama advisor, pic, surveyor, client)</small></label>
+                                                <div class="input-group">
+                                                    <input type="text" id="fullname" name="fullname" class="form-control <?= ($validation->hasError('fullname')) ? 'is-invalid' : ''; ?>" placeholder="nama lengkap" value="<?= old('fullname'); ?>">
+                                                    <div class="input-group-prepend">
+                                                        <div class="input-group-text"><i class="fas fa-user-circle"></i></div>
+                                                    </div>
+                                                    <div class="invalid-feedback">
+                                                        <?= $validation->getError('fullname'); ?>
                                                     </div>
                                                 </div>
                                             </div>
@@ -98,7 +111,7 @@
                                                 <div class="input-group">
                                                     <input type="text" id="alamat" name="alamat" class="form-control <?= ($validation->hasError('alamat')) ? 'is-invalid' : ''; ?>" placeholder="Alamat lengkap" value="<?= old('alamat'); ?>">
                                                     <div class="input-group-prepend">
-                                                        <div class="input-group-text"><i class="fas fa-address-card"></i></div>
+                                                        <div class="input-group-text"><i class="fas fa-house-user"></i></div>
                                                     </div>
                                                     <div class="invalid-feedback">
                                                         <?= $validation->getError('alamat'); ?>

@@ -20,7 +20,8 @@ class Stall extends BaseController
 	{
 		$data = [
 			'controller' => 'stall',
-			'pageTitle' => 'Data Kategori Stall'
+			'pageTitle' => 'Data Kategori Stall',
+			'situs' => $this->situs
 		];
 		return view('kategori/stall', $data);
 	}
@@ -29,7 +30,10 @@ class Stall extends BaseController
 	{
 		$response = array();
 		$data['data'] = array();
-		$result = $this->stallModel->select('id_stall, stall, username, created_at, updated_at')->findAll();
+		$result = $this->stallModel
+			->select('*, fullname')
+			->join('users', 'users.id = data_stall.id_users')
+			->findAll();
 
 		foreach ($result as $key => $value) {
 			$ops = '<button type="button" class="btn btn-sm btn-success" onclick="edit(' . $value->id_stall . ')"><i class="fa fa-pencil-alt"></i></button> <button type="button" class="btn btn-sm btn-danger" onclick="remove(' . $value->id_stall . ')"><i class="fa fa-trash-alt"></i></button>';
@@ -37,7 +41,7 @@ class Stall extends BaseController
 			$data['data'][$key] = array(
 				$value->id_stall,
 				$value->stall,
-				$value->username,
+				$value->fullname,
 				$value->created_at,
 				$value->updated_at,
 				$ops,
@@ -63,17 +67,12 @@ class Stall extends BaseController
 		$response = array();
 		$fields['id_stall'] = $this->request->getPost('idStall');
 		$fields['stall'] = $this->request->getPost('stall');
-		$fields['username'] = $this->request->getPost('username');
+		$fields['id_users'] = user()->id;
 
 		$this->validation->setRules([
 			'stall' => [
 				'label'  => 'Stall',
-				'rules'  => 'required|is_unique[kat_stall.stall]|min_length[5]|max_length[35]',
-				'errors' => [
-					'is_unique' => 'Nama {field} tidak boleh sama dengan yang sudah ada',
-					'min_length' => 'Minimal karakter {field} adalah 5 termasuk spasi',
-					'max_length' => 'Maksimal karakter {field} adalah 35 termasuk spasi'
-				]
+				'rules'  => 'required|is_unique[data_stall.stall]|min_length[5]|max_length[35]'
 			]
 		]);
 
@@ -96,18 +95,13 @@ class Stall extends BaseController
 		$response = array();
 		$fields['id_stall'] = $this->request->getPost('idStall');
 		$fields['stall'] = $this->request->getPost('stall');
-		$fields['username'] = $this->request->getPost('username');
+		$fields['id_users'] = user()->id;
 
 		$this->validation->setRules([
-			'username' => ['label' => 'Username', 'rules' => 'required|max_length[35]'],
+			'id_users' => ['label' => 'id_users', 'rules' => 'required|max_length[35]'],
 			'stall' => [
 				'label'  => 'Stall',
-				'rules'  => 'required|is_unique[kat_stall.stall]|min_length[5]|max_length[35]',
-				'errors' => [
-					'is_unique' => 'Nama {field} tidak boleh sama dengan yang sudah ada',
-					'min_length' => 'Minimal karakter {field} adalah 5 termasuk spasi',
-					'max_length' => 'Maksimal karakter {field} adalah 35 termasuk spasi'
-				]
+				'rules'  => 'required|is_unique[data_stall.stall,id,{id}]|min_length[5]|max_length[30]'
 			]
 		]);
 

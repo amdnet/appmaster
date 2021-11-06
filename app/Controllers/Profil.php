@@ -1,4 +1,6 @@
-<?php namespace App\Controllers;
+<?php
+
+namespace App\Controllers;
 
 class Profil extends BaseController
 {
@@ -7,7 +9,8 @@ class Profil extends BaseController
         $userInfo = new \Myth\Auth\Models\UserModel();
         $data = [
             'pageTitle' => 'Profile User',
-            'userInfo' => $userInfo->findAll()
+            'userInfo' => $userInfo->findAll(),
+            'situs' => $this->situs
         ];
 
         // $data = ['pageTitle' => 'List Data User'];

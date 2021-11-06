@@ -21,7 +21,8 @@ class Akun extends BaseController
         $data = [
             'pageTitle' => 'Form Tambah Akun User',
             'role' => $query,
-            'validation' => \Config\Services::validation()
+            'validation' => \Config\Services::validation(),
+            'situs' => $this->situs
         ];
         return view('akun', $data);
     }

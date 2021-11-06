@@ -10,7 +10,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Data Kategori Mobil</h3>
+                        <h3 class="card-title">Data Kategori Jenis Mobil</h3>
                         <button type="button" class="btn btn-primary btn-sm float-right" onclick="add()" title="Tambah Data"><i class="fas fa-database"></i> &nbsp; Tambah Data</button>
                     </div>
                     <div class="card-body">
@@ -18,7 +18,7 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Kategori Mobil</th>
+                                    <th>Jenis Mobil</th>
                                     <th>User Update</th>
                                     <th>Time Created</th>
                                     <th>Time Updated</th>
@@ -38,7 +38,7 @@
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
             <div class="text-center bg-dark p-2">
-                <h5 class="modal-title text-white" id="info-header-modalLabel">Add Category Mobil</h5>
+                <h5 class="modal-title text-white" id="info-header-modalLabel">Tambah Jenis Mobil</h5>
             </div>
 
             <div class="modal-body">
@@ -48,12 +48,11 @@
                 <form id="add-form" class="pl-2 pr-2">
                     <div class="row">
                         <input type="hidden" id="idMobil" name="idMobil" class="form-control">
-                        <input type="hidden" id="username" name="username" class="form-control" value="<?= user()->username; ?>">
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <label for="stall"> Mobil: </label>
-                            <input type="text" id="mobil" name="mobil" class="form-control" placeholder="Kategori Mobil" required>
+                            <label for="jenisMobil"> Mobil: </label>
+                            <input type="text" id="jenisMobil" name="jenisMobil" class="form-control" placeholder="Jenis Mobil" required>
                         </div>
                     </div>
                     <div class="modal-footer mt-3">
@@ -73,7 +72,7 @@
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
             <div class="text-center bg-dark p-2">
-                <h5 class="modal-title text-white" id="info-header-modalLabel">Add Category Mobil</h5>
+                <h5 class="modal-title text-white" id="info-header-modalLabel">Tambah Jenis Mobil</h5>
             </div>
 
             <div class="modal-body">
@@ -83,13 +82,12 @@
                 <form id="edit-form" class="pl-2 pr-2">
                     <div class="row">
                         <input type="hidden" id="idMobil" name="idMobil" class="form-control">
-                        <input type="hidden" id="username" name="username" class="form-control" value="<?= user()->username; ?>">
                     </div>
 
                     <div class="form-row">
                         <div class="col-md-12">
-                            <label for="stall"> Mobil: </label>
-                            <input type="text" id="mobil" name="mobil" class="form-control" placeholder="Kategori Mobil" required>
+                            <label for="jenisMobil"> Jenis Mobil: </label>
+                            <input type="text" id="jenisMobil" name="jenisMobil" class="form-control" placeholder="Jenis Mobil" required>
                         </div>
                     </div>
 
@@ -130,7 +128,7 @@
                 searchPlaceholder: "Cari kategori mobil",
             },
             "ajax": {
-                "url": '<?php echo base_url($controller . '/getAll') ?>',
+                "url": '<?= base_url($controller . '/getAll') ?>',
                 "type": "POST",
                 "dataType": "json",
                 async: "true"
@@ -143,6 +141,7 @@
         $("#add-form")[0].reset();
         $(".form-control").removeClass('is-invalid').removeClass('is-valid');
         $('#add-modal').modal('show');
+        $("#jenisMobil").focus();
         // submit the add from 
         $.validator.setDefaults({
             highlight: function(element) {
@@ -156,13 +155,6 @@
             errorPlacement: function(error, element) {
                 if (element.parent('.input-group').length) {
                     error.insertAfter(element.parent());
-                } else if ($(element).is('.select')) {
-                    element.next().after(error);
-                } else if (element.hasClass('select2')) {
-                    //error.insertAfter(element);
-                    error.insertAfter(element.next());
-                } else if (element.hasClass('selectpicker')) {
-                    error.insertAfter(element.next());
                 } else {
                     error.insertAfter(element);
                 }
@@ -175,7 +167,7 @@
                 $(".text-danger").remove();
 
                 $.ajax({
-                    url: '<?php echo base_url($controller . '/add') ?>',
+                    url: '<?= base_url($controller . '/add') ?>',
                     type: 'post',
                     data: form.serialize(), // /converting the form data into array and sending it to server
                     dataType: 'json',
@@ -230,12 +222,12 @@
         $('#add-form').validate();
     }
 
-    function edit(id_mobil) {
+    function edit(id_mobil_jenis) {
         $.ajax({
-            url: '<?php echo base_url($controller . '/getOne') ?>',
+            url: '<?= base_url($controller . '/getOne') ?>',
             type: 'post',
             data: {
-                id_mobil: id_mobil
+                id_mobil_jenis: id_mobil_jenis
             },
             dataType: 'json',
             success: function(response) {
@@ -244,10 +236,10 @@
                 $(".form-control").removeClass('is-invalid').removeClass('is-valid');
                 $('#edit-modal').modal('show');
 
-                $("#edit-form #idMobil").val(response.id_mobil);
-                $("#edit-form #mobil").val(response.mobil);
-                // $("#edit-form #username").val(response.username);
-                $("#edit-form #updateAt").val(response.update_at);
+                $("#edit-form #idMobil").val(response.id_mobil_jenis);
+                $("#edit-form #jenisMobil").val(response.nama_mobil_jenis);
+                // $("#edit-form #fullname").val(response.fullname);
+                // $("#edit-form #updateAt").val(response.update_at);
 
                 // submit the edit from 
                 $.validator.setDefaults({
@@ -273,7 +265,7 @@
                         var form = $('#edit-form');
                         $(".text-danger").remove();
                         $.ajax({
-                            url: '<?php echo base_url($controller . '/edit') ?>',
+                            url: '<?= base_url($controller . '/edit') ?>',
                             type: 'post',
                             data: form.serialize(),
                             dataType: 'json',
@@ -331,7 +323,7 @@
         });
     }
 
-    function remove(id_mobil) {
+    function remove(id_mobil_jenis) {
         swal.fire({
             title: 'Apakah Anda yakin dengan proses penghapusan?',
             text: 'Data akan dihapus secara permanen setelah konfirmasi!',
@@ -345,10 +337,10 @@
 
             if (result.value) {
                 $.ajax({
-                    url: '<?php echo base_url($controller . '/remove') ?>',
+                    url: '<?= base_url($controller . '/remove') ?>',
                     type: 'post',
                     data: {
-                        id_mobil: id_mobil
+                        id_mobil_jenis: id_mobil_jenis
                     },
                     dataType: 'json',
                     success: function(response) {

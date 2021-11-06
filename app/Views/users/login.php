@@ -32,7 +32,21 @@
                                         <td><?= $login->email; ?></td>
                                         <td><?= $login->user_id; ?></td>
                                         <td><?= $login->date; ?></td>
-                                        <td><?= $login->success; ?></td>
+                                        <?php if ($login->success == '1') { ?>
+                                            <td>
+                                                <div class="btn-group" role="group" aria-label="Basic example">
+                                                    <button type="button" class="btn btn-sm btn-success">berhasil</button>
+                                                    <a href="<?= base_url('users/detail/' . $login->user_id) ?>" type="button" class="btn btn-sm btn-primary">detail</a>
+                                                </div>
+                                            </td>
+                                        <?php } else { ?>
+                                            <td>
+                                                <div class="btn-group" role="group" aria-label="Basic example">
+                                                    <button type="button" class="btn btn-sm btn-danger">gagal</button>
+                                                    <a href="<?= base_url('users/detail/' . $login->user_id) ?>" type="button" class="btn btn-sm btn-primary">detail</a>
+                                                </div>
+                                            </td>
+                                        <?php } ?>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>

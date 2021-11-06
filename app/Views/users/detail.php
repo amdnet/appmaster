@@ -25,6 +25,16 @@
                                             </div>
                                         <?php endif; ?>
 
+                                        <!-- menampilkan pesan data error disimpan -->
+                                        <?php if (session()->getFlashdata('error')) : ?>
+                                            <div class="alert alert-danger alert-dismissible fade show position-absolute" role="alert">
+                                                <?= session()->getFlashdata('error'); ?>
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                        <?php endif; ?>
+
                                         <a href="#photoProfil" data-toggle="modal" data-target="#photoProfil"><img src="<?= base_url('public/profil/' . $detail['photo']); ?>" title="<?= $detail['photo']; ?>" id="avatar" class="img-fluid"></a>
                                     </div>
 
@@ -39,6 +49,13 @@
                                     <ul class="list-group list-group-unbordered mb-3">
                                         <li class="list-group-item">
                                             <b>User ID</b> <a class="float-right"><?= $detail['userid']; ?></a>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <b>User Status</b> <a class="float-right"><?php if ($detail['active'] == '1') { ?>
+                                                    aktif
+                                                <?php } else { ?>
+                                                    nonaktif
+                                                <?php } ?></a>
                                         </li>
                                         <li class="list-group-item">
                                             <b>Member Since</b> <a class="float-right"><?= $detail['created_at']; ?></a>
@@ -76,8 +93,10 @@
                     </div>
 
                     <div class="col-md-8">
-                        <form action="<?= base_url('users/editprofil/' . $detail['userid']); ?>" method="POST">
+                        <form action="<?= base_url('users/editdatadetail/' . $detail['userid']); ?>" method="POST">
                             <?= csrf_field(); ?>
+                            <input type="hidden" name="emailLama" value="<?= $detail['email']; ?>">
+                            <input type="hidden" name="userLama" value="<?= $detail['username']; ?>">
                             <div class="card card-primary card-outline">
                                 <div class="card-header p-2">
                                     <div class="card-body">
@@ -91,19 +110,6 @@
                                                         <option value="<?= $rule->id ?>"> <?= $rule->name ?> | <?= $rule->description ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
-                                            </div>
-
-                                            <div class="col-md-6 mb-3">
-                                                <label for="fullname"> Nama: <span class="text-danger">*</span> <small>(nama advisor, pic, surveyor, client)</small></label>
-                                                <div class="input-group">
-                                                    <input type="text" id="fullname" name="fullname" class="form-control <?= ($validation->hasError('fullname')) ? 'is-invalid' : ''; ?>" placeholder="nama lengkap" value="<?= (old('fullname')) ? old('fullname') : $detail['fullname'] ?>">
-                                                    <div class="input-group-prepend">
-                                                        <div class="input-group-text"><i class="fas fa-user-circle"></i></div>
-                                                    </div>
-                                                    <div class="invalid-feedback">
-                                                        <?= $validation->getError('fullname'); ?>
-                                                    </div>
-                                                </div>
                                             </div>
 
                                             <div class="col-md-6 mb-3">
@@ -124,10 +130,23 @@
                                                 <div class="input-group">
                                                     <input type="text" id="username" name="username" class="form-control <?= ($validation->hasError('username')) ? 'is-invalid' : ''; ?>" placeholder="Username" value="<?= (old('username')) ? old('username') : $detail['username'] ?>">
                                                     <div class="input-group-prepend">
-                                                        <div class="input-group-text"><i class="fas fa-user-circle"></i></div>
+                                                        <div class="input-group-text"><i class="fas fa-address-card"></i></div>
                                                     </div>
                                                     <div class="invalid-feedback">
                                                         <?= $validation->getError('username'); ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="fullname"> Nama Lengkap: <span class="text-danger">*</span> <small>(nama advisor, pic, surveyor, client)</small></label>
+                                                <div class="input-group">
+                                                    <input type="text" id="fullname" name="fullname" class="form-control <?= ($validation->hasError('fullname')) ? 'is-invalid' : ''; ?>" placeholder="nama lengkap" value="<?= (old('fullname')) ? old('fullname') : $detail['fullname'] ?>">
+                                                    <div class="input-group-prepend">
+                                                        <div class="input-group-text"><i class="fas fa-user-circle"></i></div>
+                                                    </div>
+                                                    <div class="invalid-feedback">
+                                                        <?= $validation->getError('fullname'); ?>
                                                     </div>
                                                 </div>
                                             </div>
@@ -150,7 +169,7 @@
                                                 <div class="input-group">
                                                     <input type="text" id="alamat" name="alamat" class="form-control <?= ($validation->hasError('alamat')) ? 'is-invalid' : ''; ?>" placeholder="Alamat lengkap" value="<?= (old('alamat')) ? old('alamat') : $detail['alamat'] ?>">
                                                     <div class=" input-group-prepend">
-                                                        <div class="input-group-text"><i class="fas fa-address-card"></i></div>
+                                                        <div class="input-group-text"><i class="fas fa-house-user"></i></div>
                                                     </div>
                                                     <div class="invalid-feedback">
                                                         <?= $validation->getError('alamat'); ?>
@@ -168,7 +187,7 @@
                         </form> <!-- form profil -->
 
                         <!-- form password -->
-                        <form action="<?= base_url('users/editpasswd/' . $detail['userid']); ?>" method="POST">
+                        <form action="<?= base_url('users/editpassword/' . $detail['userid']); ?>" method="POST">
                             <?= csrf_field(); ?>
                             <div class="card card-primary card-outline">
                                 <div class="card-header p-2">
@@ -177,7 +196,7 @@
                                             <div class="col-md-6 mb-3">
                                                 <label for="password"> Password: <span class="text-danger">*</span></label>
                                                 <div class="input-group">
-                                                    <input type="password" class="form-control <?= ($validation->hasError('password')) ? 'is-invalid' : ''; ?>" name="password" id="password" placeholder="input password" value="<?= old('password'); ?>">
+                                                    <input type="password" class="form-control <?= ($validation->hasError('password')) ? 'is-invalid' : ''; ?>" name="password" id="password" placeholder="input password">
                                                     <div class="input-group-prepend">
                                                         <div class="input-group-text">
                                                             <a href="#" id="show_password" onclick="change1()">
@@ -194,7 +213,7 @@
                                             <div class="col-md-6 mb-3">
                                                 <label for="pass_confirm"> Konfirmasi Password: <span class="text-danger">*</span> </label>
                                                 <div class="input-group">
-                                                    <input type="password" class="form-control <?= ($validation->hasError('pass_confirm')) ? 'is-invalid' : ''; ?>" name="pass_confirm" id="pass_confirm" placeholder="konfirmasi password" value="<?= old('pass_confirm'); ?>">
+                                                    <input type="password" class="form-control <?= ($validation->hasError('pass_confirm')) ? 'is-invalid' : ''; ?>" name="pass_confirm" id="pass_confirm" placeholder="konfirmasi password">
                                                     <div class="input-group-prepend">
                                                         <div class="input-group-text">
                                                             <a href="#" id="show_password2" onclick="change2()">

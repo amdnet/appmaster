@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\UsersModel;
+use Myth\Auth\Password;
 
 class Users extends BaseController
 {
@@ -21,27 +22,9 @@ class Users extends BaseController
         $data = [
             'controller' => 'users',
             'pageTitle' => 'List User Account',
+            'situs' => $this->situs
         ];
         return view('users/index', $data);
-    }
-
-    public function login()
-    {
-        $userLogin = new \Myth\Auth\Models\LoginModel();
-        $data = [
-            'pageTitle' => 'User Login Information',
-            'userLogin' => $userLogin->findAll()
-        ];
-        return view('users/login', $data);
-    }
-
-    public function profil()
-    {
-        $agent = $this->request->getUserAgent();
-        $data['pageTitle'] = 'Profil User';
-        $data['ip'] = $this->request->getIPAddress();
-        $data['browser'] = $agent->getBrowser();
-        return view('users/profil', $data);
     }
 
     public function add()
@@ -51,9 +34,50 @@ class Users extends BaseController
         $data = [
             'pageTitle' => 'Form Tambah User Akun',
             'role' => $query,
-            'validation' => $this->validation
+            'validation' => $this->validation,
+            'situs' => $this->situs
         ];
         return view('users/add', $data);
+    }
+
+    public function profil($id)
+    {
+        // $agent = $this->request->getUserAgent();
+        // $data['ip'] = $this->request->getIPAddress();
+        // $data['browser'] = $agent->getBrowser();
+        $data = [
+            'pageTitle' => 'User Profile',
+            'detail' => $this->usersModel->getUsers($id),
+            'validation' => $this->validation,
+            'situs' => $this->situs
+        ];
+        return view('users/profil', $data);
+    }
+
+    public function detail($id)
+    {
+        $db = db_connect();
+        $query = $db->query('SELECT * FROM auth_groups')->getResult();
+        $data = [
+            'controller' => 'users',
+            'pageTitle' => 'Detail User Account',
+            'role' => $query,
+            'detail' => $this->usersModel->getUsers($id),
+            'validation' => $this->validation,
+            'situs' => $this->situs
+        ];
+        return view('users/detail', $data);
+    }
+
+    public function login()
+    {
+        $userLogin = new \Myth\Auth\Models\LoginModel();
+        $data = [
+            'pageTitle' => 'User Login Information',
+            'userLogin' => $userLogin->findAll(),
+            'situs' => $this->situs
+        ];
+        return view('users/login', $data);
     }
 
     // buat user akun baru
@@ -62,12 +86,12 @@ class Users extends BaseController
         if (!$this->validate([
             'role' => 'required',
             'email' => 'trim|required|valid_email|is_unique[users.email]',
-            'username' => 'trim|required|min_length[5]|max_length[30]|is_unique[users.username]',
+            'username' => 'trim|required|alpha_numeric_punct|min_length[3]|max_length[30]|is_unique[users.username]',
             'fullname' => 'trim|required|min_length[3]|max_length[30]',
-            'photo' => 'max_size[photo,2048]|is_image[photo]|mime_in[photo,image/jpg,image/jpeg,image/gif,image/png]',
-            'telp' => 'required|min_length[6]|max_length[15]|is_unique[users.telp]|numeric',
+            'photo' => 'max_size[photo,6114]|is_image[photo]|mime_in[photo,image/jpg,image/jpeg,image/gif,image/png]',
+            'telp' => 'trim|required|min_length[6]|max_length[15]|is_unique[users.telp]|decimal',
             'alamat' => 'required|min_length[10]|max_length[100]',
-            'password' => 'required|min_length[8]|max_length[30]',
+            'password' => 'trim|strong_password',
             'pass_confirm' => 'matches[password]'
         ])) {
             session()->setFlashdata('error', $this->validator->listErrors());
@@ -77,15 +101,20 @@ class Users extends BaseController
         // ambil photo
         $filePhoto = $this->request->getFile('photo');
 
-        // cek tidak ada photo
+        //==cek tidak ada photo
         if ($filePhoto->getError() == 4) {
-            echo copy('public/img/avatar.png', 'public/profil/avatar.png');
-            $namaPhoto = 'avatar.png';
+            $namaPhoto = $filePhoto->getRandomName() . '.png';
+            $filePhoto = copy(FCPATH . '/public/img/avatar.png', FCPATH . '/public/profil/' . $namaPhoto);
         } else {
             $namaPhoto = $filePhoto->getRandomName();
-            $filePhoto->move('public/profil/', $namaPhoto);
+            // $image = \Config\Services::image('imagick')
+            $image = \Config\Services::image()
+                ->withFile($filePhoto)
+                ->resize(1024, 1024, true)
+                ->save(FCPATH . '/public/profil/' . $namaPhoto, 80);
         }
 
+        $password = $this->request->getVar('password');
         $this->usersModel->insert([
             'email' => $this->request->getVar('email'),
             'username' => $this->request->getVar('username'),
@@ -93,7 +122,8 @@ class Users extends BaseController
             'photo' => $namaPhoto,
             'telp' => $this->request->getVar('telp'),
             'alamat' => $this->request->getVar('alamat'),
-            'password_hash' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT)
+            'password_hash' => Password::hash($password),
+            'active' => '1'
         ]);
 
         $userID = $this->usersModel->insertID();
@@ -104,15 +134,16 @@ class Users extends BaseController
             'group_id' => $this->request->getVar('role'),
             'user_id' => $userID
         ]);
-        session()->setFlashdata('pesan', 'Data akun user berhasil disimpan!');
-        // return redirect()->to('/users');
-        return redirect()->back()->withInput();
+        session()->setFlashdata('pesan', 'Data user berhasil disimpan!');
+
+        return redirect()->to('/users');
+        // return redirect()->back()->withInput();
     }
 
     public function editphoto($id)
     {
         if (!$this->validate([
-            'photo' => 'uploaded[photo]|max_size[photo,2048]|is_image[photo]|mime_in[photo,image/jpg,image/jpeg,image/gif,image/png]',
+            'photo' => 'uploaded[photo]|max_size[photo,6114]|is_image[photo]|mime_in[photo,image/jpg,image/jpeg,image/gif,image/png]',
         ])) {
             session()->setFlashdata('error', $this->validator->listErrors());
             return redirect()->back()->withInput();
@@ -120,20 +151,29 @@ class Users extends BaseController
 
         // ambil photo
         $filePhoto = $this->request->getFile('photo');
-        // cek tidak ada photo
-        if ($filePhoto->getError() == 4) {
-            $namaPhoto = $this->request->getVar('photoLama');
-        } else {
-            // $filePhoto = $this->request->getFile('photo');
-            // $image = \Config\Services::image()
-            //     ->withFile($filePhoto)
-            //     ->resize(1024, 1024, true, 'height')
-            //     ->save('public/profil/' . $filePhoto->getRandomName());
-            // $filePhoto->move('public/compress');
-            $namaPhoto = $filePhoto->getRandomName();
-            $filePhoto->move('public/profil', $namaPhoto);
-            unlink('public/profil/' . $this->request->getVar('photoLama'));
-        }
+        $namaPhoto = $filePhoto->getRandomName();
+
+        // $image = \Config\Services::image('imagick')
+        $image = \Config\Services::image()
+            ->withFile($filePhoto)
+            ->resize(1024, 1024, true)
+            ->save(FCPATH . '/public/profil/' . $namaPhoto, 80);
+        unlink(FCPATH . 'public/profil/' . $this->request->getVar('photoLama'));
+
+        // if ($filePhoto->getError() == 4) {
+        //     $namaPhoto = $this->request->getVar('photoLama');
+        // } else {
+        //     // $filePhoto = $this->request->getFile('photo');
+        //     // $image = \Config\Services::image()
+        //     //     ->withFile($filePhoto)
+        //     //     ->resize(1024, 1024, true, 'height')
+        //     //     ->save('public/profil/' . $filePhoto->getRandomName());
+        //     // $filePhoto->move('public/compress');
+        //     // $namaPhoto = $filePhoto->getRandomName();
+        //     // $filePhoto->move('public/profil', $namaPhoto);
+        //     // unlink('public/profil/' . $this->request->getVar('photoLama'));
+        //     unlink($this->request->getVar('photoLama'));
+        // }
 
         $this->usersModel->save([
             'id' => $id,
@@ -143,15 +183,49 @@ class Users extends BaseController
         return redirect()->back()->withInput();
     }
 
-    public function editprofil($id)
+    public function editdataprofil($id)
+    {
+        // $emailLama = $this->usersModel->getUser($this->request->getVar('emailLama'));
+        // if ($emailLama['emailLama'] == $this->request->getVar('email')) {
+        //     $ruleEmail = 'trim|required|valid_email';
+        // } else {
+        //     $ruleEmail = 'trim|required|valid_email|is_unique[users.email]';
+        // }
+
+        if (!$this->validate([
+            // 'email' => $ruleEmail,
+            'email' => 'trim|required|valid_email|is_unique[users.email,id,' . $id . ']',
+            'username' => 'trim|required|alpha_numeric_punct|min_length[3]|max_length[30]|is_unique[users.username,id,' . $id . ']',
+            'fullname' => 'trim|required|min_length[3]|max_length[30]',
+            'telp' => 'trim|required|min_length[6]|max_length[15]|decimal',
+            'alamat' => 'trim|required|min_length[10]|max_length[100]'
+        ])) {
+            session()->setFlashdata('error', $this->validator->listErrors());
+            return redirect()->back()->withInput();
+        }
+
+        $this->usersModel->save([
+            'id' => $id,
+            'email' => $this->request->getVar('email'),
+            'username' => $this->request->getVar('username'),
+            'fullname' => $this->request->getVar('fullname'),
+            'telp' => $this->request->getVar('telp'),
+            'alamat' => $this->request->getVar('alamat')
+        ]);
+
+        session()->setFlashdata('pesan', 'Data profil berhasil diperbaharui!');
+        return redirect()->back()->withInput();
+    }
+
+    public function editdatadetail($id)
     {
         if (!$this->validate([
             'role' => 'required',
-            'email' => 'trim|required|valid_email',
-            'username' => 'required|min_length[5]|max_length[30]',
-            'fullname' => 'required|min_length[5]|max_length[30]',
-            'telp' => 'trim|required|min_length[6]|max_length[15]|numeric',
-            'alamat' => 'required|min_length[10]|max_length[100]',
+            'email' => 'trim|required|valid_email|is_unique[users.email,id,' . $id . ']',
+            'username' => 'trim|required|alpha_numeric_punct|min_length[3]|max_length[30]|is_unique[users.username,id,' . $id . ']',
+            'fullname' => 'trim|required|min_length[3]|max_length[30]',
+            'telp' => 'trim|required|min_length[6]|max_length[15]|decimal',
+            'alamat' => 'trim|required|min_length[10]|max_length[100]'
         ])) {
             session()->setFlashdata('error', $this->validator->listErrors());
             return redirect()->back()->withInput();
@@ -174,69 +248,29 @@ class Users extends BaseController
         $builder->where('user_id', $id);
         $builder->update($data);
 
-        session()->setFlashdata('pesan', 'Akun user berhasil diperbaharui!');
-        // return redirect()->to('/users');
+        session()->setFlashdata('pesan', 'Data user berhasil diperbaharui!');
+        // $array_items = ['id', 'email', 'username', 'group_id', 'user_id'];
+        // session()->remove($array_items);
         return redirect()->back()->withInput();
     }
 
-    public function editpasswd($id)
+    public function editpassword($id)
     {
         if (!$this->validate([
-            'password' => 'required|min_length[8]|max_length[30]',
-            'pass_confirm' => 'matches[password]'
+            'password' => 'required|strong_password',
+            'pass_confirm' => ['label' => 'konfirmasi sandi', 'rules' => 'matches[password]']
         ])) {
             session()->setFlashdata('error', $this->validator->listErrors());
             return redirect()->back()->withInput();
         }
 
+        $password = $this->request->getPost('password');
         $this->usersModel->save([
             'id' => $id,
-            'password_hash' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT)
+            'password_hash' => Password::hash($password)
         ]);
-
         session()->setFlashdata('pesan', 'Password user berhasil diperbaharui!');
-        // return redirect()->to('/users');
         return redirect()->back()->withInput();
-    }
-
-    public function update($id)
-    {
-        if (!$this->validate([
-            'role' => 'required',
-            // 'email' => $emailRule,
-            'email' => 'trim|required|valid_email',
-            // 'username' => 'required|min_length[5]|max_length[30]|is_unique[users.username]',
-            // 'photo' => 'max_size[photo,2048]|is_image[photo]|mime_in[photo,image/jpg,image/jpeg,image/gif,image/png]',
-            // 'telp' => 'required|min_length[6]|max_length[15]|is_unique[users.telp]|numeric',
-            'alamat' => 'required|min_length[10]|max_length[100]',
-            // 'password' => 'required|min_length[8]|max_length[30]',
-            // 'pass_confirm' => 'matches[password]'
-        ])) {
-            session()->setFlashdata('error', $this->validator->listErrors());
-            return redirect()->back()->withInput();
-        }
-
-        $this->usersModel->save([
-            'id' => $id,
-            'email' => $this->request->getVar('email'),
-            'username' => $this->request->getVar('username'),
-            // 'photo' => $namaPhoto,
-            'telp' => $this->request->getVar('telp'),
-            'alamat' => $this->request->getVar('alamat'),
-            // 'password_hash' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT)
-        ]);
-
-        // $data = array(
-        //     'group_id' => $this->request->getVar('role')
-        // );
-        // $db = db_connect();
-        // $builder = $db->table('auth_groups_users');
-        // $builder->where('user_id', $id);
-        // $builder->update($data);
-
-        // session()->setFlashdata('pesan', 'Akun user berhasil diperbaharui!');
-        // // return redirect()->to('/users');
-        // return redirect()->back()->withInput();
     }
 
     // hapus user akun
@@ -273,18 +307,40 @@ class Users extends BaseController
     {
         $result = $this->usersModel->getData();
         foreach ($result as $key => $value) {
+
+            if ($value->active == 1) {
+                $status = 'aktif';
+            } else {
+                $status = 'nonaktif';
+            }
+
             // $ops = '<a href="' . base_url('users/detail/' . $value->userid) . '" class="btn btn-sm bg-primary">detail</a> <a href="' . base_url('users/remove/' . $value->userid) . '" class="btn btn-sm btn-danger">hapus</a>';
-            $ops = '<a href="' . base_url('users/detail/' . $value->userid) . '" class="btn btn-sm bg-primary">detail</a> <button type="button" class="btn btn-sm btn-danger" onclick="remove(' . $value->userid . ')">hapus</button>';
+            $ops = '<a href="' . base_url('users/detail/' . $value->userid) . '" class="btn btn-sm bg-primary"><i class="fa fa-eye"></i></a> 
+            <button type="button" class="btn btn-sm btn-danger" onclick="remove(' . $value->userid . ')"><i class="fa fa-trash-alt"></i></button>';
             $data['data'][$key] = array(
                 $value->userid,
                 $value->email,
                 $value->username,
-                $value->name,
+                $value->fullname,
                 $value->telp,
-                $value->alamat,
+                $value->name,
+                $status,
                 $ops,
             );
         }
         return $this->response->setJSON($data);
+    }
+
+    public function grid()
+    {
+        $db = db_connect();
+        $data = [
+            'controller' => 'users',
+            'pageTitle' => 'List User Account',
+            // 'role' => $this->usersModel->getData(),
+            'role' => $this->usersModel->get()->getResult(),
+            'situs' => $this->situs
+        ];
+        return view('grid', $data);
     }
 }

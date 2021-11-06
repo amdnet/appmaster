@@ -7,10 +7,11 @@ use CodeIgniter\Model;
 class UsersModel extends Model
 {
     protected $table = 'users';
-    // protected $primaryKey = 'id';
-    // protected $returnType = 'object';
-    protected $allowedFields = ['email', 'username', 'fullname', 'photo', 'telp', 'alamat', 'password_hash', 'created_at', 'updated_at'];
+    protected $primaryKey = 'id';
+    protected $returnType = 'object';
+    protected $allowedFields = ['email', 'username', 'fullname', 'photo', 'telp', 'alamat', 'password_hash', 'active', 'created_at', 'updated_at'];
     protected $useTimestamps = true;
+    protected $validationRules = [];
 
     public function getUser($id = false)
     {
@@ -23,18 +24,17 @@ class UsersModel extends Model
     public function getData()
     {
         return $this->db->table('users')
-            ->select('users.id as userid, email, username, fullname, photo, telp, alamat, created_at, updated_at, name')
+            ->select('users.id as userid, email, username, fullname, photo, telp, alamat, active, created_at, updated_at, name')
             ->join('auth_groups_users', 'auth_groups_users.user_id = users.id')
             ->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id')
             ->get()->getResult();
     }
 
-
     public function getUsers($id = false)
     {
         if ($id === false) {
             return $this->table('users')
-                ->select('users.id as userid, email, username, fullname, photo, telp, alamat, created_at, updated_at, name')
+                ->select('users.id as userid, email, username, fullname, photo, telp, alamat, active, created_at, updated_at, name')
                 ->join('auth_groups_users', 'auth_groups_users.user_id = users.id')
                 ->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id')
                 // ->findAll();
@@ -42,7 +42,7 @@ class UsersModel extends Model
                 ->getResultArray();
         } else {
             return $this->table('users')
-                ->select('users.id as userid, email, username, fullname, photo, telp, alamat, created_at, updated_at, name')
+                ->select('users.id as userid, email, username, fullname, photo, telp, alamat, active, created_at, updated_at, name')
                 ->join('auth_groups_users', 'auth_groups_users.user_id = users.id')
                 ->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id')
                 ->where('users.id', $id)

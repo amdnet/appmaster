@@ -48,7 +48,6 @@
                 <form id="add-form" class="pl-2 pr-2">
                     <div class="row">
                         <input type="hidden" id="idStall" name="idStall" class="form-control">
-                        <input type="hidden" id="username" name="username" class="form-control" value="<?= user()->username; ?>">
                     </div>
                     <div class="form-row">
                         <div class="col-md-12">
@@ -83,7 +82,7 @@
                 <form id="edit-form" class="pl-2 pr-2">
                     <div class="row">
                         <input type="hidden" id="idStall" name="idStall" class="form-control">
-                        <input type="hidden" id="username" name="username" class="form-control" value="<?= user()->username; ?>">
+                        <input type="hidden" id="idUsers" name="idUsers" class="form-control" value="<?= user()->id; ?>">
                     </div>
 
                     <div class="form-row">
@@ -241,7 +240,7 @@
 
                 $("#edit-form #idStall").val(response.id_stall);
                 $("#edit-form #stall").val(response.stall);
-                // $("#edit-form #username").val(response.username);
+                // $("#edit-form #fullname").val(response.fullname);
                 $("#edit-form #updateAt").val(response.update_at);
 
                 // submit the edit from 
@@ -273,7 +272,7 @@
                         var form = $('#edit-form');
                         $(".text-danger").remove();
                         $.ajax({
-                            url: '<?php echo base_url($controller . '/edit') ?>',
+                            url: '<?= base_url($controller . '/edit') ?>',
                             type: 'post',
                             data: form.serialize(),
                             dataType: 'json',

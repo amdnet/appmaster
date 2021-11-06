@@ -6,11 +6,10 @@ use CodeIgniter\Model;
 
 class StallModel extends Model
 {
-	protected $table = 'kat_stall';
+	protected $table = 'data_stall';
 	protected $primaryKey = 'id_stall';
 	protected $returnType = 'object';
-	protected $useSoftDeletes = false;
-	protected $allowedFields = ['stall', 'username', 'update_at'];
+	protected $allowedFields = ['stall', 'id_users', 'created_at', 'updated_at'];
 	protected $useTimestamps = true;
 	protected $createdField  = 'created_at';
 	protected $updatedField  = 'updated_at';
