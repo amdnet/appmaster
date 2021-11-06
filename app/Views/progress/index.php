@@ -28,7 +28,6 @@
             </div>
         </div>
     </div>
-</section>
 
 <!-- Start add modal content -->
 <div id="add-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
@@ -103,7 +102,6 @@
 <!-- End update modal content -->
 
 <?= $this->endSection() ?>
-
 <?= $this->section('script') ?>
 <script>
     $(function() {

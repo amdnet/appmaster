@@ -109,20 +109,6 @@ class Users extends BaseController
         return redirect()->back()->withInput();
     }
 
-    public function detail($id)
-    {
-        $db = db_connect();
-        $query = $db->query('SELECT * FROM auth_groups')->getResult();
-        $data = [
-            'controller' => 'users',
-            'pageTitle' => 'Detail User Account',
-            'role' => $query,
-            'detail' => $this->usersModel->getUsers($id),
-            'validation' => $this->validation
-        ];
-        return view('users/detail', $data);
-    }
-
     public function editphoto($id)
     {
         if (!$this->validate([
@@ -215,24 +201,6 @@ class Users extends BaseController
 
     public function update($id)
     {
-        // single update database
-        // $this->usersModel->save([
-        //     'id' => $id,
-        //     'email' => $this->request->getVar('email'),
-        //     'username' => $this->request->getVar('username'),
-        //     // 'photo' => $namaPhoto,
-        //     'telp' => $this->request->getVar('telp'),
-        //     'alamat' => $this->request->getVar('alamat'),
-        //     // 'password_hash' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT)
-        // ]);
-
-        $emailLama = $this->usersModel->getUser($this->request->getVar('email'));
-        if ($emailLama == $this->request->getVar('email')) {
-            $emailRule = 'trim|required|valid_email';
-        } else {
-            $emailRule = 'trim|required|valid_email|is_unique[users.email,id,{id}]';
-        }
-
         if (!$this->validate([
             'role' => 'required',
             // 'email' => $emailRule,
@@ -270,7 +238,6 @@ class Users extends BaseController
         // // return redirect()->to('/users');
         // return redirect()->back()->withInput();
     }
-
 
     // hapus user akun
     public function remove()

@@ -40,12 +40,6 @@
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
-                        <a href="<?= base_url('users'); ?>" class="nav-link <?= (current_url() == base_url('users')) ? 'active' : '' ?>">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>User List</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
                         <a href="<?= base_url('users/add'); ?>" class="nav-link <?= (current_url() == base_url('users/add')) ? 'active' : '' ?>">
                             <i class="far fa-circle nav-icon"></i>
                             <p>User Add</p>
