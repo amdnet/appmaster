@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 04 Nov 2021 pada 20.23
+-- Waktu pembuatan: 06 Nov 2021 pada 18.25
 -- Versi server: 10.4.21-MariaDB
 -- Versi PHP: 7.4.24
 
@@ -54,10 +54,9 @@ CREATE TABLE `auth_groups` (
 INSERT INTO `auth_groups` (`id`, `name`, `description`) VALUES
 (1, 'admin', 'web administrator'),
 (2, 'advisor', 'staff konsumen'),
-(3, 'pic', 'staff bengkel'),
-(4, 'asuransi', 'asuransi perusahaan'),
-(5, 'surveyor', 'asuransi perwakilan'),
-(6, 'client', 'customer');
+(3, 'asuransi', 'asuransi perusahaan'),
+(4, 'surveyor', 'asuransi perwakilan'),
+(5, 'client', 'customer');
 
 -- --------------------------------------------------------
 
@@ -69,20 +68,6 @@ CREATE TABLE `auth_groups_permissions` (
   `group_id` int(11) UNSIGNED NOT NULL DEFAULT 0,
   `permission_id` int(11) UNSIGNED NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data untuk tabel `auth_groups_permissions`
---
-
-INSERT INTO `auth_groups_permissions` (`group_id`, `permission_id`) VALUES
-(1, 1),
-(1, 1),
-(2, 2),
-(2, 2),
-(3, 3),
-(3, 3),
-(4, 4),
-(4, 4);
 
 -- --------------------------------------------------------
 
@@ -101,25 +86,20 @@ CREATE TABLE `auth_groups_users` (
 
 INSERT INTO `auth_groups_users` (`group_id`, `user_id`) VALUES
 (1, 1),
+(1, 2),
 (1, 25),
 (1, 26),
-(2, 2),
 (2, 12),
-(2, 23),
 (2, 37),
-(3, 21),
+(3, 20),
 (3, 22),
-(4, 20),
-(4, 24),
-(6, 27),
-(6, 28),
-(6, 30),
-(6, 31),
-(6, 32),
-(6, 33),
-(6, 34),
-(6, 35),
-(6, 36);
+(4, 21),
+(4, 23),
+(5, 24),
+(5, 27),
+(5, 28),
+(5, 34),
+(5, 35);
 
 -- --------------------------------------------------------
 
@@ -239,7 +219,37 @@ INSERT INTO `auth_logins` (`id`, `ip_address`, `email`, `user_id`, `date`, `succ
 (96, '127.0.0.1', 'admin2@gmail.com', 2, '2021-11-04 23:25:11', 0),
 (97, '127.0.0.1', 'admin2@gmail.com', 2, '2021-11-04 23:26:32', 0),
 (98, '127.0.0.1', 'admin2@gmail.com', 2, '2021-11-04 23:30:51', 0),
-(99, '127.0.0.1', 'admin2@gmail.com', 2, '2021-11-05 00:21:55', 1);
+(99, '127.0.0.1', 'admin2@gmail.com', 2, '2021-11-05 00:21:55', 1),
+(100, '127.0.0.1', 'admin1@gmail.com', 1, '2021-11-05 17:08:22', 1),
+(101, '127.0.0.1', 'admin2@gmail.com', 2, '2021-11-05 20:23:22', 1),
+(102, '127.0.0.1', 'admin2@gmail.com', 2, '2021-11-05 20:23:47', 1),
+(103, '127.0.0.1', 'admin2@gmail.com', 2, '2021-11-06 00:30:23', 1),
+(104, '127.0.0.1', 'admin2@gmail.com', 2, '2021-11-06 00:31:45', 1),
+(105, '127.0.0.1', 'admin2@gmail.com', 2, '2021-11-06 00:32:20', 1),
+(106, '127.0.0.1', 'admin2@gmail.com', 2, '2021-11-06 00:33:15', 1),
+(107, '127.0.0.1', 'admin2@gmail.com', 2, '2021-11-06 00:40:24', 1),
+(108, '127.0.0.1', 'admin2@gmail.com', 2, '2021-11-06 00:46:18', 1),
+(109, '127.0.0.1', 'admin2@gmail.com', 2, '2021-11-06 00:52:32', 1),
+(110, '127.0.0.1', 'admin2@gmail.com', 2, '2021-11-06 01:00:31', 1),
+(111, '127.0.0.1', 'admin1@gmail.com', 1, '2021-11-06 01:08:38', 1),
+(112, '127.0.0.1', 'admin1@gmail.com', 1, '2021-11-06 01:09:12', 1),
+(113, '127.0.0.1', 'admin1@gmail.com', 1, '2021-11-06 01:10:15', 1),
+(114, '127.0.0.1', 'admin1@gmail.com', 1, '2021-11-06 01:14:53', 1),
+(115, '127.0.0.1', 'admin1@gmail.com', 1, '2021-11-06 01:16:38', 1),
+(116, '127.0.0.1', 'admin1@gmail.com', 1, '2021-11-06 01:17:23', 1),
+(117, '127.0.0.1', 'admin2@gmail.com', 2, '2021-11-06 01:18:12', 1),
+(118, '127.0.0.1', 'admin1@gmail.com', 1, '2021-11-06 01:21:13', 1),
+(119, '127.0.0.1', 'admin2@gmail.com', 2, '2021-11-06 01:21:42', 1),
+(120, '127.0.0.1', 'admin2@gmail.com', 2, '2021-11-06 01:22:16', 1),
+(121, '127.0.0.1', 'admin2@gmail.com', 2, '2021-11-06 01:22:49', 1),
+(122, '::1', 'admin2@gmail.com', 2, '2021-11-06 01:23:33', 1),
+(123, '127.0.0.1', 'admin2@gmail.com', 2, '2021-11-06 01:24:57', 1),
+(124, '127.0.0.1', 'admin1@gmail.com', 1, '2021-11-06 01:29:46', 1),
+(125, '127.0.0.1', 'admin2@gmail.com', 2, '2021-11-06 01:44:19', 1),
+(126, '127.0.0.1', 'admin2@gmail.com', 2, '2021-11-06 01:53:22', 1),
+(127, '127.0.0.1', 'admin2@gmail.com', 2, '2021-11-06 15:02:53', 1),
+(128, '127.0.0.1', 'admin1@gmail.com', 1, '2021-11-06 15:56:12', 1),
+(129, '127.0.0.1', 'admin2@gmail.com', 2, '2021-11-06 21:50:37', 1);
 
 -- --------------------------------------------------------
 
@@ -498,11 +508,11 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `email`, `username`, `fullname`, `photo`, `telp`, `alamat`, `password_hash`, `reset_hash`, `reset_at`, `reset_expires`, `activate_hash`, `status`, `status_message`, `active`, `force_pass_reset`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 'admin1@gmail.com', 'admin pertama', 'admin no satu', '1636022278_d6261077eeb524223168.jpg', '984557455', 'jalan hujan alamat', '$2y$10$mCss0GIwqL4lLeuRijvnnuOR6YSnGCzwiouLr.qf8qzDufUV7QQ..', NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, '2021-10-18 10:49:12', '2021-11-04 21:55:38', NULL),
-(2, 'admin2@gmail.com', 'admin dua', 'nama admin 2', '1635963584_16469f1e59760630f265.jpg', '9097865645', 'jalan kanggraksan no 950 cirebon', '$2y$10$4OnrTlw/WJju2q24H5MN7uvmqx27j09XiCDW.YBXga8Avsg4xg9ce', NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, '2021-10-20 17:47:13', '2021-11-04 22:45:56', NULL),
+(2, 'admin2@gmail.com', 'admin dua', 'nama admin 2', '1635963584_16469f1e59760630f265.jpg', '9097865645', 'jalan kanggraksan no 950 cirebon', '$2y$10$4OnrTlw/WJju2q24H5MN7uvmqx27j09XiCDW.YBXga8Avsg4xg9ce', NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, '2021-10-20 17:47:13', '2021-11-06 22:45:32', NULL),
 (12, 'admin3@gmail.com', 'admin sat', 'admin ke tiga', 'avatar.png', '516484963', 'jalan ketiiga', '$2y$10$kCX03irmFKHyAM1HxnDVDO.hW18vbVyg4TS.vnTP3.PLyuWjUSEqO', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-10-28 00:47:02', '2021-11-04 19:12:13', NULL),
 (20, 'asuransi@gmail.com', 'asuransi', 'nama surveyor', '1635851362_d9cebaaecdafd85bf837.jpg', '57448785487', 'alamat survwyor', '$2y$10$T8.h9iZV.volp8UzT/szUe0wr9LTXyty6qTqEDyJTvH2sm64Q5jE2', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-11-01 04:46:15', '2021-11-03 08:11:46', NULL),
-(21, 'mailasi@yaho.com', 'asuransi pertama', '', 'bfb5cc0872b444917fc7dc4e252d25ff.jpg', '0096554', 'tuparev barat', '$2y$10$mIhH22ReIQoc5P7xAY486.LSV6/vqs1GPjZod4EV9zLJPlHU06Vn.', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-11-01 06:07:42', '2021-11-01 21:06:25', NULL),
-(22, 'ransi@gmail.com', 'asuransi abc', 'nama surveyor', 'rujak-kangkung-sambel-asem-foto-resep-utama.jpg', '089784496', 'fatahillah jabar', '$2y$10$G6778OcNxfA9/ra3VZu/ceoK7iWmuU3TOkRMFeOZHrfmmlefXYQve', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-11-01 21:21:26', '2021-11-01 21:21:42', NULL),
+(21, 'pic01@yaho.com', 'pic01', 'nama pic 01', 'bfb5cc0872b444917fc7dc4e252d25ff.jpg', '0096554', 'alamat pic 01', '$2y$10$mIhH22ReIQoc5P7xAY486.LSV6/vqs1GPjZod4EV9zLJPlHU06Vn.', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-11-01 06:07:42', '2021-11-06 17:12:26', NULL),
+(22, 'asuransi.abc@gmail.com', 'asuransi abc', 'nama suryevor abc', 'rujak-kangkung-sambel-asem-foto-resep-utama.jpg', '089784496', 'fatahillah jabar', '$2y$10$G6778OcNxfA9/ra3VZu/ceoK7iWmuU3TOkRMFeOZHrfmmlefXYQve', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-11-01 21:21:26', '2021-11-06 17:05:06', NULL),
 (23, 'picbengkel@gm.com', 'pic nama user', 'nama advisor', '1635778558_f8ef36f1946cb12ced3c.jpg', '785785685', 'nama alamanar', '$2y$10$ZGfk5ocrQoUso9eV6/ZmqOBLMPF9EUFkzmORyfW218binPWGQVIty', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-11-01 21:53:47', '2021-11-01 21:55:58', NULL),
 (24, 'clien5t@gmai.com', 'fuytrr gtree', 'nar iku', '1635779286_f95959f7b36293e52ce2.jpg', '258569866', 'yfyuiui mkuhny', '$2y$10$i.8i.aXruwZ5bBnYsAr1iOWZux48hVd69eIEBuVSQ2zKyBZJ1Mf9a', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-11-01 22:06:33', '2021-11-01 22:08:06', NULL),
 (25, 'adm954@yahu.com', 'adm 954', 'admin 954', '1635782416_c143efbeba38667fabd9.png', '987498565', 'jalan kalibata', '$2y$10$N9seziHylqWS8bMwRAtn/uWZtjWJ57WMCEaQm2B9uqSrpF/kjIRG.', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2021-11-01 22:31:28', '2021-11-01 23:00:16', NULL),
@@ -647,7 +657,7 @@ ALTER TABLE `auth_groups`
 -- AUTO_INCREMENT untuk tabel `auth_logins`
 --
 ALTER TABLE `auth_logins`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=130;
 
 --
 -- AUTO_INCREMENT untuk tabel `auth_permissions`

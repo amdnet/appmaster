@@ -10,10 +10,11 @@
 
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+	<link rel="stylesheet" type="text/css" href="<?= base_url('public/css/custom.css') ?>" media="all" />
 	<link rel="stylesheet" href="<?= base_url() ?>/public/css/bootstrap-4.min.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.1.0/dist/css/adminlte.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css">
-	<link rel="stylesheet" href="<?= base_url() ?>/public/css/custom.css">
+	<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"> -->
 	<style>
 		.select2-container .select2-selection--single {
 			height: 38px !important;

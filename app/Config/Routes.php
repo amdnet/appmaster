@@ -47,6 +47,7 @@ $routes->setAutoRoute(true);
 // $routes->addPlaceholder('uuid', '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}');
 $routes->get('/', 'Home::index');
 $routes->get('progress', 'Progress::index');
+$routes->get('service/add', 'Service::add');
 
 // $routes->get('/', 'Home::index', ['filter' => 'role:admin,advisor']);
 // $routes->get('/', 'Home::asuransi', ['as' => '/'], ['filter' => 'role:asuransi,surveyor']);

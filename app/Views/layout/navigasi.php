@@ -10,10 +10,8 @@
 
         <!-- data kategori -->
         <?php if (in_groups([1, 2])) : ?>
-            <li class="nav-item <?= (current_url() == base_url('stall')) || (current_url() == base_url('mobil-jenis')) ||
-                                    (current_url() == base_url('mobil-merk')) || (current_url() == base_url('mobil-tipe')) ? 'menu-open' : '' ?> ">
-                <a href="#" class="nav-link <?= (current_url() == base_url('stall')) || (current_url() == base_url('mobil-jenis')) ||
-                                                (current_url() == base_url('mobil-merk')) || (current_url() == base_url('mobil-tipe')) ? 'active' : '' ?>">
+            <li class="nav-item <?= (current_url() == base_url('stall')) || (current_url() == base_url('mobil-jenis')) || (current_url() == base_url('mobil-merk')) || (current_url() == base_url('mobil-tipe')) ? 'menu-open' : '' ?> ">
+                <a href="#" class="nav-link <?= (current_url() == base_url('stall')) || (current_url() == base_url('mobil-jenis')) || (current_url() == base_url('mobil-merk')) || (current_url() == base_url('mobil-tipe')) ? 'active' : '' ?>">
                     <i class="nav-icon fas fa-th-list"></i>
                     <p>Data Kategori<i class="fas fa-angle-left right"></i></p>
                 </a>
@@ -77,24 +75,24 @@
             </li>
         <?php endif; ?>
 
-        <!-- data progress -->
+        <!-- data service progress -->
         <?php if (in_groups([1, 2])) : ?>
-            <li class="nav-item <?= (current_url() == base_url('progress')) || (current_url() == base_url('progress/add')) ? 'menu-open' : '' ?> ">
-                <a href="#" class="nav-link <?= (current_url() == base_url('progress')) || (current_url() == base_url('progress/add')) ? 'active' : '' ?>">
-                    <i class="nav-icon fas fa-car-crash"></i>
-                    <p>Data Progress<i class="fas fa-angle-left right"></i></p>
+            <li class="nav-item <?= (current_url() == base_url('service')) || (current_url() == base_url('service/add')) ? 'menu-open' : '' ?> ">
+                <a href="#" class="nav-link <?= (current_url() == base_url('service')) || (current_url() == base_url('service/add')) ? 'active' : '' ?>">
+                    <i class="nav-icon fas fa-tools"></i>
+                    <p>Data service<i class="fas fa-angle-left right"></i></p>
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
-                        <a href="<?= base_url('progress'); ?>" class="nav-link <?= (current_url() == base_url('progress')) ? 'active' : '' ?>">
+                        <a href="<?= base_url('service'); ?>" class="nav-link <?= (current_url() == base_url('service')) ? 'active' : '' ?>">
                             <i class="far fa-circle nav-icon"></i>
-                            <p>Semua Progres</p>
+                            <p>List Service</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="<?= base_url('progress/add'); ?>" class="nav-link <?= (current_url() == base_url('progress/add')) ? 'active' : '' ?>">
+                        <a href="<?= base_url('service/add'); ?>" class="nav-link <?= (current_url() == base_url('service/add')) ? 'active' : '' ?>">
                             <i class="far fa-circle nav-icon"></i>
-                            <p>Tambah Progres</p>
+                            <p>Tambah Service</p>
                         </a>
                     </li>
                     <li class="nav-item">

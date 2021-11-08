@@ -26,6 +26,15 @@ h4 {
   border: 0 !important;
 }
 
+.position-absolute {
+  z-index: 9;
+}
+
+.alert {
+  width: 100%;
+  z-index: 9;
+}
+
 /* #Imgavatar {
   max-height: 500px !important;
 } */
