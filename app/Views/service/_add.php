@@ -1,3 +1,12 @@
+<?= $this->extend('layout/template.php') ?>
+<?= $this->section('css') ?>
+<?php include_once "app/views/layout/tabelcss.php"; ?>
+<?= $this->endSection() ?>
+
+<?= $this->section('content') ?>
+
+<!-- Main content -->
+
 <section class="content">
     <div class="container-fluid">
         <div class="row">
@@ -332,3 +341,125 @@
     </div>
 
 </section>
+<?= $this->endSection() ?>
+<?= $this->section('script') ?>
+<script>
+    $('.select2').select2();
+</script>
+
+<script>
+    document.getElementById('tipeClient').addEventListener('change', function() {
+        if (this.value == 1) {
+            document.getElementById('namaPIC').disabled = false;
+            document.getElementById('namaPIC').placeholder = 'Nama PIC wajib diisi';
+            document.getElementById('telpPIC').disabled = false;
+            document.getElementById('telpPIC').placeholder = 'Telp. PIC wajib diisi';
+        } else {
+            document.getElementById('namaPIC').disabled = true;
+            document.getElementById('namaPIC').placeholder = '';
+            document.getElementById('namaPIC').value = '';
+            document.getElementById('telpPIC').disabled = true;
+            document.getElementById('telpPIC').placeholder = '';
+        }
+    });
+</script>
+
+<script>
+    $("#add-form").validate({
+
+        highlight: function(element) {
+            $(element).addClass('is-invalid').removeClass('is-valid');
+        },
+        unhighlight: function(element) {
+            $(element).removeClass('is-invalid').addClass('is-valid');
+        },
+        errorElement: 'div ',
+        errorClass: 'invalid-feedback',
+        errorPlacement: function(error, element) {
+            if (element.parent('.input-group').length) {
+                error.insertAfter(element.parent());
+            } else {
+                error.insertAfter(element);
+            }
+        },
+
+        submitHandler: function(form) {
+            var form = $('#add-form');
+            // remove the text-danger
+            $(".text-danger").show();
+
+            $.ajax({
+                url: '<?= base_url($controller . '/simpan') ?>',
+                type: 'post',
+                data: form.serialize(), // /converting the form data into array and sending it to server
+                dataType: 'json',
+                beforeSend: function() {
+                    $('#add-form-btn').html('<i class="fa fa-spinner fa-spin"></i>');
+                },
+                success: function(response) {
+
+                    if (response.success === true) {
+
+                        Swal.fire({
+                            position: 'bottom-end',
+                            icon: 'success',
+                            title: response.messages,
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(function() {
+                            $('#data_table').DataTable().ajax.reload(null, false).draw(false);
+                            $('#add-modal').modal('hide');
+                        })
+
+                    } else {
+
+                        // var mockResponse = {
+                        //     errors: {
+                        //         'noRangka': 'First name must not be blank',
+                        //         'noMesin': 'Last name must not be blank'
+                        //     }
+                        // };
+                        // $.each(mockResponse.errors, function(fieldName, error) {
+                        //     let field = form.find('[name="' + fieldName + '"]');
+                        //     field.addClass("is-invalid");
+                        //     let immediateSibling = field.next();
+                        //     if (immediateSibling.hasClass('invalid-feedback')) {
+                        //         immediateSibling.text(error);
+                        //     } else {
+                        //         field.after("<div class='invalid-feedback'>" + error + "</div>")
+                        //     }
+                        // });                        
+
+                        if (response.messages instanceof Object) {
+                            $.each(response.messages, function(index, value) {
+                                var id = $("#" + index);
+
+                                id.closest('.form-control')
+                                    .removeClass('is-invalid')
+                                    .removeClass('is-valid')
+                                    .addClass(value.length > 0 ? 'is-invalid' : 'is-valid');
+
+                                id.after(value);
+                            });
+                        } else {
+                            Swal.fire({
+                                position: 'bottom-end',
+                                icon: 'error',
+                                title: response.messages,
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                            // .then(function() {
+                            //     location.reload();
+                            // })
+                        }
+                    }
+                    $('#add-form-btn').html('Simpan');
+                }
+            });
+            return false;
+        }
+    });
+    $('#add-form').validate();
+</script>
+<?= $this->endSection() ?>

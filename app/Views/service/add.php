@@ -1,7 +1,4 @@
 <?= $this->extend('layout/template.php') ?>
-<?= $this->section('css') ?>
-<?php include_once "app/views/layout/tabelcss.php"; ?>
-<?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
 
@@ -13,6 +10,7 @@
             <div class="col-12">
                 <form action="<?= base_url('service/addsave'); ?>" method="POST">
                     <?= csrf_field(); ?>
+                    <input type="hidden" id="idUsers" name="idUsers" class="form-control" value="<?= user()->id; ?>">
 
                     <!-- Informasi Perusahaan -->
                     <div class="card card-primary">

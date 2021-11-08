@@ -26,6 +26,10 @@ class Service extends BaseController
         return view('service/index', $data);
     }
 
+    //
+    // tampilan tambah data service
+    //
+
     public function add()
     {
         // $db = db_connect();
@@ -40,7 +44,7 @@ class Service extends BaseController
             'advisor' => $this->serviceModel->getAdvisor(),
             'client' => $this->serviceModel->getClient(),
             'asuransi' => $this->serviceModel->getAsuransi(),
-            'pic' => $this->serviceModel->getPIC(),
+            // 'pic' => $this->serviceModel->getPIC(),
             'mobilJenis' => $mobilJenis->findAll(),
             'mobilMerk' => $mobilMerk->findAll(),
             'mobilTipe' => $mobilTipe->findAll(),
@@ -49,6 +53,10 @@ class Service extends BaseController
         ];
         return view('service/add', $data);
     }
+
+    //
+    // fungsi simpan data service
+    //
 
     public function addsave()
     {
@@ -80,26 +88,123 @@ class Service extends BaseController
             return redirect()->back()->withInput();
         }
 
-        // $this->usersModel->insert([
-        //     'email' => $this->request->getVar('email'),
-        //     'username' => $this->request->getVar('username'),
-        //     'fullname' => $this->request->getVar('fullname'),
-        //     'telp' => $this->request->getVar('telp'),
-        //     'alamat' => $this->request->getVar('alamat'),
-        //     'active' => '1'
-        // ]);
-
-        // $userID = $this->usersModel->insertID();
-
-        // $db = db_connect();
-        // $builder = $db->table('auth_groups_users');
-        // $builder->insert([
-        //     'group_id' => $this->request->getVar('role'),
-        //     'user_id' => $userID
-        // ]);
-        // session()->setFlashdata('pesan', 'Data user berhasil disimpan!');
-
+        $kode_service = $this->serviceModel->getKode();
+        $this->serviceModel->insert([
+            'kode_service' => $kode_service,
+            'id_advisor' => $this->request->getVar('advisor'),
+            'id_client' => $this->request->getVar('client'),
+            'id_asuransi' => $this->request->getVar('asuransi'),
+            'tipe_client' => $this->request->getVar('tipeClient'),
+            'pic_nama' => $this->request->getVar('namaPIC'),
+            'pic_telp' => $this->request->getVar('telpPIC'),
+            'id_mbl_jenis' => $this->request->getVar('mobilJenis'),
+            'id_mbl_merk' => $this->request->getVar('mobilMerk'),
+            'id_mbl_tipe' => $this->request->getVar('mobilTipe'),
+            'thn_rakit' => $this->request->getVar('tahunRakit'),
+            'no_pol' => $this->request->getVar('noPolisi'),
+            'no_rangka' => $this->request->getVar('noRangka'),
+            'no_mesin' => $this->request->getVar('noMesin'),
+            'id_users' => $this->request->getVar('idUsers')
+        ]);
+        session()->setFlashdata('pesan', 'Data service berhasil disimpan!');
+        return redirect()->back()->withInput();
         // return redirect()->to('/service');
+    }
+
+    //
+    // fungsi tampilan edit data service
+    //
+
+    public function edit($id)
+    {
+        $db = db_connect();
+
+        $mobilJenis = new \App\Models\MobilJenisModel;
+        $mobilMerk = new \App\Models\MobilMerkModel;
+        $mobilTipe = new \App\Models\MobilTipeModel;
+
+        // $dataClient = $db->table('data_service')
+        //     ->select('id_client, fullname, alamat, telp')
+        //     ->join('users', 'users.id = data_service.id_client')
+        //     ->where('data_service.id_service', $id)
+        //     ->get()->getRow();
+
+        $data = [
+            // 'detail' => $this->serviceModel->getDetail($id),
+            'controller' => 'service',
+            'pageTitle' => 'Edit Data Service Client',
+            'detail' => $this->serviceModel->where('id_service', $id)->get()->getRow(),
+            'advisor' => $this->serviceModel->editAdvisor(),
+            'advisorMenu' => $this->serviceModel->getAdvisor(),
+            'client' => $this->serviceModel->editClient(),
+            'clientMenu' => $this->serviceModel->getClient(),
+            'asuransi' => $this->serviceModel->editAsuransi(),
+            'asuransiMenu' => $this->serviceModel->getAsuransi(),
+            'mobilEdit' => $this->serviceModel->editMobil(),
+            'mobilJenis' => $mobilJenis->findAll(),
+            'mobilMerk' => $mobilMerk->findAll(),
+            'mobilTipe' => $mobilTipe->findAll(),
+            'validation' => $this->validation,
+            'situs' => $this->situs
+        ];
+        return view('service/edit', $data);
+    }
+
+    //
+    // fungsi edit -> update data service
+    //
+
+    public function editsave($id)
+    {
+        $cekCLient = $this->request->getVar('tipeClient');
+        if ($cekCLient == 1) {
+            $namaPIC = ['label' => 'nama PIC', 'rules' => 'required|min_length[3]|max_length[30]'];
+            $telpPIC = ['label' => 'telephone PIC', 'rules' => 'trim|required|min_length[6]|max_length[15]'];
+        } else {
+            $namaPIC = 'permit_empty';
+            $telpPIC = 'permit_empty';
+        }
+
+        if (!$this->validate([
+            'advisor' => ['label' => 'service advisor', 'rules' => 'required'],
+            'client' => ['label' => 'nama konsumen', 'rules' => 'required'],
+            'asuransi' => ['label' => 'perusahaan asuransi', 'rules' => 'required'],
+            'tipeClient' => ['label' => 'tipe client', 'rules' => 'required'],
+            'namaPIC' => $namaPIC,
+            'telpPIC' => $telpPIC,
+            'mobilJenis' => ['label' => 'jenis mobil', 'rules' => 'required'],
+            'mobilMerk' => ['label' => 'merk mobil', 'rules' => 'required'],
+            'mobilTipe' => ['label' => 'tipe mobil', 'rules' => 'required'],
+            'tahunRakit' => ['label' => 'tahun rakit', 'rules' => 'required|min_length[4]|max_length[5]'],
+            'noPolisi' => ['label' => 'nomor polisi', 'rules' => 'required|min_length[3]|max_length[10]'],
+            'noRangka' => ['label' => 'nomor rangka', 'rules' => 'required|min_length[3]|max_length[30]'],
+            'noMesin' => ['label' => 'nomor mesin', 'rules' => 'required|min_length[3]|max_length[30]']
+        ])) {
+            session()->setFlashdata('error', $this->validator->listErrors());
+            return redirect()->back()->withInput();
+        }
+
+        // $kode_service = $this->serviceModel->getKode();
+        $this->serviceModel->save([
+            'id_service' => $id,
+            // 'kode_service' => $kode_service,
+            'id_advisor' => $this->request->getPost('advisor'),
+            'id_client' => $this->request->getPost('client'),
+            'id_asuransi' => $this->request->getPost('asuransi'),
+            'tipe_client' => $this->request->getPost('tipeClient'),
+            'pic_nama' => $this->request->getPost('namaPIC'),
+            'pic_telp' => $this->request->getPost('telpPIC'),
+            'id_mbl_jenis' => $this->request->getPost('mobilJenis'),
+            'id_mbl_merk' => $this->request->getPost('mobilMerk'),
+            'id_mbl_tipe' => $this->request->getPost('mobilTipe'),
+            'thn_rakit' => $this->request->getPost('tahunRakit'),
+            'no_pol' => $this->request->getPost('noPolisi'),
+            'no_rangka' => $this->request->getPost('noRangka'),
+            'no_mesin' => $this->request->getPost('noMesin'),
+            'id_users' => $this->request->getPost('idUsers')
+        ]);
+        session()->setFlashdata('pesan', 'Data service berhasil diperbaharui!');
+        return redirect()->back()->withInput();
     }
 
     public function getAll()

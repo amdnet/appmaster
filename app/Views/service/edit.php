@@ -1,10 +1,16 @@
+<?= $this->extend('layout/template.php') ?>
+
+<?= $this->section('content') ?>
+
+<!-- Main content -->
+
 <section class="content">
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
-                <!-- <form action="<?= base_url('service/addsave'); ?>" method="POST"> -->
-                <form id="add-form">
+                <form action="<?= base_url('service/editsave/' . $detail->id_service); ?>" method="POST">
                     <?= csrf_field(); ?>
+                    <input type="hidden" id="idUsers" name="idUsers" class="form-control" value="<?= user()->id; ?>">
 
                     <!-- Informasi Perusahaan -->
                     <div class="card card-primary">
@@ -66,9 +72,9 @@
                                 <div class="col-md-4 mb-3">
                                     <label for="advisor"> Service Advisor: <span class="text-danger">*</span> <small><em>(staff pelayanan konsumen)</em></small></label>
                                     <select id="advisor" name="advisor" class="form-control select2 <?= ($validation->hasError('advisor')) ? 'is-invalid' : ''; ?>" onchange="document.getElementById('telp').value=this.options[this.selectedIndex].getAttribute('data-telp')">
-                                        <option value="" disabled selected>-- pilih service advisor --</option>
-                                        <?php foreach ($advisor as $advisor) : ?>
-                                            <option value="<?= $advisor->user_id ?>" data-telp="<?= $advisor->telp ?>"> <?= $advisor->fullname ?> </option>
+                                        <option value="<?= $detail->id_advisor ?>" selected disabled><?= $advisor->fullname ?></option>
+                                        <?php foreach ($advisorMenu as $menu) : ?>
+                                            <option value="<?= $menu->user_id ?>" data-telp="<?= $menu->telp ?>"> <?= $menu->fullname ?> </option>
                                         <?php endforeach; ?>
                                     </select>
                                     <div class="invalid-feedback">
@@ -82,7 +88,7 @@
                                         <div class="input-group-prepend">
                                             <div class="input-group-text"><i class="fas fa-mobile-alt"></i></div>
                                         </div>
-                                        <input type="text" id="telp" name="telp" class="form-control" value="" disabled>
+                                        <input type="text" id="telp" name="telp" class="form-control" value="<?= $advisor->telp; ?>" disabled>
                                     </div>
                                 </div>
 
@@ -107,9 +113,9 @@
                                 <div class="col-md-4 mb-3">
                                     <label for="client"> Nama Client: <span class="text-danger">*</span></label>
                                     <select id="client" name="client" class="form-control select2 <?= ($validation->hasError('client')) ? 'is-invalid' : ''; ?>" onchange="document.getElementById('alamatClient').value=this.options[this.selectedIndex].getAttribute('data-alamatClient');document.getElementById('telpClient').value=this.options[this.selectedIndex].getAttribute('data-telpClient')">
-                                        <option value="" disabled selected>-- pilih nama konsumen --</option>
-                                        <?php foreach ($client as $client) : ?>
-                                            <option value="<?= $client->user_id ?>" data-alamatClient="<?= $client->alamat ?>" data-telpClient="<?= $client->telp ?>"> <?= $client->fullname ?> </option>
+                                        <option value="<?= $detail->id_client ?>" selected disabled><?= $client->fullname; ?></option>
+                                        <?php foreach ($clientMenu as $menu) : ?>
+                                            <option value="<?= $menu->user_id ?>" data-alamatClient="<?= $menu->alamat ?>" data-telpClient="<?= $menu->telp ?>"> <?= $menu->fullname ?> </option>
                                         <?php endforeach; ?>
                                     </select>
                                     <div class="invalid-feedback">
@@ -123,7 +129,7 @@
                                         <div class="input-group-prepend">
                                             <div class="input-group-text"><i class="fas fa-map-marker-alt"></i></div>
                                         </div>
-                                        <input type="text" id="alamatClient" name="alamatClient" class="form-control" value="" autocomplete="off" disabled>
+                                        <input type="text" id="alamatClient" name="alamatClient" class="form-control" value="<?= $client->alamat; ?>" autocomplete="off" disabled>
                                     </div>
                                 </div>
 
@@ -133,16 +139,16 @@
                                         <div class="input-group-prepend">
                                             <div class="input-group-text"><i class="fas fa-phone-alt"></i></div>
                                         </div>
-                                        <input type="text" id="telpClient" name="telpClient" class="form-control" value="" autocomplete="off" disabled>
+                                        <input type="text" id="telpClient" name="telpClient" class="form-control" value="<?= $client->telp; ?>" autocomplete="off" disabled>
                                     </div>
                                 </div>
 
                                 <div class="col-md-4 mb-3">
                                     <label for="asuransi"> Asuransi: <span class="text-danger">*</span> <small><em>(perusahaan asuransi)</em></small></label>
                                     <select id="asuransi" name="asuransi" class="form-control select2 <?= ($validation->hasError('asuransi')) ? 'is-invalid' : ''; ?>" onchange="document.getElementById('svyAsuransi').value=this.options[this.selectedIndex].getAttribute('data-svyAsuransi');document.getElementById('telpSvy').value=this.options[this.selectedIndex].getAttribute('data-telpSvy')">
-                                        <option value="" disabled selected>-- pilih asuransi --</option>
-                                        <?php foreach ($asuransi as $asuransi) : ?>
-                                            <option value="<?= $asuransi->user_id ?>" data-svyAsuransi="<?= $asuransi->fullname ?>" data-telpSvy="<?= $asuransi->telp ?>"> <?= $asuransi->username ?> </option>
+                                        <option value="<?= $detail->id_asuransi ?>" disabled selected><?= $asuransi->username ?></option>
+                                        <?php foreach ($asuransiMenu as $menu) : ?>
+                                            <option value="<?= $menu->user_id ?>" data-svyAsuransi="<?= $menu->fullname ?>" data-telpSvy="<?= $menu->telp ?>"> <?= $menu->username ?> </option>
                                         <?php endforeach; ?>
                                     </select>
                                     <div class="invalid-feedback">
@@ -156,7 +162,7 @@
                                         <div class="input-group-prepend">
                                             <div class="input-group-text"><i class="fas fa-user-circle"></i></div>
                                         </div>
-                                        <input type="text" id="svyAsuransi" name="svyAsuransi" class="form-control" value="" disabled>
+                                        <input type="text" id="svyAsuransi" name="svyAsuransi" class="form-control" value="<?= $asuransi->fullname ?>" disabled>
                                     </div>
                                 </div>
 
@@ -166,7 +172,7 @@
                                         <div class="input-group-prepend">
                                             <div class="input-group-text"><i class="fas fa-mobile-alt"></i></div>
                                         </div>
-                                        <input type="text" id="telpSvy" name="telpSvy" class="form-control" value="" disabled>
+                                        <input type="text" id="telpSvy" name="telpSvy" class="form-control" value="<?= $asuransi->telp ?>" disabled>
                                     </div>
                                 </div>
 
@@ -174,6 +180,13 @@
                                     <label for="tipeClient"> Tipe Client: <span class="text-danger">*</span></label>
                                     <select id="tipeClient" name="tipeClient" class="form-control">
                                         <!-- <option disabled selected>-- pilih tipe konsumen --</option> -->
+                                        <option value="<?= $detail->tipe_client ?>" disabled selected>
+                                            <?php if ($detail->tipe_client == '1') { ?>
+                                                Corporate
+                                            <?php } else { ?>
+                                                Personal
+                                            <?php } ?>
+                                        </option>
                                         <option value="2">Personal</option>
                                         <option value="1">Corporate</option>
                                     </select>
@@ -188,7 +201,7 @@
                                         <div class="input-group-prepend">
                                             <div class="input-group-text"><i class="fas fa-user-circle"></i></div>
                                         </div>
-                                        <input type="text" id="namaPIC" name="namaPIC" class="form-control <?= ($validation->hasError('namaPIC')) ? 'is-invalid' : ''; ?>" value="<?= old('namaPIC') ?>" disabled>
+                                        <input type="text" id="namaPIC" name="namaPIC" class="form-control <?= ($validation->hasError('namaPIC')) ? 'is-invalid' : ''; ?>" value="<?= $detail->pic_nama ?>" disabled>
                                         <div class="invalid-feedback">
                                             <?= $validation->getError('namaPIC'); ?>
                                         </div>
@@ -201,7 +214,7 @@
                                         <div class="input-group-prepend">
                                             <div class="input-group-text"><i class="fas fa-mobile-alt"></i></div>
                                         </div>
-                                        <input type="text" id="telpPIC" name="telpPIC" class="form-control <?= ($validation->hasError('telpPIC')) ? 'is-invalid' : ''; ?>" value="<?= old('telpPIC') ?>" value="" disabled>
+                                        <input type="text" id="telpPIC" name="telpPIC" class="form-control <?= ($validation->hasError('telpPIC')) ? 'is-invalid' : ''; ?>" value="<?= $detail->pic_telp ?>" disabled>
                                         <div class="invalid-feedback">
                                             <?= $validation->getError('telpPIC'); ?>
                                         </div>
@@ -229,7 +242,7 @@
                                 <div class="col-md-4 mb-3">
                                     <label for="mobilJenis"> Jenis Mobil: <span class="text-danger">*</span></label>
                                     <select id="mobilJenis" name="mobilJenis" class="form-control select2 <?= ($validation->hasError('mobilJenis')) ? 'is-invalid' : ''; ?>">
-                                        <option value="" disabled selected>-- pilih jenis mobil --</option>
+                                        <option value="<?= $detail->id_mbl_jenis ?>" disabled selected><?= $mobilEdit->nama_mobil_jenis ?></option>
                                         <?php foreach ($mobilJenis as $mobilJenis) : ?>
                                             <option value="<?= $mobilJenis->id_mobil_jenis ?>"> <?= $mobilJenis->nama_mobil_jenis ?> </option>
                                         <?php endforeach; ?>
@@ -242,7 +255,7 @@
                                 <div class="col-md-4 mb-3">
                                     <label for="mobilMerk"> Merk Mobil: <span class="text-danger">*</span></label>
                                     <select id="mobilMerk" name="mobilMerk" class="form-control select2 <?= ($validation->hasError('mobilMerk')) ? 'is-invalid' : ''; ?>">
-                                        <option value="" disabled selected>-- pilih merk mobil --</option>
+                                        <option value="<?= $detail->id_mbl_merk ?>" disabled selected><?= $mobilEdit->nama_mobil_merk ?></option>
                                         <?php foreach ($mobilMerk as $mobilMerk) : ?>
                                             <option value="<?= $mobilMerk->id_mobil_merk ?>"> <?= $mobilMerk->nama_mobil_merk ?> </option>
                                         <?php endforeach; ?>
@@ -255,7 +268,7 @@
                                 <div class="col-md-4 mb-3">
                                     <label for="mobilTipe"> Tipe Mobil: <span class="text-danger">*</span></label>
                                     <select id="mobilTipe" name="mobilTipe" class="form-control select2 <?= ($validation->hasError('mobilTipe')) ? 'is-invalid' : ''; ?>">
-                                        <option value="" disabled selected>-- pilih tipe mobil --</option>
+                                        <option value="<?= $detail->id_mbl_tipe ?>" disabled selected><?= $mobilEdit->nama_mobil_tipe ?></option>
                                         <?php foreach ($mobilTipe as $mobilTipe) : ?>
                                             <option value="<?= $mobilTipe->id_mobil_tipe ?>"> <?= $mobilTipe->nama_mobil_tipe ?> </option>
                                         <?php endforeach; ?>
@@ -271,7 +284,7 @@
                                         <div class="input-group-prepend">
                                             <div class="input-group-text"><i class="fas fa-calendar-alt"></i></div>
                                         </div>
-                                        <input type="text" id="tahunRakit" name="tahunRakit" class="form-control <?= ($validation->hasError('tahunRakit')) ? 'is-invalid' : ''; ?>" value="<?= old('tahunRakit') ?>">
+                                        <input type="text" id="tahunRakit" name="tahunRakit" class="form-control <?= ($validation->hasError('tahunRakit')) ? 'is-invalid' : ''; ?>" value="<?= (old('tahunRakit')) ? old('tahunRakit') : $detail->thn_rakit ?>">
                                         <div class="invalid-feedback">
                                             <?= $validation->getError('tahunRakit'); ?>
                                         </div>
@@ -284,7 +297,7 @@
                                         <div class="input-group-prepend">
                                             <div class="input-group-text"><i class="fas fa-car"></i></div>
                                         </div>
-                                        <input type="text" id="noPolisi" name="noPolisi" class="form-control <?= ($validation->hasError('noPolisi')) ? 'is-invalid' : ''; ?>" value="<?= old('noPolisi') ?>">
+                                        <input type="text" id="noPolisi" name="noPolisi" class="form-control <?= ($validation->hasError('noPolisi')) ? 'is-invalid' : ''; ?>" value="<?= (old('noPolisi')) ? old('noPolisi') : $detail->no_pol ?>">
                                         <div class="invalid-feedback">
                                             <?= $validation->getError('noPolisi'); ?>
                                         </div>
@@ -297,7 +310,7 @@
                                         <div class="input-group-prepend">
                                             <div class="input-group-text"><i class="fas fa-car"></i></div>
                                         </div>
-                                        <input type="text" id="noRangka" name="noRangka" class="form-control <?= ($validation->hasError('noRangka')) ? 'is-invalid' : ''; ?>" value="<?= old('noRangka') ?>">
+                                        <input type="text" id="noRangka" name="noRangka" class="form-control <?= ($validation->hasError('noRangka')) ? 'is-invalid' : ''; ?>" value="<?= (old('noRangka')) ? old('noRangka') : $detail->no_rangka ?>">
                                         <div class="invalid-feedback">
                                             <?= $validation->getError('noRangka'); ?>
                                         </div>
@@ -310,7 +323,7 @@
                                         <div class="input-group-prepend">
                                             <div class="input-group-text"><i class="fas fa-car"></i></div>
                                         </div>
-                                        <input type="text" id="noMesin" name="noMesin" class="form-control <?= ($validation->hasError('noMesin')) ? 'is-invalid' : ''; ?>" value="<?= old('noMesin') ?>">
+                                        <input type="text" id="noMesin" name="noMesin" class="form-control <?= ($validation->hasError('noMesin')) ? 'is-invalid' : ''; ?>" value="<?= (old('noMesin')) ? old('noMesin') : $detail->no_mesin ?>">
                                         <div class="invalid-feedback">
                                             <?= $validation->getError('noMesin'); ?>
                                         </div>
@@ -323,8 +336,7 @@
                     <!-- Informasi Mobil -->
                     <div class="d-grid gap-3 mb-4 float-right">
                         <a href="<?= base_url('service'); ?>" class="btn btn-dark"><i class="fas fa-arrow-circle-left"></i> &nbsp; Batal</a>
-                        <!-- <button class="btn btn-primary" type="submit"><i class="fas fa-save"></i> &nbsp; Simpan</button> -->
-                        <button type="submit" class="btn btn-success" id="add-form-btn"><i class="fas fa-save"></i> &nbsp; Simpan</button>
+                        <button class="btn btn-primary" type="submit"><i class="fas fa-save"></i> &nbsp; Simpan</button>
                     </div>
                 </form>
             </div>
@@ -332,3 +344,26 @@
     </div>
 
 </section>
+<?= $this->endSection() ?>
+<?= $this->section('script') ?>
+<script>
+    $('.select2').select2();
+</script>
+
+<script>
+    document.getElementById('tipeClient').addEventListener('change', function() {
+        if (this.value == 1) {
+            document.getElementById('namaPIC').disabled = false;
+            document.getElementById('namaPIC').placeholder = 'Nama PIC wajib diisi';
+            document.getElementById('telpPIC').disabled = false;
+            document.getElementById('telpPIC').placeholder = 'Telp. PIC wajib diisi';
+        } else {
+            document.getElementById('namaPIC').disabled = true;
+            document.getElementById('namaPIC').placeholder = '';
+            document.getElementById('namaPIC').value = '';
+            document.getElementById('telpPIC').disabled = true;
+            document.getElementById('telpPIC').placeholder = '';
+        }
+    });
+</script>
+<?= $this->endSection() ?>
