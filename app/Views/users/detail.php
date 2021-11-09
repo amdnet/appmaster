@@ -75,7 +75,7 @@
                                                     </button>
                                                 </div>
                                                 <div class="text-center">
-                                                    <img src="<?= base_url('public/profil/' . $detail['photo']); ?>" id="Imgavatar">
+                                                    <img src="<?= base_url('public/profil/' . $detail['photo']); ?>" id="Imgavatar" class="img-fluid">
                                                     <br>
                                                     <span class="text-light"><?= $detail['photo']; ?></span>
                                                 </div>

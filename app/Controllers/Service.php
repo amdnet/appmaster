@@ -4,20 +4,29 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\ServiceModel;
+use App\Models\ProgressModel;
 
 class Service extends BaseController
 {
     protected $serviceModel;
+    protected $progressModel;
     protected $validation;
 
     public function __construct()
     {
         $this->serviceModel = new ServiceModel();
+        $this->progressModel = new ProgressModel();
         $this->validation =  \Config\Services::validation();
     }
 
     public function index()
     {
+        // $db = db_connect();
+        // $query = $db->table('users')
+        //     ->select('fullname, telp')
+        // ->join('users', 'users.id = data_service.id_advisor')
+        // ->whereIn('id', array('1', '2'))
+        //     ->get()->getResult();
         $data = [
             'controller' => 'service',
             'pageTitle' => 'Data Recent Service',
@@ -107,8 +116,44 @@ class Service extends BaseController
             'id_users' => $this->request->getVar('idUsers')
         ]);
         session()->setFlashdata('pesan', 'Data service berhasil disimpan!');
-        return redirect()->back()->withInput();
-        // return redirect()->to('/service');
+        // return redirect()->back()->withInput();
+        return redirect()->to('/service');
+    }
+
+    //
+    // fungsi tampilan detail data service dan list progress
+    //
+
+    public function detail($id)
+    {
+        // $db = db_connect();
+        // $progress = $db->table('data_progress')
+        //     ->select('*, data_service.id_service')
+        //     ->join('data_service', 'data_service.id_service = data_progress.id_service')
+        //     ->join('data_stall', 'data_stall.id_stall = data_progress.id_stall')
+        //     ->join('users', 'users.id = data_progress.id_users')
+        //     ->where('data_progress.id_service', $id)
+        //     ->groupBy('data_progress.id_service')
+        //     ->get()->getResult();
+
+        $progress = $this->progressModel->getData()
+            ->where('data_progress.id_service', $id)
+            ->groupBy('data_progress.id_service')
+            ->get()->getResult();
+
+        $data = [
+            'controller' => 'service',
+            'pageTitle' => 'Detail Data Service :: Progress',
+            'detail' => $this->serviceModel->where('id_service', $id)->get()->getRow(),
+            'advisor' => $this->serviceModel->editAdvisor(),
+            'client' => $this->serviceModel->editClient(),
+            'asuransi' => $this->serviceModel->editAsuransi(),
+            'mobilEdit' => $this->serviceModel->editMobil(),
+            'validation' => $this->validation,
+            'progress' => $progress,
+            'situs' => $this->situs
+        ];
+        return view('service/detail', $data);
     }
 
     //
@@ -117,8 +162,6 @@ class Service extends BaseController
 
     public function edit($id)
     {
-        $db = db_connect();
-
         $mobilJenis = new \App\Models\MobilJenisModel;
         $mobilMerk = new \App\Models\MobilMerkModel;
         $mobilTipe = new \App\Models\MobilTipeModel;
@@ -181,20 +224,20 @@ class Service extends BaseController
         $this->serviceModel->save([
             'id_service' => $id,
             // 'kode_service' => $kode_service,
-            'id_advisor' => $this->request->getPost('advisor'),
-            'id_client' => $this->request->getPost('client'),
-            'id_asuransi' => $this->request->getPost('asuransi'),
-            'tipe_client' => $this->request->getPost('tipeClient'),
-            'pic_nama' => $this->request->getPost('namaPIC'),
-            'pic_telp' => $this->request->getPost('telpPIC'),
-            'id_mbl_jenis' => $this->request->getPost('mobilJenis'),
-            'id_mbl_merk' => $this->request->getPost('mobilMerk'),
-            'id_mbl_tipe' => $this->request->getPost('mobilTipe'),
-            'thn_rakit' => $this->request->getPost('tahunRakit'),
-            'no_pol' => $this->request->getPost('noPolisi'),
-            'no_rangka' => $this->request->getPost('noRangka'),
-            'no_mesin' => $this->request->getPost('noMesin'),
-            'id_users' => $this->request->getPost('idUsers')
+            'id_advisor' => $this->request->getVar('advisor'),
+            'id_client' => $this->request->getVar('client'),
+            'id_asuransi' => $this->request->getVar('asuransi'),
+            'tipe_client' => $this->request->getVar('tipeClient'),
+            'pic_nama' => $this->request->getVar('namaPIC'),
+            'pic_telp' => $this->request->getVar('telpPIC'),
+            'id_mbl_jenis' => $this->request->getVar('mobilJenis'),
+            'id_mbl_merk' => $this->request->getVar('mobilMerk'),
+            'id_mbl_tipe' => $this->request->getVar('mobilTipe'),
+            'thn_rakit' => $this->request->getVar('tahunRakit'),
+            'no_pol' => $this->request->getVar('noPolisi'),
+            'no_rangka' => $this->request->getVar('noRangka'),
+            'no_mesin' => $this->request->getVar('noMesin'),
+            'id_users' => $this->request->getVar('idUsers')
         ]);
         session()->setFlashdata('pesan', 'Data service berhasil diperbaharui!');
         return redirect()->back()->withInput();
@@ -204,27 +247,98 @@ class Service extends BaseController
     {
         $response = array();
         $data['data'] = array();
+        // $id = $this->request->getVar('id_service');
+
         $result = $this->serviceModel->getData();
-        // $result = $this->serviceModel
-        //     ->select('*, stall')
-        //     ->join('data_stall', 'data_stall.id_stall = data_service.id_stall')
-        //     ->findAll();
+        // $result = $this->serviceModel->getData
+        //     ->where('data_progress.id_service', $id)
+        //     ->group('data_progress.id_service')
+        //     ->get()->getResult();
+
+        // $db = db_connect();
+        // $result = $db->query('SELECT * FROM data_progress WHERE id_service = 13 GROUP BY id_service')->findAll();
+        // dd($result);
+
+        // $db = db_connect();
+        // $namaKlien = $db->table('data_service')
+        //     ->select('id_service, id_client, fullname')
+        //     ->join('users', 'users.id = data_service.id_client')
+        //     ->get();
 
         foreach ($result as $key => $value) {
-            $no = 1;
-            $poto = '<a href="' . base_url('public/service/' . $value->pgs_photo) . '" data-toggle="modal" data-target="#photoProfil">
-        <img src="' . base_url('public/service/' . $value->pgs_photo) . '" title="' . $value->pgs_note . '" class="img-fluid profile-user-img img-rounded"></a>';
+            $ops = '<a href="' . base_url('service/detail/' . $value->id_service) . '" class="btn btn-sm bg-primary"><i class="fa fa-eye"></i></a> <a href="' . base_url('service/edit/' . $value->id_service) . '" class="btn btn-sm bg-info"><i class="fa fa-pencil-alt"></i></a>
+            <button type="button" class="btn btn-sm btn-danger" onclick="remove(' . $value->id_service . ')"><i class="fa fa-trash-alt"></i></button>';
 
             $data['data'][$key] = array(
-                $no++,
-                $value->id_servis,
-                $value->tgl_service,
-                $value->stall,
+                $value->id_service,
+                $value->kode_service,
                 $value->fullname,
-                $value->pgs_note,
-                $poto
+                $value->telp,
+                $value->no_pol,
+                $value->nama_mobil_jenis,
+                $ops
             );
         }
         return $this->response->setJSON($data);
+    }
+
+    public function getOne()
+    {
+        $response = array();
+        $id = $this->request->getPost('id_progress');
+        if ($this->validation->check($id, 'required|numeric')) {
+            $data = $this->progressModel->where('id_progress', $id)->first();
+            return $this->response->setJSON($data);
+        } else {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException();
+        }
+    }
+
+    public function editProgress()
+    {
+        $response = array();
+        $fields['id_progress'] = $this->request->getPost('id_progress');
+        $fields['stall'] = $this->request->getPost('stall');
+        $fields['id_users'] = user()->id;
+
+        $this->validation->setRules([
+            'id_users' => ['label' => 'id_users', 'rules' => 'required|max_length[35]'],
+            'stall' => [
+                'label'  => 'Stall',
+                'rules'  => 'required|is_unique[data_stall.stall,id,{id}]|min_length[5]|max_length[30]'
+            ]
+        ]);
+
+        if ($this->validation->run($fields) == FALSE) {
+            $response['success'] = false;
+            $response['messages'] = $this->validation->listErrors();
+        } else {
+            if ($this->stallModel->update($fields['id_progress'], $fields)) {
+                $response['success'] = true;
+                $response['messages'] = 'Successfully updated';
+            } else {
+                $response['success'] = false;
+                $response['messages'] = 'Update error!';
+            }
+        }
+        return $this->response->setJSON($response);
+    }
+
+    public function delProgress()
+    {
+        $response = array();
+        $id = $this->request->getPost('id_progress');
+        if (!$this->validation->check($id, 'required|numeric')) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException();
+        } else {
+            if ($this->stallModel->where('id_progress', $id)->delete()) {
+                $response['success'] = true;
+                $response['messages'] = 'Deletion succeeded';
+            } else {
+                $response['success'] = false;
+                $response['messages'] = 'Deletion error!';
+            }
+        }
+        return $this->response->setJSON($response);
     }
 }

@@ -24,6 +24,9 @@ class Progress extends BaseController
             'situs' => $this->situs
         ];
         return view('progress/index', $data);
+
+        // $result = $this->progressModel->getData();
+        // dd($result);
     }
 
     public function add()

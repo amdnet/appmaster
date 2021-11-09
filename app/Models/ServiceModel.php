@@ -14,14 +14,22 @@ class ServiceModel extends Model
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
 
-    // public function getData()
-    // {
-    //     return $this->db->table('data_service')
-    //         ->select('*, stall, fullname')
-    //         ->join('data_stall', 'data_stall.id_stall = data_service.id_stall')
-    //         ->join('users', 'users.id = data_service.id_users')
-    //         ->get()->getResult();
-    // }
+    public function getData()
+    {
+        return $this->db->table('data_service')
+            ->select('id_service, kode_service, id_client, no_pol, fullname, telp, nama_mobil_jenis')
+            ->join('users', 'users.id = data_service.id_client')
+            ->join('mobil_jenis', 'mobil_jenis.id_mobil_jenis = data_service.id_mbl_jenis')
+            ->get()->getResult();
+    }
+
+    public function getData2()
+    {
+        return $this->db->table('data_service')
+            ->select('id_service, id_client, fullname as namaclient')
+            ->join('users', 'users.id = data_service.id_client')
+            ->get()->getResult();
+    }
 
     public function getAdvisor()
     {
@@ -30,6 +38,14 @@ class ServiceModel extends Model
             ->join('users', 'users.id = auth_groups_users.user_id')
             ->where('group_id', '2')
             ->get()->getResult();
+    }
+
+    public function namaAdvisor()
+    {
+        return $this->db->table('data_service')
+            ->select('id_advisor, fullname')
+            ->join('users', 'users.id = data_service.id_advisor')
+            ->get()->getRow();
     }
 
     public function getAsuransi() // perusahaan asuransi

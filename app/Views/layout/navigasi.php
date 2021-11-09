@@ -77,7 +77,7 @@
 
         <!-- data service progress -->
         <?php if (in_groups([1, 2])) : ?>
-            <li class="nav-item <?= (current_url() == base_url('service')) || (current_url() == base_url('service/add')) ? 'menu-open' : '' ?> ">
+            <li class="nav-item <?= (current_url() == base_url('service')) || (current_url() == base_url('service/add')) || (current_url() == base_url('service/detail/')) ? 'menu-open' : '' ?> ">
                 <a href="#" class="nav-link <?= (current_url() == base_url('service')) || (current_url() == base_url('service/add')) ? 'active' : '' ?>">
                     <i class="nav-icon fas fa-tools"></i>
                     <p>Data service<i class="fas fa-angle-left right"></i></p>

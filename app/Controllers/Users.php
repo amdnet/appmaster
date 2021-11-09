@@ -45,8 +45,14 @@ class Users extends BaseController
         // $agent = $this->request->getUserAgent();
         // $data['ip'] = $this->request->getIPAddress();
         // $data['browser'] = $agent->getBrowser();
+        // $this->breadcrumb->add('Home', '/');
+        // $this->breadcrumb->add('Dashboard', '/dashboard');
+        // $this->breadcrumb->add('Customer', '/dashboard/customer');
+
+        // $data['breadcrumbs'] = $this->breadcrumb->render();
         $data = [
             'pageTitle' => 'User Profile',
+
             'detail' => $this->usersModel->getUsers($id),
             'validation' => $this->validation,
             'situs' => $this->situs

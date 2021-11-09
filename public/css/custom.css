@@ -12,6 +12,20 @@ h4 {
   background-color: rgba(0, 0, 0, 0.7);
 }
 
+.modal-header .close {
+  font-size: 40px;
+  font-weight: bold;
+  transition: 0.3s;
+  color: #000;
+}
+
+.modal-header .close:hover,
+.modal-header .close:focus {
+  color: rgb(255, 0, 0);
+  text-decoration: none;
+  cursor: pointer;
+}
+
 .profil-photo {
   max-width: 60px;
 }
@@ -118,20 +132,6 @@ label:not(.form-check-label):not(.custom-file-label) {
 
 button.close {
   padding: 0.7rem 1rem !important;
-}
-
-.modal-header .close {
-  font-size: 40px;
-  font-weight: bold;
-  transition: 0.3s;
-  color: #fff;
-}
-
-.modal-header .close:hover,
-.modal-header .close:focus {
-  color: #ff0;
-  text-decoration: none;
-  cursor: pointer;
 }
 
 @media only screen and (max-width: 700px) {

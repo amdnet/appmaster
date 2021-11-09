@@ -9,7 +9,7 @@ class ProgressModel extends Model
     protected $table = 'data_progress';
     protected $primaryKey = 'id_progress';
     protected $returnType = 'object';
-    protected $allowedFields = ['id_servis', 'tgl_progress', 'id_stall', 'pgs_persen', 'pgs_note', 'pgs_photo', 'id_users', 'created_at', 'updated_at'];
+    protected $allowedFields = ['id_progress', 'id_service', 'tgl_progress', 'id_stall', 'pgs_persen', 'pgs_note', 'pgs_photo', 'id_users', 'created_at', 'updated_at'];
     protected $useTimestamps = true;
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
@@ -17,11 +17,10 @@ class ProgressModel extends Model
     public function getData()
     {
         return $this->db->table('data_progress')
-            // ->select('id_progress, id_servis, tgl_progress, id_stall as idstall, pgs_persen, pgs_note, pgs_photo, id_users, created_at, updated_at, stall')
-            ->select('*, stall, fullname')
+            ->select('*, data_service.id_service')
+            ->join('data_service', 'data_service.id_service = data_progress.id_service')
             ->join('data_stall', 'data_stall.id_stall = data_progress.id_stall')
-            ->join('users', 'users.id = data_progress.id_users')
-            ->get()->getResult();
+            ->join('users', 'users.id = data_progress.id_users');
     }
 
     public function getAdvisor()
