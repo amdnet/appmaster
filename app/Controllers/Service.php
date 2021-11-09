@@ -123,14 +123,7 @@ class Service extends BaseController
         $mobilMerk = new \App\Models\MobilMerkModel;
         $mobilTipe = new \App\Models\MobilTipeModel;
 
-        // $dataClient = $db->table('data_service')
-        //     ->select('id_client, fullname, alamat, telp')
-        //     ->join('users', 'users.id = data_service.id_client')
-        //     ->where('data_service.id_service', $id)
-        //     ->get()->getRow();
-
         $data = [
-            // 'detail' => $this->serviceModel->getDetail($id),
             'controller' => 'service',
             'pageTitle' => 'Edit Data Service Client',
             'detail' => $this->serviceModel->where('id_service', $id)->get()->getRow(),
