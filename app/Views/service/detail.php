@@ -269,13 +269,50 @@
             </div>
 
             <div class="modal-body">
-                <div class="text-center">
-                    <i class="text-muted fas fa-car fa-7x"></i>
-                </div>
                 <form id="edit-form" class="pl-2 pr-2">
                     <div class="row">
-                        <input type="hidden" id="idMobil" name="idMobil" class="form-control">
+                        <div class="col-md-12">
+                            <div class="row">
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="tgl_progress"> Tanggal: </label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text"><i class="fas fa-calendar-alt"></i></div>
+                                        </div>
+                                        <input type="text" id="tgl_progress" name="tgl_progress" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="id_stall"> Location: </label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text"><i class="fas fa-location-arrow"></i></div>
+                                        </div>
+                                        <input type="text" id="id_stall" name="id_stall" class="form-control" value="<?= (old('id_stall')) ? old('id_stall') : $progres->id_stall; ?>">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 mb-3">
+                                    <label for="pgs_persen"> Percent: </label>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="pgs_note"> Note: </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text"><i class="fas fa-clipboard"></i></div>
+                                </div>
+                                <input type="text" id="pgs_note" name="pgs_note" class="form-control" value="<?= (old('id_stall')) ? old('id_stall') : $progres->pgs_note; ?>">
+                            </div>
+                        </div>
                     </div>
+            </div>
 
                     <div class="form-row">
                         <div class="col-md-12">
@@ -290,7 +327,6 @@
                     </div>
                 </form>
             </div>
-
         </div>
     </div>
 </div>
