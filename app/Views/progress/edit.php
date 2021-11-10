@@ -14,9 +14,10 @@
                 $('#edit-modal').modal('show');
 
                 $("#edit-form #id_progress").val(response.id_progress);
-                $("#edit-form #tgl_progress").val(response.tgl_progress);
-                // $("#edit-form #fullname").val(response.fullname);
-                // $("#edit-form #updateAt").val(response.update_at);
+                // $("#edit-form #tgl_progress").val(response.tgl_progress);
+                // $("#edit-form #id_stall").val(response.id_stall);
+                // $("#edit-form #pgs_persen").val(response.pgs_persen);
+                $("#edit-form #pgs_note").val(response.pgs_note);
 
                 // submit the edit from
                 $.validator.setDefaults({
@@ -31,7 +32,7 @@
                     errorPlacement: function(error, element) {
                         if (element.parent('.input-group').length) {
                             error.insertAfter(element.parent());
-                        } else if (element.hasClass('selectpicker')) {
+                        } else if (element.hasClass('tgl_progress')) {
                             error.insertAfter(element.next());
                         } else {
                             error.insertAfter(element);

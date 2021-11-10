@@ -72,7 +72,7 @@
                                                 <div class="text-center">
                                                     <img src="<?= base_url('public/profil/' . user()->photo); ?>" class="img-fluid">
                                                     <br>
-                                                    <span class="text-light"><?= user()->photo; ?></span>
+                                                    <span class="text-dark"><?= user()->photo; ?></span>
                                                 </div>
                                             </div>
                                         </div>

@@ -141,6 +141,8 @@ class Service extends BaseController
             ->groupBy('data_progress.id_service')
             ->get()->getResult();
 
+        $stallModel = new \App\Models\StallModel();
+
         $data = [
             'controller' => 'service',
             'pageTitle' => 'Detail Data Service :: Progress',
@@ -151,6 +153,7 @@ class Service extends BaseController
             'mobilEdit' => $this->serviceModel->editMobil(),
             'validation' => $this->validation,
             'progress' => $progress,
+            'stall' => $stallModel->get()->getResult(),
             'situs' => $this->situs
         ];
         return view('service/detail', $data);
@@ -247,23 +250,7 @@ class Service extends BaseController
     {
         $response = array();
         $data['data'] = array();
-        // $id = $this->request->getVar('id_service');
-
         $result = $this->serviceModel->getData();
-        // $result = $this->serviceModel->getData
-        //     ->where('data_progress.id_service', $id)
-        //     ->group('data_progress.id_service')
-        //     ->get()->getResult();
-
-        // $db = db_connect();
-        // $result = $db->query('SELECT * FROM data_progress WHERE id_service = 13 GROUP BY id_service')->findAll();
-        // dd($result);
-
-        // $db = db_connect();
-        // $namaKlien = $db->table('data_service')
-        //     ->select('id_service, id_client, fullname')
-        //     ->join('users', 'users.id = data_service.id_client')
-        //     ->get();
 
         foreach ($result as $key => $value) {
             $ops = '<a href="' . base_url('service/detail/' . $value->id_service) . '" class="btn btn-sm bg-primary"><i class="fa fa-eye"></i></a> <a href="' . base_url('service/edit/' . $value->id_service) . '" class="btn btn-sm bg-info"><i class="fa fa-pencil-alt"></i></a>
@@ -276,6 +263,33 @@ class Service extends BaseController
                 $value->telp,
                 $value->no_pol,
                 $value->nama_mobil_jenis,
+                $ops
+            );
+        }
+        return $this->response->setJSON($data);
+    }
+
+    public function getProgress()
+    { // error
+        $data['data'] = array();
+        $id = $this->request->getPost('id_progress');
+
+        $result = $this->progressModel->getData()
+            ->where('data_progress.id_service', $id)
+            ->groupBy('data_progress.id_service')
+            ->get()->getResult();
+
+        foreach ($result as $key => $value) {
+            $ops = '<a href="' . base_url('service/detail/' . $value->id_service) . '" class="btn btn-sm bg-primary"><i class="fa fa-eye"></i></a> <a href="' . base_url('service/edit/' . $value->id_service) . '" class="btn btn-sm bg-info"><i class="fa fa-pencil-alt"></i></a>
+            <button type="button" class="btn btn-sm btn-danger" onclick="remove(' . $value->id_service . ')"><i class="fa fa-trash-alt"></i></button>';
+
+            $data['data'][$key] = array(
+                $value->id_progress,
+                $value->id_service,
+                $value->tgl_progress,
+                $value->stall,
+                $value->pgs_persen,
+                $value->pgs_note,
                 $ops
             );
         }
@@ -298,22 +312,24 @@ class Service extends BaseController
     {
         $response = array();
         $fields['id_progress'] = $this->request->getPost('id_progress');
-        $fields['stall'] = $this->request->getPost('stall');
+        // $fields['tgl_progress'] = $this->request->getPost('tgl_progress');
+        // $fields['id_stall'] = $this->request->getPost('id_stall');
+        // $fields['pgs_persen'] = $this->request->getPost('pgs_persen');
+        $fields['pgs_note'] = $this->request->getPost('pgs_note');
         $fields['id_users'] = user()->id;
 
         $this->validation->setRules([
-            'id_users' => ['label' => 'id_users', 'rules' => 'required|max_length[35]'],
-            'stall' => [
-                'label'  => 'Stall',
-                'rules'  => 'required|is_unique[data_stall.stall,id,{id}]|min_length[5]|max_length[30]'
-            ]
+            // 'tgl_progress' => ['label'  => 'Tanggal progress', 'rules'  => 'required'],
+            // 'id_stall' => ['label'  => 'Lokasi stall progress', 'rules'  => 'required'],
+            // 'pgs_persen' => ['label'  => 'Persen progress', 'rules'  => 'required'],
+            'pgs_note' => ['label'  => 'Catatan progres', 'rules'  => 'required']
         ]);
 
         if ($this->validation->run($fields) == FALSE) {
             $response['success'] = false;
             $response['messages'] = $this->validation->listErrors();
         } else {
-            if ($this->stallModel->update($fields['id_progress'], $fields)) {
+            if ($this->progressModel->update($fields['id_progress'], $fields)) {
                 $response['success'] = true;
                 $response['messages'] = 'Successfully updated';
             } else {
