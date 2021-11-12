@@ -4,15 +4,18 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\ProgressModel;
+use App\Models\StallModel;
 
 class Progress extends BaseController
 {
     protected $progressModel;
     protected $validation;
+    protected $stallModel;
 
     public function __construct()
     {
         $this->progressModel = new ProgressModel();
+        $this->stallModel = new StallModel();
         $this->validation =  \Config\Services::validation();
     }
 
@@ -34,20 +37,14 @@ class Progress extends BaseController
         // $db = db_connect();
         // $query = $db->query('SELECT * FROM auth_groups')->getResult();
         // $mobilJenis = $Mobiljenis->getResult();
+        // dd($this->stallModel->select('id_stall, stall')->get()->getResult());
         $mobilJenis = new \App\Models\MobilJenisModel;
         $mobilMerk = new \App\Models\MobilMerkModel;
         $mobilTipe = new \App\Models\MobilTipeModel;
         $data = [
-            'controller' => 'progress',
-            'pageTitle' => 'Tambah Data Service Client',
-            'advisor' => $this->progressModel->getAdvisor(),
-            'client' => $this->progressModel->getClient(),
-            'asuransi' => $this->progressModel->getAsuransi(),
-            'pic' => $this->progressModel->getPIC(),
-            'mobilJenis' => $mobilJenis->findAll(),
-            'mobilMerk' => $mobilMerk->findAll(),
-            'mobilTipe' => $mobilTipe->findAll(),
+            'pageTitle' => 'Form Tambah Progress',
             'validation' => $this->validation,
+            'stall' => $this->stallModel->select('id_stall, stall')->get()->getResult(),
             'situs' => $this->situs
         ];
         return view('progress/add', $data);

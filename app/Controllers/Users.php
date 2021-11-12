@@ -162,8 +162,8 @@ class Users extends BaseController
         // $image = \Config\Services::image('imagick')
         $image = \Config\Services::image()
             ->withFile($filePhoto)
-            ->resize(1024, 1024, true)
-            ->save(FCPATH . '/public/profil/' . $namaPhoto, 80);
+            ->resize(1080, 768, true)
+            ->save(FCPATH . 'public/profil/' . $namaPhoto, 80);
         unlink(FCPATH . 'public/profil/' . $this->request->getVar('photoLama'));
 
         // if ($filePhoto->getError() == 4) {

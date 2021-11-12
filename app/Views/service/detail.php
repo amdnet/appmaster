@@ -3,6 +3,14 @@
 <?php include_once "app/views/layout/tabelcss.php"; ?>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
 <style>
+    .select2-container {
+        width: 100% !important;
+    }
+
+    .datepicker {
+        z-index: 9999 !important;
+    }
+
     input:focus {
         outline: none;
     }
@@ -359,6 +367,116 @@
 </div>
 <!-- End Modal -->
 
+<!-- Start add modal content -->
+<div id="add-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="text-center bg-warning p-2">
+                <h5 class="modal-title text-white" id="info-header-modalLabel">Edit Progress</h5>
+            </div>
+
+            <div class="modal-body">
+                <form id="edit-form" class="pl-2 pr-2">
+                    <input type="hidden" id="id_progress" name="id_progress" class="form-control">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="tgl_progress"> Tanggal: </label>
+                                    <div class="input-group date">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text"><i class="fas fa-calendar-alt"></i></div>
+                                        </div>
+                                        <input type="text" id="tgl_progress" name="tgl_progress" class="form-control datepicker">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="id_stall"> Location: </label>
+                                    <select id="id_stall" name="id_stall" class="form-control <?= ($validation->hasError('id_stall')) ? 'is-invalid' : ''; ?>">
+                                        <?php foreach ($stall as $lokasi) : ?>
+                                            <option value="<?= $lokasi->id_stall ?>"> <?= $lokasi->stall ?> </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        <?= $validation->getError('id_stall'); ?>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 mb-3">
+                                    <label for="pgs_persen"> Percent: </label>
+                                    <div class="slidecontainer">
+                                        <input type="range" min="0" max="100" value="<?= $progress->p_persen ?>" step='10' class="slider" id="myRange" onchange="updateTextInput(this.value);" list='tickmarks'>
+                                        <div id="tickmarks">
+                                            <p>0</p>
+                                            <p>10</p>
+                                            <p>20</p>
+                                            <p>30</p>
+                                            <p>40</p>
+                                            <p>50</p>
+                                            <p>60</p>
+                                            <p>70</p>
+                                            <p>80</p>
+                                            <p>90</p>
+                                            <p>100</p>
+                                        </div>
+                                        <input type="hidden" id="textRange" name="pgs_persen" value="<?= $progress->p_persen ?>">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="pgs_note"> Note: </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text"><i class="fas fa-clipboard"></i></div>
+                                </div>
+                                <input type="text" id="pgs_note" name="pgs_note" class="form-control" value=" ">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="Photo"> Photo: </label>
+                            <input type="hidden" name="photoLama" value="<?= $progress->p_photo ?>">
+                            <input type="hidden" name="photoBaru" id="photoBaru">
+                            <img src="<?= base_url('public/progress/' . $progress->p_photo) ?>" class="img-fluid" id="photo_progress">
+                            <div class="custom-file form-control-sm mt-3">
+                                <input type="file" class="custom-file-input" id="pgs_photo" name="pgs_photo" onchange="photoPreview()">
+                                <label class="custom-file-label" for="Photo">Ganti photo ...</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="informasi"> Informasi </label>
+                            <ul class="list-group list-group-unbordered mt-2">
+                                <li class="list-group-item">
+                                    <i class="fas fa-calendar-alt"></i>&nbsp; <b>Date Created</b> <span class="float-right"> <?= $progress->p_create ?> </span>
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="fas fa-calendar-alt"></i>&nbsp; <b>Date Updated</b> <span class="float-right"> <?= $progress->p_update ?> </span>
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="fas fa-user-edit"></i>&nbsp; <b>User Update</b> <span class="float-right"> <?= $progress->fullname ?> </span>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-success" id="add-form-btn">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- End add modal content -->
+
 <!-- Start modal edit progress -->
 <div id="edit-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -399,7 +517,7 @@
                                 <div class="col-md-12 mb-3">
                                     <label for="pgs_persen"> Percent: </label>
                                     <div class="slidecontainer">
-                                        <input type="range" min="0" max="100" value=" " step='10' class="slider" id="myRange" onchange="updateTextInput(this.value);" list='tickmarks'>
+                                        <input type="range" min="0" max="100" value="<?= $progress->p_persen ?>" step='10' class="slider" id="myRange" onchange="updateTextInput(this.value);" list='tickmarks'>
                                         <div id="tickmarks">
                                             <p>0</p>
                                             <p>10</p>
@@ -413,7 +531,7 @@
                                             <p>90</p>
                                             <p>100</p>
                                         </div>
-                                        <input type="hidden" id="textRange" name="pgs_persen" value=" ">
+                                        <input type="hidden" id="textRange" name="pgs_persen" value="<?= $progress->p_persen ?>">
                                     </div>
                                 </div>
 
@@ -431,14 +549,13 @@
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="pgs_photo"> Photo: </label>
-                            <img src="<?= base_url('public/progress/' . $progress->p_photo) ?>" class="img-fluid">
+                            <label for="Photo"> Photo: </label>
+                            <input type="hidden" name="photoLama" value="<?= $progress->p_photo ?>">
+                            <input type="hidden" name="photoBaru" id="photoBaru">
+                            <img src="<?= base_url('public/progress/' . $progress->p_photo) ?>" class="img-fluid" id="photo_progress">
                             <div class="custom-file form-control-sm mt-3">
-                                <input type="file" class="custom-file-input <?= ($validation->hasError('pgs_photo')) ? 'is-invalid' : ''; ?>" id="pgs_photo" name="pgs_photo" onchange="photoPreview()">
-                                <label class="custom-file-label" for="pgs_photo">Ganti photo ...</label>
-                                <div class="invalid-feedback">
-                                    <?= $validation->getError('pgs_photo'); ?>
-                                </div>
+                                <input type="file" class="custom-file-input" id="pgs_photo" name="pgs_photo" onchange="photoPreview()">
+                                <label class="custom-file-label" for="Photo">Ganti photo ...</label>
                             </div>
                         </div>
 
@@ -497,6 +614,22 @@
             todayHighlight: true,
         });
     });
+
+    function photoPreview() {
+        const photo = document.querySelector('#pgs_photo');
+        const photoLabel = document.querySelector('.custom-file-label');
+        const imgPreview = document.querySelector('#photo_progress');
+
+        photoLabel.textContent = photo.files[0].name;
+        document.getElementById('photoBaru').value = photo.files[0].name;
+
+        const filePhoto = new FileReader();
+        filePhoto.readAsDataURL(photo.files[0]);
+
+        filePhoto.onload = function(e) {
+            imgPreview.src = e.target.result;
+        }
+    }
 
     <?php require_once(APPPATH . 'views/progress/view.js'); ?>
     <?php require_once(APPPATH . 'views/progress/edit.js'); ?>

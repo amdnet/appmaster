@@ -33,7 +33,7 @@ class ProgressModel extends Model
     public function getDataModal()
     {
         return $this->db->table('data_progress')
-            ->select('data_progress.id_stall as p_stall, pgs_photo as p_photo, pgs_note as p_note, data_progress.id_users as p_users, data_progress.created_at as p_create, data_progress.updated_at as p_update')
+            ->select('data_progress.id_stall as p_stall, pgs_photo as p_photo, pgs_persen as p_persen, pgs_note as p_note, data_progress.id_users as p_users, data_progress.created_at as p_create, data_progress.updated_at as p_update')
             ->join('users', 'users.id = data_progress.id_users', 'left')
             ->select('users.fullname');
     }

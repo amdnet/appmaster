@@ -1,6 +1,126 @@
 <?= $this->extend('layout/template.php') ?>
 <?= $this->section('css') ?>
-<?php include_once "app/views/layout/tabelcss.php"; ?>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
+<style>
+    .select2-container {
+        width: 100% !important;
+    }
+
+    .datepicker {
+        z-index: 9999 !important;
+    }
+
+    input:focus {
+        outline: none;
+    }
+
+    .slider {
+        -webkit-appearance: none;
+        --range: calc(var(--max) - var(--min));
+        --ratio: calc((var(--val) - var(--min))/var(--range));
+        --sx: calc(.5*1.5em + var(--ratio)*(100% - 1.5em));
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 1.5em;
+        background: transparent;
+        font: 1em/1 arial, sans-serif;
+        border: none;
+    }
+
+    .slider,
+    .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+    }
+
+    .slider::-webkit-slider-runnable-track {
+        box-sizing: border-box;
+        border: none;
+        width: 12.5em;
+        height: 0.5em;
+        background: #ccc;
+    }
+
+    .js .slider::-webkit-slider-runnable-track {
+        background: linear-gradient(#7b1c1a, #7b1c1a) 0/var(--sx) 100% no-repeat #ccc;
+    }
+
+    .slider::-moz-range-track {
+        box-sizing: border-box;
+        border: none;
+        height: 0.5em;
+        background: #ccc;
+    }
+
+    .slider::-ms-track {
+        box-sizing: border-box;
+        border: none;
+        width: 12.5em;
+        height: 0.5em;
+        background: #ccc;
+    }
+
+    .slider::-moz-range-progress {
+        height: 0.5em;
+        background: #7b1c1a;
+    }
+
+    .slider::-ms-fill-lower {
+        height: 0.5em;
+        background: #7b1c1a;
+    }
+
+    .slider::-webkit-slider-thumb {
+        margin-top: -0.550em;
+        box-sizing: border-box;
+        border: none;
+        width: 1.5em;
+        height: 1.5em;
+        border-radius: 50%;
+        background: #7b1c1a;
+    }
+
+    .slider::-moz-range-thumb {
+        box-sizing: border-box;
+        border: none;
+        width: 1.5em;
+        height: 1.5em;
+        border-radius: 50%;
+        background: #7b1c1a;
+    }
+
+    .slider::-ms-thumb {
+        margin-top: 0;
+        box-sizing: border-box;
+        border: none;
+        width: 1.5em;
+        height: 1.5em;
+        border-radius: 50%;
+        background: #7b1c1a;
+    }
+
+    .slider::-ms-tooltip {
+        display: none;
+    }
+
+    #tickmarks {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 10px;
+    }
+
+    #tickmarks p {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        width: 1px;
+        background: #D3D3D3;
+        height: 10px;
+        line-height: 40px;
+        margin: 0 0 20px 0;
+    }
+</style>
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -11,286 +131,98 @@
         <div class="row">
             <div class="col-12">
                 <form action="<?= base_url('progress/addsave'); ?>" method="POST">
-                    <?= csrf_field(); ?>
-
-                    <!-- Informasi Perusahaan -->
-                    <div class="card card-primary">
-                        <div class="card-header">
-                            <div class="row">
-                                <div class="col-md-8 mt-2">
-                                    <h3 class="card-title">Informasi Perusahaan</h3>
-                                </div>
-                                <div class="col-md-4">
-                                    <a href="<?= base_url('progress'); ?>" class="btn btn-dark btn-sm float-right"><i class="fas fa-arrow-circle-left"></i> &nbsp; Batal</a>
-                                </div>
-                            </div>
-                        </div> <!-- /.card-header -->
-
-                        <div class="card-body">
-                            <div class="row">
-
-                                <div class="col-md-4 mb-3">
-                                    <label for="perusahaan"> Perusahaan: <span class="text-danger">*</span></label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-building"></i></div>
-                                        </div>
-                                        <input type="perusahaan" id="perusahaan" name="perusahaan" class="form-control" value="AUTO KOOL Body & Paint" disabled>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4 mb-3">
-                                    <label for="alamat"> Alamat: <span class="text-danger">*</span></label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-map-marker-alt"></i></div>
-                                        </div>
-                                        <input type="alamat" id="alamat" name="alamat" class="form-control" value="Jl. Sunan Gn. Jati No. 91 Cirebon 45151" disabled>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4 mb-3">
-                                    <label for="phone"> Telephone: <span class="text-danger">*</span></label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-phone-alt"></i></div>
-                                        </div>
-                                        <input type="phone" id="phone" name="phone" class="form-control" value="0231 - 202948" disabled>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4 mb-3">
-                                    <label for="email"> Email: <span class="text-danger">*</span></label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-envelope"></i></div>
-                                        </div>
-                                        <input type="email" id="email" name="email" class="form-control" placeholder="Email" value="info@autokool.co.id" disabled>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4 mb-3">
-                                    <label for="advisor"> Service Advisor: <span class="text-danger">*</span> <small><em>(staff pelayanan konsumen)</em></small></label>
-                                    <select id="advisor" name="advisor" class="form-control select2 <?= ($validation->hasError('advisor')) ? 'is-invalid' : ''; ?>" onchange="document.getElementById('telp').value=this.options[this.selectedIndex].getAttribute('data-telp')">
-                                        <option value="" disabled selected>-- pilih service advisor --</option>
-                                        <?php foreach ($advisor as $advisor) : ?>
-                                            <option value="<?= $advisor->user_id ?>" data-telp="<?= $advisor->telp ?>"> <?= $advisor->fullname ?> </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                    <div class="invalid-feedback">
-                                        <?= $validation->getError('advisor'); ?>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4 mb-3">
-                                    <label for="telp"> Telp. Advisor: <span class="text-danger">*</span></label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-mobile-alt"></i></div>
-                                        </div>
-                                        <input type="text" id="telp" name="telp" class="form-control" value="" disabled>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Informasi Perusahaan -->
-
-                    <!-- Informasi Konsumen -->
-                    <div class="card card-success">
-                        <div class="card-header">
-                            <div class="row">
-                                <div class="col-md-8 mt-2">
-                                    <h3 class="card-title">Informasi Konsumen</h3>
-                                </div>
-                            </div>
-                        </div> <!-- /.card-header -->
-
-                        <div class="card-body">
-                            <div class="row">
-
-                                <div class="col-md-4 mb-3">
-                                    <label for="client"> Nama Client: <span class="text-danger">*</span></label>
-                                    <select id="client" name="client" class="form-control select2 <?= ($validation->hasError('client')) ? 'is-invalid' : ''; ?>" onchange="document.getElementById('alamatClient').value=this.options[this.selectedIndex].getAttribute('data-alamatClient');document.getElementById('telpClient').value=this.options[this.selectedIndex].getAttribute('data-telpClient')">
-                                        <option value="" disabled selected>-- pilih nama konsumen --</option>
-                                        <?php foreach ($client as $client) : ?>
-                                            <option value="<?= $client->user_id ?>" data-alamatClient="<?= $client->alamat ?>" data-telpClient="<?= $client->telp ?>"> <?= $client->fullname ?> </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-4 mb-3">
-                                    <label for="alamatClient"> Alamat Client: <span class="text-danger">*</span></label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-map-marker-alt"></i></div>
-                                        </div>
-                                        <input type="text" id="alamatClient" name="alamatClient" class="form-control" value="" autocomplete="off" disabled>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4 mb-3">
-                                    <label for="telpClient"> Telp. Client: <span class="text-danger">*</span></label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-phone-alt"></i></div>
-                                        </div>
-                                        <input type="text" id="telpClient" name="telpClient" class="form-control" value="" autocomplete="off" disabled>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4 mb-3">
-                                    <label for="asuransi"> Asuransi: <span class="text-danger">*</span> <small><em>(perusahaan asuransi)</em></small></label>
-                                    <select id="asuransi" name="asuransi" class="form-control select2 <?= ($validation->hasError('asuransi')) ? 'is-invalid' : ''; ?>" onchange="document.getElementById('svyAsuransi').value=this.options[this.selectedIndex].getAttribute('data-svyAsuransi');document.getElementById('telpSvy').value=this.options[this.selectedIndex].getAttribute('data-telpSvy')">
-                                        <option value="" disabled selected>-- pilih asuransi --</option>
-                                        <?php foreach ($asuransi as $asuransi) : ?>
-                                            <option value="<?= $asuransi->user_id ?>" data-svyAsuransi="<?= $asuransi->fullname ?>" data-telpSvy="<?= $asuransi->telp ?>"> <?= $asuransi->username ?> </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-4 mb-3">
-                                    <label for="svyAsuransi"> Nama Surveyor: <span class="text-danger">*</span> <small><em>(perwakilan asuransi)</em></small></label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-user-circle"></i></div>
-                                        </div>
-                                        <input type="text" id="svyAsuransi" name="svyAsuransi" class="form-control" value="" disabled>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4 mb-3">
-                                    <label for="telpSvy"> Telp. Surveyor: <span class="text-danger">*</span></label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-mobile-alt"></i></div>
-                                        </div>
-                                        <input type="text" id="telpSvy" name="telpSvy" class="form-control" value="" disabled>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4 mb-3">
-                                    <label for="tipeClient"> Tipe Client: <span class="text-danger">*</span></label>
-                                    <select id="tipeClient" name="tipeClient" class="form-control<?= ($validation->hasError('tipeClient')) ? 'is-invalid' : ''; ?>">
-                                        <option value="" disabled selected>-- pilih tipe konsumen --</option>
-                                        <option value="1">corporate</option>
-                                        <option value="2">Personal</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-4 mb-3">
-                                    <label for="namaPIC" class="namaPIClbl"> Nama PIC: <span class="text-danger">*</span></label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-user-circle"></i></div>
-                                        </div>
-                                        <input type="text" id="namaPIC" name="namaPIC" class="form-control" value="" disabled>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4 mb-3">
-                                    <label for="telpPIC"> Telp. PIC: <span class="text-danger">*</span></label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-mobile-alt"></i></div>
-                                        </div>
-                                        <input type="text" id="telpPIC" name="telpPIC" class="form-control" value="" disabled>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Informasi Konsumen -->
 
                     <!-- Informasi Mobil -->
                     <div class="card card-warning">
                         <div class="card-header">
                             <div class="row">
-                                <div class="col-md-8 mt-2">
-                                    <h3 class="card-title">Informasi Kendaraan</h3>
+                                <div class="col-md-12 mt-2">
+                                    <h3 class="card-title"><i class="fas fa-car"></i> &nbsp; Add progress client :: </h3>
                                 </div>
                             </div>
-                        </div> <!-- /.card-header -->
+                        </div>
 
                         <div class="card-body">
                             <div class="row">
+                                <input type="hidden" id="id_progress" name="id_progress" class="form-control">
 
-                                <div class="col-md-4 mb-3">
-                                    <label for="mobilJenis"> Jenis Mobil: <span class="text-danger">*</span></label>
-                                    <select id="mobilJenis" name="mobilJenis" class="form-control select2 <?= ($validation->hasError('mobilJenis')) ? 'is-invalid' : ''; ?>">
-                                        <option value="" disabled selected>-- pilih jenis mobil --</option>
-                                        <?php foreach ($mobilJenis as $mobilJenis) : ?>
-                                            <option value="<?= $mobilJenis->id_mobil_jenis ?>"> <?= $mobilJenis->nama_mobil_jenis ?> </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
+                                <div class="col-md-6">
+                                    <div class="row">
 
-                                <div class="col-md-4 mb-3">
-                                    <label for="mobilMerk"> Merk Mobil: <span class="text-danger">*</span></label>
-                                    <select id="mobilMerk" name="mobilMerk" class="form-control select2 <?= ($validation->hasError('mobilMerk')) ? 'is-invalid' : ''; ?>">
-                                        <option value="" disabled selected>-- pilih merk mobil --</option>
-                                        <?php foreach ($mobilMerk as $mobilMerk) : ?>
-                                            <option value="<?= $mobilMerk->id_mobil_merk ?>"> <?= $mobilMerk->nama_mobil_merk ?> </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
 
-                                <div class="col-md-4 mb-3">
-                                    <label for="mobilTipe"> Tipe Mobil: <span class="text-danger">*</span></label>
-                                    <select id="mobilTipe" name="mobilTipe" class="form-control select2 <?= ($validation->hasError('mobilTipe')) ? 'is-invalid' : ''; ?>">
-                                        <option value="" disabled selected>-- pilih tipe mobil --</option>
-                                        <?php foreach ($mobilTipe as $mobilTipe) : ?>
-                                            <option value="<?= $mobilTipe->id_mobil_tipe ?>"> <?= $mobilTipe->nama_mobil_tipe ?> </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-3 mb-3">
-                                    <label for="tahunRakit"> Tahun Rakit: <span class="text-danger">*</span></label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-calendar-alt"></i></div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="tgl_progress"> Tanggal: </label>
+                                            <div class="input-group date">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text"><i class="fas fa-calendar-alt"></i></div>
+                                                </div>
+                                                <input type="text" id="tgl_progress" name="tgl_progress" class="form-control datepicker">
+                                            </div>
                                         </div>
-                                        <input type="text" id="tahunRakit" name="tahunRakit" class="form-control" value="">
+
+                                        <div class="col-md-6 mb-3">
+                                            <label for="id_stall"> Location: </label>
+                                            <select id="id_stall" name="id_stall" class="form-control select2 <?= ($validation->hasError('id_stall')) ? 'is-invalid' : ''; ?>">
+                                                <option value="" disabled selected>-- pilih lokasi stall --</option>
+                                                <?php foreach ($stall as $lokasi) : ?>
+                                                    <option value="<?= $lokasi->id_stall ?>"> <?= $lokasi->stall ?> </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                <?= $validation->getError('id_stall'); ?>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 mb-3">
+                                            <label for="pgs_persen"> Percent: </label>
+                                            <div class="slidecontainer">
+                                                <input type="range" min="0" max="100" value="0" step='10' class="slider" id="myRange" onchange="updateTextInput(this.value);" list='tickmarks'>
+                                                <div id="tickmarks">
+                                                    <p>0</p>
+                                                    <p>10</p>
+                                                    <p>20</p>
+                                                    <p>30</p>
+                                                    <p>40</p>
+                                                    <p>50</p>
+                                                    <p>60</p>
+                                                    <p>70</p>
+                                                    <p>80</p>
+                                                    <p>90</p>
+                                                    <p>100</p>
+                                                </div>
+                                                <input type="hidden" id="textRange" name="pgs_persen" value="">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 mb-3">
+                                            <label for="pgs_note"> Note: </label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text"><i class="fas fa-clipboard"></i></div>
+                                                </div>
+                                                <input type="text" id="pgs_note" name="pgs_note" class="form-control" value=" ">
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
 
-                                <div class="col-md-3 mb-3">
-                                    <label for="noPolisi"> No. Polisi: <span class="text-danger">*</span></label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-car"></i></div>
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-12 mb-3">
+                                            <label for="Photo"> Photo: </label> <br>
+                                            <img src="<?= base_url('public/progress/auto-repair.jpg') ?>" class="img-fluid" id="photo_progress">
+                                            <div class="custom-file form-control-sm mt-3">
+                                                <input type="file" class="custom-file-input" id="pgs_photo" name="pgs_photo" onchange="photoPreview()">
+                                                <label class="custom-file-label" for="Photo">Upload photo ...</label>
+                                            </div>
                                         </div>
-                                        <input type="text" id="noPolisi" name="noPolisi" class="form-control" value="">
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3 mb-3">
-                                    <label for="noRangka"> No. Rangka: <span class="text-danger">*</span></label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-car"></i></div>
-                                        </div>
-                                        <input type="text" id="noRangka" name="noRangka" class="form-control" value="">
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3 mb-3">
-                                    <label for="noMesin"> No. Mesin: <span class="text-danger">*</span></label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-car"></i></div>
-                                        </div>
-                                        <input type="text" id="noMesin" name="noMesin" class="form-control" value="">
                                     </div>
                                 </div>
 
                             </div>
                         </div>
                     </div>
-                    <!-- Informasi Mobil -->
                     <div class="d-grid gap-3 mb-4 float-right">
                         <a href="<?= base_url('progress'); ?>" class="btn btn-dark"><i class="fas fa-arrow-circle-left"></i> &nbsp; Batal</a>
                         <button class="btn btn-primary" type="submit"><i class="fas fa-save"></i> &nbsp; Simpan</button>
@@ -302,25 +234,32 @@
 </section>
 <?= $this->endSection() ?>
 <?= $this->section('script') ?>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 <script>
     $('.select2').select2();
-</script>
 
-<script>
-    document.getElementById('tipeClient').addEventListener('change', function() {
-        if (this.value == 1) {
-            // document.querySelector('#namaPIC, #telpPIC').disabled = false;
-            document.getElementById('namaPIC').disabled = false;
-            document.getElementById('namaPIC').placeholder = 'nama pic wajib diisi';
-            // document.getElementById('namaPIC').required = true;
-            document.getElementById('telpPIC').disabled = false
-        } else {
-            // document.querySelector('#namaPIC, #telpPIC').disabled = true;
-            document.getElementById('namaPIC').disabled = true;
-            document.getElementById('namaPIC').placeholder = '';
-            document.getElementById('namaPIC').value = '';
-            document.getElementById('telpPIC').disabled = true
-        }
+    $(function() {
+        $(".datepicker").datepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+            todayHighlight: true,
+        });
     });
+
+    function photoPreview() {
+        const photo = document.querySelector('#pgs_photo');
+        const photoLabel = document.querySelector('.custom-file-label');
+        const imgPreview = document.querySelector('#photo_progress');
+
+        photoLabel.textContent = photo.files[0].name;
+        document.getElementById('photoBaru').value = photo.files[0].name;
+
+        const filePhoto = new FileReader();
+        filePhoto.readAsDataURL(photo.files[0]);
+
+        filePhoto.onload = function(e) {
+            imgPreview.src = e.target.result;
+        }
+    }
 </script>
 <?= $this->endSection() ?>

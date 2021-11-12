@@ -16,6 +16,9 @@
                 $("#edit-form #id_stall").val(response.id_stall);
                 $("#edit-form #pgs_persen").val(response.pgs_persen);
                 $("#edit-form #pgs_note").val(response.pgs_note);
+                // $("#edit-form #photoLama").val(response.pgs_photo);
+                $("#edit-form #pgs_photo").attr('src', response.pgs_photo.result);
+                reader.readAsDataURL(input.files[0]);
 
                 // submit the edit from
                 $.validator.setDefaults({

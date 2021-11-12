@@ -150,10 +150,8 @@ class Service extends BaseController
         $data = [
             'controller' => 'service',
             'pageTitle' => 'Detail Data Service :: Progress',
-            // 'detail' => $this->progressModel->getDataModal()->where('id_service', $id)->get()->getRow(),
             'detail' => $this->serviceModel->where('id_service', $id)->get()->getRow(),
             'progress' => $progress,
-            // 'progress' => $this->progressModel->getDataModal()->where('data_progress.id_service', $id)->get()->getRow(),,
             'advisor' => $this->serviceModel->editAdvisor(),
             'client' => $this->serviceModel->editClient(),
             'asuransi' => $this->serviceModel->editAsuransi(),
@@ -280,10 +278,7 @@ class Service extends BaseController
         $response = array();
         $data['data'] = array();
         $no = 1;
-        // $id = $this->request->getPost('id_service');
-        // $id = 13;
         $id = $this->request->uri->getSegment(3);
-        // $id = $this->request->uri->getQuery();
         $result = $this->progressModel->getData()
             ->where('data_progress.id_service', $id)
             ->groupBy('data_progress.id_service')
@@ -291,11 +286,7 @@ class Service extends BaseController
 
         foreach ($result as $key => $value) {
             $ops = '<button type="button" class="btn btn-sm btn-success" onclick="editProgress(' . $value->p_id . ')"><i class="fa fa-pencil-alt"></i> 
-			</button>
-            <button type="button" class="btn btn-sm btn-danger" onclick="delProgress(' . $value->p_id . ')"><i class="fa fa-trash-alt"></i></button>';
-
-            // $pgs_photo = '<a href="' . base_url('public/progress/' . $value->p_photo) . '" data-toggle="modal" data-target="#photoProgress">
-            //                                     <img src="' . base_url('public/progress/' . $value->p_photo) . '" title="' . $value->p_note . '" class="img-fluid rounded profile-user-img"></a>';
+			</button> <button type="button" class="btn btn-sm btn-danger" onclick="delProgress(' . $value->p_id . ')"><i class="fa fa-trash-alt"></i></button>';
 
             $pgs_photo = '<img src="' . base_url('public/progress/' . $value->p_photo) . '" title="' . $value->p_note . '" class="img-fluid rounded profile-user-img" style="cursor:pointer" onclick="photoProgress(' . $value->p_photo . ')" data-toggle="modal" data-target="#photoProgress" >';
 
@@ -324,21 +315,51 @@ class Service extends BaseController
         }
     }
 
+    public function getPhoto()
+    {
+        $filePhoto = $this->request->getFile('pgs_photo');
+        $namaPhoto = $filePhoto->getRandomName();
+        $image = \Config\Services::image()
+            ->withFile($filePhoto)
+            ->resize(1080, 768, true)
+            ->save(FCPATH . 'public/progress/' . $namaPhoto, 80);
+        unlink(FCPATH . 'public/progress/' . $this->request->getPost('photoLama'));
+    }
+
+
+
     public function editProgress()
     {
+        $photoFile = $this->request->getFile('pgs_photo');
+        $photoLama = $this->request->getPost('photoLama');
+        $namaPhoto = $this->request->getPost('photoBaru');
+        // if ($photoFile != $photoLama) {
+        //     $namaPhoto = $this->request->getPost('pgs_photo');
+        //     $image = \Config\Services::image()
+        //         ->withFile($photoFile)
+        //         ->resize(1080, 768, true)
+        //         ->save(FCPATH . '/public/progress/' . $namaPhoto, 80);
+        //     unlink(FCPATH . '/public/progress/' . $photoLama);
+        // } else {
+        //     $namaPhoto = $photoLama;
+        // }
+
         $response = array();
         $fields['id_progress'] = $this->request->getPost('id_progress');
         $fields['tgl_progress'] = $this->request->getPost('tgl_progress');
         $fields['id_stall'] = $this->request->getPost('id_stall');
         $fields['pgs_persen'] = $this->request->getPost('pgs_persen');
         $fields['pgs_note'] = $this->request->getPost('pgs_note');
+        $fields['pgs_photo'] = $photoFile;
         $fields['id_users'] = user()->id;
 
         $this->validation->setRules([
             'tgl_progress' => ['label'  => 'Tanggal progress', 'rules'  => 'required'],
             'id_stall' => ['label'  => 'Lokasi stall progress', 'rules'  => 'required'],
             'pgs_persen' => ['label'  => 'Persen progress', 'rules'  => 'required'],
-            'pgs_note' => ['label'  => 'Catatan progres', 'rules'  => 'required']
+            'pgs_note' => ['label'  => 'Catatan progres', 'rules'  => 'required'],
+            'pgs_photo' => ['label'  => 'Photo progres', 'rules'  => 'uploaded[pgs_photo]'],
+            // 'photoBaru' => ['label'  => 'Photo progres', 'rules'  => 'required'],
         ]);
 
         if ($this->validation->run($fields) == FALSE) {

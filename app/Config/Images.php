@@ -22,7 +22,7 @@ class Images extends BaseConfig
      * @var string
      */
     // public $libraryPath = '/usr/local/bin/convert';
-    public $libraryPath = FCPATH . '/public/compress';
+    public $libraryPath = FCPATH . '/writable/uploads';
 
     /**
      * The available handler classes.
