@@ -506,7 +506,6 @@
 </script>
 <script>
     $(function() {
-        var id = document.getElementById('id_service').value;
         $('#data_table').DataTable({
             dom: 'Blfrtip',
             buttons: ["copyHtml5", "csvHtml5", "excelHtml5", "pdfHtml5", "print", "colvis"],
@@ -524,31 +523,8 @@
                 processing: "Memproses data...",
                 search: "Pencarian: ",
             },
-            "ajax": {
-                type: "GET",
-                url: "<?= base_url('service/detail') . '/' . $detail->id_service ?>",
-                dataType: "json",
-            }
         });
     });
-</script>
-<?php //require_once(APPPATH . 'views/progress/edit.php'); 
-?>
-<?php require_once(APPPATH . 'views/progress/delete.php'); ?>
-<script>
-    function editProgress(id_progress) {
-        $.ajax({
-            url: '<?= base_url($controller . '/getOne') ?>',
-            type: 'post',
-            data: {
-                id_progress: id_progress
-            },
-            dataType: 'json',
-            success: function(response) {
-                // reset the form
-                $("#edit-form")[0].reset();
-                $(".form-control").removeClass('is-invalid').removeClass('is-valid');
-                $('#edit-modal').modal('show');
 
                 $("#edit-form #id_progress").val(response.id_progress);
                 // $("#edit-form #tgl_progress").val(response.tgl_progress);
