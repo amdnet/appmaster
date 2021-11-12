@@ -1,4 +1,3 @@
-<script>
     function remove(id_progress) {
         swal.fire({
             title: 'Apakah Anda yakin dengan proses penghapusan?',
@@ -13,7 +12,7 @@
 
             if (result.value) {
                 $.ajax({
-                    url: '<?= base_url($controller . '/delProgress') ?>',
+                    url: "<?= base_url($controller . '/delProgress') ?>",
                     type: 'post',
                     data: {
                         id_progress: id_progress
@@ -29,7 +28,7 @@
                                 showConfirmButton: false,
                                 timer: 1500
                             }).then(function() {
-                                $('#data_table').DataTable().ajax.reload(null, false).draw(false);
+                                location.reload();
                             })
                         } else {
                             Swal.fire({
@@ -45,4 +44,3 @@
             }
         })
     }
-</script>

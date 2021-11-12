@@ -1,7 +1,7 @@
 <?= $this->extend('layout/template.php') ?>
 <?= $this->section('css') ?>
 <?php include_once "app/views/layout/tabelcss.php"; ?>
-<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/css/bootstrap-slider.min.css" /> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
 <style>
     input:focus {
         outline: none;
@@ -134,7 +134,6 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>ID Service</th>
                                     <th>Tanggal</th>
                                     <th>Location</th>
                                     <th>Percent</th>
@@ -144,20 +143,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($progress as $progres) : ?>
-                                    <tr>
-                                        <?php $no = 1; ?>
-                                        <td><?= $no++; ?></td>
-                                        <td><?= $progres->id_service; ?></td>
-                                        <td><?= $progres->tgl_progress; ?></td>
-                                        <td><?= $progres->stall; ?></td>
-                                        <td><?= $progres->pgs_persen; ?></td>
-                                        <td><?= $progres->pgs_note; ?></td>
-                                        <td><a href="<?= base_url('public/progress/' . $progres->pgs_photo) ?>" data-toggle="modal" data-target="#photoProfil">
-                                                <img src="<?= base_url('public/progress/' . $progres->pgs_photo) ?>" title="' . $progres->pgs_note . '" class="img-fluid rounded profile-user-img"></a> </td>
-                                        <td><button type="button" class="btn btn-sm btn-success" onclick="editProgress(<?= $progres->id_progress ?>)"><i class="fa fa-pencil-alt"></i></button> <button type="button" class="btn btn-sm btn-danger" onclick="remove(<?= $progres->id_progress ?>)"><i class="fa fa-trash-alt"></i></button></td>
-                                    </tr>
-                                <?php endforeach; ?>
+
                             </tbody>
                         </table>
                     </div>
@@ -200,13 +186,13 @@
                                 <i class="fas fa-mobile-alt"></i>&nbsp; <b>Telp. Advisor</b> <a class="float-right"> <b><?= $advisor->telp ?></b> </a>
                             </li>
                             <li class="list-group-item">
-                                <i class="fas fa-calendar-alt"></i>&nbsp; <b>Data Created</b> <a class="float-right"> <b><?= $detail->created_at ?></b> </a>
+                                <i class="fas fa-calendar-alt"></i>&nbsp; <b>Data Created</b> <a class="float-right"> <b><?= $progress->p_create ?></b> </a>
                             </li>
                             <li class="list-group-item">
-                                <i class="fas fa-calendar-alt"></i>&nbsp; <b>Data Updated</b> <a class="float-right"> <b><?= $detail->updated_at ?></b> </a>
+                                <i class="fas fa-calendar-alt"></i>&nbsp; <b>Data Updated</b> <a class="float-right"> <b><?= $progress->p_update ?></b> </a>
                             </li>
                             <li class="list-group-item">
-                                <i class="fas fa-user-edit"></i>&nbsp; <b>User Update</b> <a class="float-right"> <b><?= $detail->id_users ?></b> </a>
+                                <i class="fas fa-user-edit"></i>&nbsp; <b>User Update</b> <a class="float-right"> <b><?= $progress->fullname ?></b> </a>
                             </li>
                         </ul>
                     </div>
@@ -355,7 +341,7 @@
 </section>
 
 <!-- Modal Image -->
-<div class="modal fade" id="photoProfil" tabindex="-1" role="dialog" aria-labelledby="photoProfilTitle" aria-hidden="true">
+<div class="modal fade" id="photoProgress" tabindex="-1" role="dialog" aria-labelledby="photoProgressTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content myPhoto">
             <div class="modal-header">
@@ -364,9 +350,9 @@
                 </button>
             </div>
             <div class="text-center">
-                <img src="<?= base_url('public/progress/' . $progres->pgs_photo); ?>" class="img-fluid">
+                <img src="<?= base_url('public/progress/' . $progress->p_photo); ?>" class="img-fluid">
                 <br>
-                <span class="text-dark"><?= $progres->pgs_note;; ?></span>
+                <span id="namaPhoto" name="namaPhoto" class="text-dark"> <?= $progress->p_note ?> </span>
             </div>
         </div>
     </div>
@@ -383,25 +369,24 @@
 
             <div class="modal-body">
                 <form id="edit-form" class="pl-2 pr-2">
-                    <input type="hidden" id="id_progress" name="id_progress" value="<?= $progres->id_progress ?>">
+                    <input type="hidden" id="id_progress" name="id_progress" class="form-control">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
 
                                 <div class="col-md-6 mb-3">
                                     <label for="tgl_progress"> Tanggal: </label>
-                                    <div class="input-group">
+                                    <div class="input-group date">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text"><i class="fas fa-calendar-alt"></i></div>
                                         </div>
-                                        <input type="date" id="tgl_progress" name="tgl_progress" class="form-control">
+                                        <input type="text" id="tgl_progress" name="tgl_progress" class="form-control datepicker">
                                     </div>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label for="id_stall"> Location: </label>
                                     <select id="id_stall" name="id_stall" class="form-control <?= ($validation->hasError('id_stall')) ? 'is-invalid' : ''; ?>">
-                                        <option value="<?= $progres->id_stall ?>" disabled selected><?= $progres->stall ?></option>
                                         <?php foreach ($stall as $lokasi) : ?>
                                             <option value="<?= $lokasi->id_stall ?>"> <?= $lokasi->stall ?> </option>
                                         <?php endforeach; ?>
@@ -414,7 +399,7 @@
                                 <div class="col-md-12 mb-3">
                                     <label for="pgs_persen"> Percent: </label>
                                     <div class="slidecontainer">
-                                        <input type="range" min="0" max="100" value="<?= $progres->pgs_persen; ?>" step='10' class="slider" id="myRange" onchange="updateTextInput(this.value);" list='tickmarks'>
+                                        <input type="range" min="0" max="100" value=" " step='10' class="slider" id="myRange" onchange="updateTextInput(this.value);" list='tickmarks'>
                                         <div id="tickmarks">
                                             <p>0</p>
                                             <p>10</p>
@@ -428,7 +413,7 @@
                                             <p>90</p>
                                             <p>100</p>
                                         </div>
-                                        <input type="hidden" id="textRange" name="pgs_persen" value="<?= $progres->pgs_persen; ?>">
+                                        <input type="hidden" id="textRange" name="pgs_persen" value=" ">
                                     </div>
                                 </div>
 
@@ -441,13 +426,13 @@
                                 <div class="input-group-prepend">
                                     <div class="input-group-text"><i class="fas fa-clipboard"></i></div>
                                 </div>
-                                <input type="text" id="pgs_note" name="pgs_note" class="form-control" value="<?= $progres->pgs_note ?>">
+                                <input type="text" id="pgs_note" name="pgs_note" class="form-control" value=" ">
                             </div>
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label for="pgs_photo"> Photo: </label>
-                            <img src="<?= base_url('public/progress/' . $progres->pgs_photo) ?>" class="img-fluid">
+                            <img src="<?= base_url('public/progress/' . $progress->p_photo) ?>" class="img-fluid">
                             <div class="custom-file form-control-sm mt-3">
                                 <input type="file" class="custom-file-input <?= ($validation->hasError('pgs_photo')) ? 'is-invalid' : ''; ?>" id="pgs_photo" name="pgs_photo" onchange="photoPreview()">
                                 <label class="custom-file-label" for="pgs_photo">Ganti photo ...</label>
@@ -461,13 +446,13 @@
                             <label for="informasi"> Informasi </label>
                             <ul class="list-group list-group-unbordered mt-2">
                                 <li class="list-group-item">
-                                    <i class="fas fa-calendar-alt"></i>&nbsp; <b>Date Created</b> <span class="float-right"> <?= $detail->created_at ?> </span>
+                                    <i class="fas fa-calendar-alt"></i>&nbsp; <b>Date Created</b> <span class="float-right"> <?= $progress->p_create ?> </span>
                                 </li>
                                 <li class="list-group-item">
-                                    <i class="fas fa-calendar-alt"></i>&nbsp; <b>Date Updated</b> <span class="float-right"> <?= $detail->updated_at ?> </span>
+                                    <i class="fas fa-calendar-alt"></i>&nbsp; <b>Date Updated</b> <span class="float-right"> <?= $progress->p_update ?> </span>
                                 </li>
                                 <li class="list-group-item">
-                                    <i class="fas fa-user-edit"></i>&nbsp; <b>User Update</b> <span class="float-right"> <?= $detail->id_users ?> </span>
+                                    <i class="fas fa-user-edit"></i>&nbsp; <b>User Update</b> <span class="float-right"> <?= $progress->fullname ?> </span>
                                 </li>
                             </ul>
                         </div>
@@ -488,6 +473,7 @@
 <?= $this->endSection() ?>
 <?= $this->section('script') ?>
 <?php include_once "app/views/layout/tabeljs.php"; ?>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 <script>
     const _R = document.querySelector('[type=range]');
     _R.style.setProperty('--val', +_R.value);
@@ -503,117 +489,17 @@
     function updateTextInput(val) {
         document.getElementById('textRange').value = val;
     }
-</script>
-<script>
+
     $(function() {
-        $('#data_table').DataTable({
-            dom: 'Blfrtip',
-            buttons: ["copyHtml5", "csvHtml5", "excelHtml5", "pdfHtml5", "print", "colvis"],
-            "paging": true,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
-            language: {
-                emptyTable: "Tidak ada data di dalam tabel",
-                info: "Menampilkan _START_ hingga _END_ dari _TOTAL_ data entri",
-                lengthMenu: "Lihat _MENU_ entri",
-                loadingRecords: "Loading data...",
-                processing: "Memproses data...",
-                search: "Pencarian: ",
-            },
+        $(".datepicker").datepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+            todayHighlight: true,
         });
     });
 
-                $("#edit-form #id_progress").val(response.id_progress);
-                // $("#edit-form #tgl_progress").val(response.tgl_progress);
-                // $("#edit-form #id_stall").val(response.id_stall);
-                // $("#edit-form #pgs_persen").val(response.pgs_persen);
-                $("#edit-form #pgs_note").val(response.pgs_note);
-
-                // submit the edit from
-                $.validator.setDefaults({
-                    highlight: function(element) {
-                        $(element).addClass('is-invalid').removeClass('is-valid');
-                    },
-                    unhighlight: function(element) {
-                        $(element).removeClass('is-invalid').addClass('is-valid');
-                    },
-                    errorElement: 'div ',
-                    errorClass: 'invalid-feedback',
-                    errorPlacement: function(error, element) {
-                        if (element.parent('.input-group').length) {
-                            error.insertAfter(element.parent());
-                        } else if (element.hasClass('tgl_progress')) {
-                            error.insertAfter(element.next());
-                        } else {
-                            error.insertAfter(element);
-                        }
-                    },
-
-                    submitHandler: function(form) {
-                        var form = $('#edit-form');
-                        $(".text-danger").remove();
-                        $.ajax({
-                            url: '<?= base_url($controller . '/editProgress') ?>',
-                            type: 'post',
-                            data: form.serialize(),
-                            dataType: 'json',
-                            beforeSend: function() {
-                                $('#edit-form-btn').html('<i class="fa fa-spinner fa-spin"></i>');
-                            },
-                            success: function(response) {
-
-                                if (response.success === true) {
-                                    Swal.fire({
-                                        position: 'bottom-end',
-                                        icon: 'success',
-                                        title: response.messages,
-                                        showConfirmButton: false,
-                                        timer: 1500
-                                    }).then(function() {
-                                        // $('#data_table').DataTable().ajax.reload(null, false).draw(false);
-                                        // $('#data_table').DataTable();
-
-                                        // var row = $(this).closest('tr');
-                                        // var nRow = row[0];
-                                        // $('#data_table').dataTable().fnDeleteRow(nRow);
-
-                                        location.reload();
-                                        $('#edit-modal').modal('hide');
-                                    })
-                                } else {
-                                    if (response.messages instanceof Object) {
-                                        $.each(response.messages, function(index, value) {
-                                            var id = $("#" + index);
-
-                                            id.closest('.form-control')
-                                                .removeClass('is-invalid')
-                                                .removeClass('is-valid')
-                                                .addClass(value.length > 0 ? 'is-invalid' : 'is-valid');
-
-                                            id.after(value);
-                                        });
-                                    } else {
-                                        Swal.fire({
-                                            position: 'bottom-end',
-                                            icon: 'error',
-                                            title: response.messages,
-                                            showConfirmButton: false,
-                                            timer: 1500
-                                        })
-                                    }
-                                }
-                                $('#edit-form-btn').html('Update');
-                            }
-                        });
-                        return false;
-                    }
-                });
-                $('#edit-form').validate();
-            }
-        });
-    }
+    <?php require_once(APPPATH . 'views/progress/view.js'); ?>
+    <?php require_once(APPPATH . 'views/progress/edit.js'); ?>
+    <?php require_once(APPPATH . 'views/progress/delete.js'); ?>
 </script>
 <?= $this->endSection() ?>

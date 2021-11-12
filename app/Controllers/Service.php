@@ -128,31 +128,37 @@ class Service extends BaseController
     {
         // $db = db_connect();
         // $progress = $db->table('data_progress')
-        //     ->select('*, data_service.id_service')
-        //     ->join('data_service', 'data_service.id_service = data_progress.id_service')
-        //     ->join('data_stall', 'data_stall.id_stall = data_progress.id_stall')
-        //     ->join('users', 'users.id = data_progress.id_users')
+        // dd($progress);
+
+        // $uri = new \CodeIgniter\HTTP\URI();
+        // dd($this->request->uri->getSegment(3));
+        // $tested = $uri->getFragment(2);
+        // dd($tested);
+
+        // $progress = $this->progressModel->getData()
         //     ->where('data_progress.id_service', $id)
         //     ->groupBy('data_progress.id_service')
         //     ->get()->getResult();
 
-        $progress = $this->progressModel->getData()
+        $progress = $this->progressModel->getDataModal()
             ->where('data_progress.id_service', $id)
             ->groupBy('data_progress.id_service')
-            ->get()->getResult();
+            ->get()->getRow();
 
         $stallModel = new \App\Models\StallModel();
 
         $data = [
             'controller' => 'service',
             'pageTitle' => 'Detail Data Service :: Progress',
+            // 'detail' => $this->progressModel->getDataModal()->where('id_service', $id)->get()->getRow(),
             'detail' => $this->serviceModel->where('id_service', $id)->get()->getRow(),
+            'progress' => $progress,
+            // 'progress' => $this->progressModel->getDataModal()->where('data_progress.id_service', $id)->get()->getRow(),,
             'advisor' => $this->serviceModel->editAdvisor(),
             'client' => $this->serviceModel->editClient(),
             'asuransi' => $this->serviceModel->editAsuransi(),
             'mobilEdit' => $this->serviceModel->editMobil(),
             'validation' => $this->validation,
-            'progress' => $progress,
             'stall' => $stallModel->get()->getResult(),
             'situs' => $this->situs
         ];
@@ -270,26 +276,36 @@ class Service extends BaseController
     }
 
     public function getProgress()
-    { // error
+    {
+        $response = array();
         $data['data'] = array();
-        $id = $this->request->getPost('id_progress');
-
+        $no = 1;
+        // $id = $this->request->getPost('id_service');
+        // $id = 13;
+        $id = $this->request->uri->getSegment(3);
+        // $id = $this->request->uri->getQuery();
         $result = $this->progressModel->getData()
             ->where('data_progress.id_service', $id)
             ->groupBy('data_progress.id_service')
             ->get()->getResult();
 
         foreach ($result as $key => $value) {
-            $ops = '<a href="' . base_url('service/detail/' . $value->id_service) . '" class="btn btn-sm bg-primary"><i class="fa fa-eye"></i></a> <a href="' . base_url('service/edit/' . $value->id_service) . '" class="btn btn-sm bg-info"><i class="fa fa-pencil-alt"></i></a>
-            <button type="button" class="btn btn-sm btn-danger" onclick="remove(' . $value->id_service . ')"><i class="fa fa-trash-alt"></i></button>';
+            $ops = '<button type="button" class="btn btn-sm btn-success" onclick="editProgress(' . $value->p_id . ')"><i class="fa fa-pencil-alt"></i> 
+			</button>
+            <button type="button" class="btn btn-sm btn-danger" onclick="delProgress(' . $value->p_id . ')"><i class="fa fa-trash-alt"></i></button>';
+
+            // $pgs_photo = '<a href="' . base_url('public/progress/' . $value->p_photo) . '" data-toggle="modal" data-target="#photoProgress">
+            //                                     <img src="' . base_url('public/progress/' . $value->p_photo) . '" title="' . $value->p_note . '" class="img-fluid rounded profile-user-img"></a>';
+
+            $pgs_photo = '<img src="' . base_url('public/progress/' . $value->p_photo) . '" title="' . $value->p_note . '" class="img-fluid rounded profile-user-img" style="cursor:pointer" onclick="photoProgress(' . $value->p_photo . ')" data-toggle="modal" data-target="#photoProgress" >';
 
             $data['data'][$key] = array(
-                $value->id_progress,
-                $value->id_service,
-                $value->tgl_progress,
+                $no++,
+                $value->p_tgl,
                 $value->stall,
-                $value->pgs_persen,
-                $value->pgs_note,
+                $value->p_persen . ' %',
+                $value->p_note,
+                $pgs_photo,
                 $ops
             );
         }
@@ -312,16 +328,16 @@ class Service extends BaseController
     {
         $response = array();
         $fields['id_progress'] = $this->request->getPost('id_progress');
-        // $fields['tgl_progress'] = $this->request->getPost('tgl_progress');
-        // $fields['id_stall'] = $this->request->getPost('id_stall');
-        // $fields['pgs_persen'] = $this->request->getPost('pgs_persen');
+        $fields['tgl_progress'] = $this->request->getPost('tgl_progress');
+        $fields['id_stall'] = $this->request->getPost('id_stall');
+        $fields['pgs_persen'] = $this->request->getPost('pgs_persen');
         $fields['pgs_note'] = $this->request->getPost('pgs_note');
         $fields['id_users'] = user()->id;
 
         $this->validation->setRules([
-            // 'tgl_progress' => ['label'  => 'Tanggal progress', 'rules'  => 'required'],
-            // 'id_stall' => ['label'  => 'Lokasi stall progress', 'rules'  => 'required'],
-            // 'pgs_persen' => ['label'  => 'Persen progress', 'rules'  => 'required'],
+            'tgl_progress' => ['label'  => 'Tanggal progress', 'rules'  => 'required'],
+            'id_stall' => ['label'  => 'Lokasi stall progress', 'rules'  => 'required'],
+            'pgs_persen' => ['label'  => 'Persen progress', 'rules'  => 'required'],
             'pgs_note' => ['label'  => 'Catatan progres', 'rules'  => 'required']
         ]);
 

@@ -9,18 +9,33 @@ class ProgressModel extends Model
     protected $table = 'data_progress';
     protected $primaryKey = 'id_progress';
     protected $returnType = 'object';
-    protected $allowedFields = ['id_progress', 'id_service', 'tgl_progress', 'id_stall', 'pgs_persen', 'pgs_note', 'pgs_photo', 'id_users', 'created_at', 'updated_at'];
+    protected $allowedFields = ['id_service', 'tgl_progress', 'id_stall', 'pgs_persen', 'pgs_note', 'pgs_photo', 'id_users', 'created_at', 'updated_at'];
     protected $useTimestamps = true;
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
 
     public function getData()
     {
+        // return $this->db->table('data_progress')
+        //     ->select('id_progress as p_id, data_progress.id_service as p_service, tgl_progress as p_tgl, data_progress.id_stall as p_stall, pgs_persen as p_persen, pgs_note as p_note, pgs_photo as p_photo, data_progress.id_users as p_users, data_progress.created_at as p_create, data_progress.updated_at as p_update')
+        //     ->join('data_service', 'data_service.id_service = data_progress.id_service', 'left')
+        //     ->join('data_stall', 'data_stall.id_stall = data_progress.id_stall')
+        //     ->join('users', 'users.id = data_progress.id_users', 'left')
+        //     ->select('users.fullname, data_stall.stall');
+
         return $this->db->table('data_progress')
-            ->select('*, data_service.id_service')
-            ->join('data_service', 'data_service.id_service = data_progress.id_service')
+            ->select('id_progress as p_id, tgl_progress as p_tgl, data_progress.id_stall as p_stall, pgs_persen as p_persen, pgs_note as p_note, pgs_photo as p_photo')
+            ->join('data_service', 'data_service.id_service = data_progress.id_service', 'left')
             ->join('data_stall', 'data_stall.id_stall = data_progress.id_stall')
-            ->join('users', 'users.id = data_progress.id_users');
+            ->select('data_stall.stall');
+    }
+
+    public function getDataModal()
+    {
+        return $this->db->table('data_progress')
+            ->select('data_progress.id_stall as p_stall, pgs_photo as p_photo, pgs_note as p_note, data_progress.id_users as p_users, data_progress.created_at as p_create, data_progress.updated_at as p_update')
+            ->join('users', 'users.id = data_progress.id_users', 'left')
+            ->select('users.fullname');
     }
 
     public function getAdvisor()

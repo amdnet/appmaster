@@ -1,22 +1,20 @@
-<script>
     function editProgress(id_progress) {
         $.ajax({
-            url: '<?= base_url($controller . '/getOne') ?>',
+            url: "<?= base_url($controller . '/getOne') ?>",
             type: 'post',
             data: {
                 id_progress: id_progress
             },
             dataType: 'json',
             success: function(response) {
-                // reset the form
                 $("#edit-form")[0].reset();
                 $(".form-control").removeClass('is-invalid').removeClass('is-valid');
                 $('#edit-modal').modal('show');
 
                 $("#edit-form #id_progress").val(response.id_progress);
-                // $("#edit-form #tgl_progress").val(response.tgl_progress);
-                // $("#edit-form #id_stall").val(response.id_stall);
-                // $("#edit-form #pgs_persen").val(response.pgs_persen);
+                $("#edit-form #tgl_progress").val(response.tgl_progress);
+                $("#edit-form #id_stall").val(response.id_stall);
+                $("#edit-form #pgs_persen").val(response.pgs_persen);
                 $("#edit-form #pgs_note").val(response.pgs_note);
 
                 // submit the edit from
@@ -43,7 +41,7 @@
                         var form = $('#edit-form');
                         $(".text-danger").remove();
                         $.ajax({
-                            url: '<?= base_url($controller . '/editProgress') ?>',
+                            url: "<?= base_url($controller . '/editProgress') ?>",
                             type: 'post',
                             data: form.serialize(),
                             dataType: 'json',
@@ -95,4 +93,3 @@
             }
         });
     }
-</script>
