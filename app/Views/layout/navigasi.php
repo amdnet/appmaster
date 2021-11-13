@@ -2,7 +2,7 @@
     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
         <li class="nav-item ">
-            <a href="<?= base_url('home') ?>" class="nav-link <?= (current_url() == base_url('home')) ? 'active' : '' ?>">
+            <a href="<?= base_url('home/' . user()->id) ?>" class="nav-link <?= (current_url() == base_url('home/' . user()->id)) ? 'active' : '' ?>">
                 <i class="nav-icon fas fa-home"></i>
                 <p> Dashboard </p>
             </a>

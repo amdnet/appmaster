@@ -45,9 +45,13 @@ $routes->setAutoRoute(true);
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 // $routes->addPlaceholder('uuid', '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}');
-$routes->get('/', 'Home::index');
+// $routes->get('/', 'Home::index');
+// $routes->get('client/(:num)', 'Home::index/$1');
+$routes->get('home/(:num)', 'Home::index/$1'); // client dashboard
+$routes->get('users/profil/(:num)', 'Users::profil/$1'); // all profile
 $routes->get('progress', 'Progress::index');
 $routes->get('service/add', 'Service::add');
+$routes->get('service/detail/(:num)', 'Service::detail/$1');
 
 // $routes->get('/', 'Home::index', ['filter' => 'role:admin,advisor']);
 // $routes->get('/', 'Home::asuransi', ['as' => '/'], ['filter' => 'role:asuransi,surveyor']);
@@ -73,7 +77,6 @@ $routes->group('users', ['filter' => 'role:admin,advisor,asuransi,surveyor,clien
     //     $routes->delete('delete/(:num)', 'Users::delete/$1');
     //     $routes->get('add', 'Users::add');
     //     $routes->post('addsave', 'Users::addsave');
-    $routes->get('profil/(:num)', 'Users::profil/$1');
     // $routes->put('profil/gantipassword/(:num)', 'Users::gantipassword/$1');
 });
 

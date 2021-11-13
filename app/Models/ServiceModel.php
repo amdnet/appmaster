@@ -40,13 +40,54 @@ class ServiceModel extends Model
             ->get()->getResult();
     }
 
-    public function namaAdvisor()
+    public function editMobil()
     {
         return $this->db->table('data_service')
-            ->select('id_advisor, fullname')
-            ->join('users', 'users.id = data_service.id_advisor')
+            ->select('id_mbl_jenis, id_mbl_merk, id_mbl_tipe, id_mobil_jenis, nama_mobil_jenis, id_mobil_merk, nama_mobil_merk, id_mobil_tipe, nama_mobil_tipe')
+            ->join('mobil_jenis', 'mobil_jenis.id_mobil_jenis = data_service.id_mbl_jenis')
+            ->join('mobil_merk', 'mobil_merk.id_mobil_merk = data_service.id_mbl_merk')
+            ->join('mobil_tipe', 'mobil_tipe.id_mobil_tipe = data_service.id_mbl_tipe')
             ->get()->getRow();
     }
+
+    public function viewDetail() // Home::index + Service::detail($id)
+    {
+        return $this->db->table('data_service')
+            ->select('id_service, kode_service, id_advisor, id_client, id_asuransi, tipe_client, pic_nama, pic_telp, id_mbl_jenis, id_mbl_merk, id_mbl_tipe, thn_rakit, no_pol, no_rangka, no_mesin, data_service.id_users as s_user, data_service.created_at as s_create, data_service.updated_at as s_update')
+            ->join('users', 'users.id = data_service.id_users') // user update
+            ->join('mobil_jenis', 'mobil_jenis.id_mobil_jenis = data_service.id_mbl_jenis') // jenis mobil
+            ->join('mobil_merk', 'mobil_merk.id_mobil_merk = data_service.id_mbl_merk') // merk mobil
+            ->join('mobil_tipe', 'mobil_tipe.id_mobil_tipe = data_service.id_mbl_tipe') // tipe mobil
+            ->select('fullname, nama_mobil_jenis, nama_mobil_merk, nama_mobil_tipe');
+    }
+
+    public function viewAdvisor() // Home::index
+    {
+        return $this->db->table('data_service')
+            ->select('id_advisor, users.fullname, users.telp') // nama & telp advisor = staff konsumen
+            ->join('users', 'users.id = data_service.id_advisor');
+    }
+
+    public function viewAsuransi() // Home::index
+    {
+        return $this->db->table('data_service')
+            ->select('id_asuransi, users.username, users.fullname, users.telp') // nama asuransi dan surveyor = perwakilan asuransi
+            ->join('users', 'users.id = data_service.id_asuransi');
+    }
+
+    public function viewClient() // Service::detail($id)
+    {
+        return $this->db->table('data_service')
+            ->select('id_client, users.username, users.fullname, users.alamat, users.telp') // nama asuransi dan surveyor = perwakilan asuransi
+            ->join('users', 'users.id = data_service.id_client');
+    }
+
+    // public function viewStall()
+    // {
+    //     return $this->db->table('data_service')
+    //         ->select('id_asuransi, users.username, users.fullname, users.telp') // nama asuransi dan surveyor = perwakilan asuransi
+    //         ->join('users', 'users.id = data_service.id_asuransi');
+    // }
 
     public function getAsuransi() // perusahaan asuransi
     {
@@ -90,15 +131,7 @@ class ServiceModel extends Model
             ->get()->getRow();
     }
 
-    public function editMobil()
-    {
-        return $this->db->table('data_service')
-            ->select('id_mbl_jenis, id_mbl_merk, id_mbl_tipe, id_mobil_jenis, nama_mobil_jenis, id_mobil_merk, nama_mobil_merk, id_mobil_tipe, nama_mobil_tipe')
-            ->join('mobil_jenis', 'mobil_jenis.id_mobil_jenis = data_service.id_mbl_jenis')
-            ->join('mobil_merk', 'mobil_merk.id_mobil_merk = data_service.id_mbl_merk')
-            ->join('mobil_tipe', 'mobil_tipe.id_mobil_tipe = data_service.id_mbl_tipe')
-            ->get()->getRow();
-    }
+
 
     // public function getPIC() // pic = staff bengkel
     // {

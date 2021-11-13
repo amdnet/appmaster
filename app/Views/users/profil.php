@@ -10,7 +10,6 @@
                 <div class="row">
                     <div class="col-md-4">
                         <form action="<?= base_url('users/editphoto/' . user()->id); ?>" method="POST" enctype="multipart/form-data">
-                            <?= csrf_field(); ?>
                             <input type="hidden" name="photoLama" value="<?= user()->photo; ?>">
                             <div class="card card-primary card-outline">
                                 <div class="card-body box-profile">
@@ -89,7 +88,6 @@
 
                     <div class="col-md-8">
                         <form action="<?= base_url('users/editdataprofil/' . user()->id); ?>" method="POST">
-                            <?= csrf_field(); ?>
                             <input type="hidden" name="emailLama" value="<?= user()->email; ?>">
                             <input type="hidden" name="userLama" value="<?= user()->username; ?>">
                             <div class="card card-primary card-outline">
@@ -178,7 +176,6 @@
 
                         <!-- form password -->
                         <form action="<?= base_url('users/editpassword/' . user()->id); ?>" method="POST">
-                            <?= csrf_field(); ?>
                             <div class="card card-primary card-outline">
                                 <div class="card-header p-2">
                                     <div class="card-body">

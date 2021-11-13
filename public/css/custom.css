@@ -8,21 +8,28 @@ h4 {
   font-size: 1.2rem;
 }
 
-.slider.slider-horizontal {
+#data_table tr th {
+  text-align: center;
+}
+
+table.dataTable tbody td {
+  vertical-align: middle;
+}
+
+.select2-container {
   width: 100% !important;
 }
 
-.range-slider__value {
-  display: inline-block;
-  position: relative;
-  width: 60px;
-  color: #fff;
-  line-height: 20px;
-  text-align: center;
-  border-radius: 3px;
-  background: #2c3e50;
-  padding: 5px 10px;
-  margin-left: 8px;
+.select2-container .select2-selection--single {
+  height: 38px !important;
+}
+
+.datepicker {
+  z-index: 9999 !important;
+}
+
+input:focus {
+  outline: none;
 }
 
 .modal {

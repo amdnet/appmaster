@@ -1,4 +1,4 @@
-    function remove(id_progress) {
+    function delProgress(id_progress) {
         swal.fire({
             title: 'Apakah Anda yakin dengan proses penghapusan?',
             text: 'Data akan dihapus secara permanen setelah konfirmasi!',

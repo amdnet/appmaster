@@ -42,14 +42,10 @@ class Users extends BaseController
 
     public function profil($id)
     {
-        // $agent = $this->request->getUserAgent();
-        // $data['ip'] = $this->request->getIPAddress();
-        // $data['browser'] = $agent->getBrowser();
-        // $this->breadcrumb->add('Home', '/');
-        // $this->breadcrumb->add('Dashboard', '/dashboard');
-        // $this->breadcrumb->add('Customer', '/dashboard/customer');
-
-        // $data['breadcrumbs'] = $this->breadcrumb->render();
+        $cekID = user()->id;
+        if ($cekID !== $id) {
+            return redirect()->to('home/error');
+        };
         $data = [
             'pageTitle' => 'User Profile',
 
@@ -162,8 +158,8 @@ class Users extends BaseController
         // $image = \Config\Services::image('imagick')
         $image = \Config\Services::image()
             ->withFile($filePhoto)
-            ->resize(1024, 1024, true)
-            ->save(FCPATH . '/public/profil/' . $namaPhoto, 80);
+            ->resize(1080, 768, true)
+            ->save(FCPATH . 'public/profil/' . $namaPhoto, 80);
         unlink(FCPATH . 'public/profil/' . $this->request->getVar('photoLama'));
 
         // if ($filePhoto->getError() == 4) {

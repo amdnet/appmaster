@@ -5,23 +5,21 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<meta name="<?= csrf_token() ?>" content="<?= csrf_hash() ?>">
+	<?= csrf_meta() ?>
 	<title><?= $pageTitle . " - " . $situs ?></title>
 
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 	<link rel="stylesheet" type="text/css" href="<?= base_url('public/css/custom.css') ?>" media="all" />
-	<link rel="stylesheet" href="<?= base_url() ?>/public/css/bootstrap-4.min.css">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.1.0/dist/css/adminlte.min.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css">
-	<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"> -->
+	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+	<link rel="stylesheet" type="text/css" href="<?= base_url() ?>/public/css/bootstrap-4.min.css">
+	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/admin-lte@3.1.0/dist/css/adminlte.min.css">
+	<link rel="stylesheet" type="text/css" href="<?= base_url() ?>/public/css/select2.min.css">
+	<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css"> -->
+	<?= $this->renderSection('css') ?>
 	<style>
-		.select2-container .select2-selection--single {
-			height: 38px !important;
-		}
+		<?php include_once "public/css/custom.css"; ?>
 	</style>
 
-	<?= $this->renderSection('css') ?>
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -115,14 +113,18 @@
 		</aside>
 	</div> <!-- end wrapper setelah body -->
 
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="<?= base_url() ?>/public/js/jquery-3.6.0.min.js"></script>
 	<script src="<?= base_url() ?>/public/js/bootstrap.bundle.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/additional-methods.min.js"></script>
+	<script src="<?= base_url() ?>/public/js/jquery.validate.min.js"></script>
+	<script src="<?= base_url() ?>/public/js/jquery.validate.min.js"></script>
 	<script src="<?= base_url() ?>/public/js/sweetalert2.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1.0/dist/js/adminlte.min.js"></script>
 	<script src="<?= base_url() ?>/public/js/dashboard.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+	<script src="<?= base_url() ?>/public/js/select2.min.js"></script>
+	<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/additional-methods.min.js"></script> -->
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/additional-methods.min.js"></script> -->
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script> -->
 
 	<?= $this->renderSection('script') ?>
 </body>

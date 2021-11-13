@@ -16,27 +16,64 @@ class ProgressModel extends Model
 
     public function getData()
     {
-        // return $this->db->table('data_progress')
-        //     ->select('id_progress as p_id, data_progress.id_service as p_service, tgl_progress as p_tgl, data_progress.id_stall as p_stall, pgs_persen as p_persen, pgs_note as p_note, pgs_photo as p_photo, data_progress.id_users as p_users, data_progress.created_at as p_create, data_progress.updated_at as p_update')
-        //     ->join('data_service', 'data_service.id_service = data_progress.id_service', 'left')
-        //     ->join('data_stall', 'data_stall.id_stall = data_progress.id_stall')
-        //     ->join('users', 'users.id = data_progress.id_users', 'left')
-        //     ->select('users.fullname, data_stall.stall');
-
         return $this->db->table('data_progress')
-            ->select('id_progress as p_id, tgl_progress as p_tgl, data_progress.id_stall as p_stall, pgs_persen as p_persen, pgs_note as p_note, pgs_photo as p_photo')
-            ->join('data_service', 'data_service.id_service = data_progress.id_service', 'left')
+            ->select('id_progress as p_id, tgl_progress as p_tgl, data_progress.id_stall as p_stall, pgs_persen as p_persen, pgs_note as p_note, pgs_photo as p_photo, data_progress.id_users as p_user, data_progress.created_at as p_create, data_progress.updated_at as p_update')
+            ->join('data_service', 'data_service.id_service = data_progress.id_service')
             ->join('data_stall', 'data_stall.id_stall = data_progress.id_stall')
-            ->select('data_stall.stall');
+            ->join('users', 'users.id = data_progress.id_users')
+            ->select('data_service.id_service, data_service.id_client, data_stall.stall, users.fullname');
     }
 
-    public function getDataModal()
+    public function viewData() // menampilkan data->table pada client
     {
         return $this->db->table('data_progress')
-            ->select('data_progress.id_stall as p_stall, pgs_photo as p_photo, pgs_note as p_note, data_progress.id_users as p_users, data_progress.created_at as p_create, data_progress.updated_at as p_update')
-            ->join('users', 'users.id = data_progress.id_users', 'left')
-            ->select('users.fullname');
+            ->select('id_progress as p_id, data_progress.id_service as p_srv, tgl_progress as p_tgl, data_progress.id_stall as p_stall, pgs_persen as p_persen, pgs_note as p_note, pgs_photo as p_photo, data_progress.id_users as p_user, data_progress.created_at as p_create, data_progress.updated_at as p_update')
+            ->join('data_service', 'data_service.id_service = data_progress.id_service')
+            ->join('data_stall', 'data_stall.id_stall = data_progress.id_stall')
+            ->join('users', 'users.id = data_progress.id_users')
+            ->select('data_service.id_service, data_service.id_client, data_stall.stall, users.fullname');
     }
+
+    public function editData()
+    {
+        return $this->db->table('data_progress')
+            ->select('id_progress, id_service, tgl_progress, data_progress.id_stall as p_stall, pgs_persen, pgs_note, pgs_photo, data_progress.id_users as p_users, data_progress.created_at, data_progress.updated_at')
+            ->select('data_stall.id_stall, data_stall.stall, users.fullname')
+            ->join('data_stall', 'data_stall.id_stall = data_progress.id_stall')
+            ->join('users', 'users.id = data_progress.id_users');
+    }
+
+    // public function getDataModal()
+    // {
+    //     return $this->db->table('data_progress')
+    //         ->select('data_progress.id_stall as p_stall, pgs_photo as p_photo, pgs_persen as p_persen, pgs_note as p_note, data_progress.id_users as p_users, data_progress.created_at as p_create, data_progress.updated_at as p_update')
+    //         ->join('users', 'users.id = data_progress.id_users', 'left')
+    //         ->select('users.fullname');
+    // }
+
+    // public function getDataModal($id = false)
+    // {
+    //     if ($id === false) {
+    //         return $this->db->table('data_progress')
+    //             ->select('data_progress.id_stall as p_stall, pgs_photo as p_photo, pgs_persen as p_persen, pgs_note as p_note, data_progress.id_users as p_users, data_progress.created_at as p_create, data_progress.updated_at as p_update')
+    //             // ->join('users', 'users.id = data_progress.id_users', 'left')
+    //             // ->select('users.fullname')
+    //             ->get()
+    //             // ->getResult();
+    //             // ->getResultArray();
+    //             // ->getResultObject();
+    //             ->getResultArray();
+    //     } else {
+    //         return $this->db->table('data_progress')
+    //             ->select('data_progress.id_stall as p_stall, pgs_photo as p_photo, pgs_persen as p_persen, pgs_note as p_note, data_progress.id_users as p_users, data_progress.created_at as p_create, data_progress.updated_at as p_update')
+    //             ->join('users', 'users.id = data_progress.id_users', 'left')
+    //             ->select('users.fullname')
+    //             ->where('data_progress.id_service', $id)
+    //             ->groupBy('data_progress.id_service')
+    //             ->get()
+    //             ->getRow();
+    //     }
+    // }
 
     public function getAdvisor()
     {

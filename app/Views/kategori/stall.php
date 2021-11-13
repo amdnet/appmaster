@@ -133,7 +133,17 @@
                 "type": "POST",
                 "dataType": "json",
                 async: "true"
-            }
+            },
+            columnDefs: [{
+                    "className": "dt-body-center",
+                    "targets": [0],
+                    "width": "6%"
+                },
+                {
+                    "className": "dt-body-center",
+                    "targets": [3, 4, 5]
+                },
+            ]
         });
     });
 
