@@ -10,14 +10,16 @@ class Home extends BaseController
 {
     protected $serviceModel;
     protected $progressModel;
+    protected $validation;
 
     public function __construct()
     {
         $this->serviceModel = new ServiceModel();
         $this->progressModel = new ProgressModel();
+        $this->validation =  \Config\Services::validation();
     }
 
-    public function index($id)
+    public function index($id = false)
     {
         $cekID = user()->id;
         if (in_groups([1, 2])) {
@@ -28,7 +30,8 @@ class Home extends BaseController
             return view('dashboard/asuransi', $data);
         } elseif (in_groups(5)) {
             if ($cekID !== $id) {
-                return redirect()->to('home/error');
+                // return redirect()->to('home/error');
+                return redirect()->to('home/' . $cekID);
             };
             $stallModel = new \App\Models\StallModel();
 
@@ -36,6 +39,7 @@ class Home extends BaseController
                 'pageTitle' => 'Client Dashboard',
                 'controller' => 'home',
                 'situs' => $this->situs,
+                'validation' => $this->validation,
                 'detail' => $this->serviceModel->viewDetail()->where('id_client', $id)->get()->getRow(),
                 'advisor' => $this->serviceModel->viewAdvisor()->where('id_client', $id)->get()->getRow(),
                 'asuransi' => $this->serviceModel->viewAsuransi()->where('id_client', $id)->get()->getRow(),
@@ -101,7 +105,7 @@ class Home extends BaseController
                 $no++,
                 $value->p_tgl,
                 $value->stall,
-                $value->p_persen . ' %',
+                $value->p_persen . '%',
                 $value->p_note,
                 $pgs_photo,
                 $ops,
@@ -118,7 +122,12 @@ class Home extends BaseController
         $response = array();
         $id = $this->request->getPost('id_progress');
         if ($this->validation->check($id, 'required|numeric')) {
-            $data = $this->progressModel->where('id_progress', $id)->first();
+            // $data = $this->progressModel->where('id_progress', $id)->first();
+            $data = $this->progressModel
+                ->select('*, fullname, stall')
+                ->join('data_stall', 'data_stall.id_stall = data_progress.id_stall')
+                ->join('users', 'users.id = data_progress.id_users')
+                ->where('id_progress', $id)->first();
             return $this->response->setJSON($data);
         } else {
             throw new \CodeIgniter\Exceptions\PageNotFoundException();

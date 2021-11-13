@@ -275,7 +275,7 @@ class Service extends BaseController
                 $no++,
                 $value->p_tgl,
                 $value->stall,
-                $value->p_persen . ' %',
+                $value->p_persen . '%',
                 $value->p_note,
                 $pgs_photo,
                 $ops,

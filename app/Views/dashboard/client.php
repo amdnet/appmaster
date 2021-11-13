@@ -1,6 +1,8 @@
 <?= $this->extend('layout/template.php') ?>
 <?= $this->section('css') ?>
 <?php include_once "app/views/layout/tabelcss.php"; ?>
+<style>
+</style>
 <?= $this->endSection() ?>
 <?= $this->section('content') ?>
 <input type="hidden" name="idClient" value="<?= user()->id ?>">
@@ -248,7 +250,7 @@
                 <form id="photo-form" class="pl-2 pr-2">
                     <input type="hidden" id="id_progress" name="id_progress" class="form-control">
                     <img src="<?= base_url('public/progress/') ?>" class="img-fluid" id="pgs_photo">
-                    <input type="text" id="pgs_note" name="pgs_note" class="form-control" disabled>
+                    <input type="text" id="pgs_note" name="pgs_note" class="form-control text-center" disabled>
 
                 </form>
             </div>
@@ -259,100 +261,103 @@
 <!-- End Modal -->
 
 <!-- Start VIEW modal progress -->
-<div id="edit-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+<div id="view-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
-            <div class="text-center bg-warning p-2">
-                <h5 class="modal-title text-white" id="info-header-modalLabel">Edit Progress</h5>
+            <div class="text-center bg-dark p-2">
+                <h5 class="modal-title text-white" id="info-header-modalLabel">Report Progress</h5>
             </div>
 
             <div class="modal-body">
-                <form id="edit-form" class="pl-2 pr-2">
+                <form id="view-form" class="pl-2 pr-2">
+                    <input type="hidden" id="id_progress" name="id_progress" class="form-control">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
 
                                 <div class="col-md-6 mb-3">
                                     <label for="tgl_progress"> Tanggal: </label>
-                                    <div class="input-group date">
+                                    <div class="input-group">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text"><i class="fas fa-calendar-alt"></i></div>
                                         </div>
-                                        <input type="text" id="tgl_progress" name="tgl_progress" class="form-control datepicker">
+                                        <input type="text" id="tgl_progress" class="form-control" disabled>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label for="id_stall"> Location: </label>
-                                    <select id="id_stall" name="id_stall" class="form-control">
-
-                                    </select>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text"><i class="fas fa-tools"></i></div>
+                                        </div>
+                                        <input type="text" id="id_stall" class="form-control" disabled>
+                                    </div>
                                 </div>
 
-                                <div class="col-md-12 mb-3">
+                                <div class="col-md-6 mb-3">
                                     <label for="pgs_persen"> Percent: </label>
-                                    <div class="slidecontainer">
-                                        <input type="range" min="0" max="100" value="" step='10' class="slider" id="myRange" onchange="updateTextInput(this.value);" list='tickmarks'>
-                                        <div id="tickmarks">
-                                            <p>0</p>
-                                            <p>10</p>
-                                            <p>20</p>
-                                            <p>30</p>
-                                            <p>40</p>
-                                            <p>50</p>
-                                            <p>60</p>
-                                            <p>70</p>
-                                            <p>80</p>
-                                            <p>90</p>
-                                            <p>100</p>
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated" id="pgs_persen" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%">75%</div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="pgs_note"> Note: </label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text"><i class="fas fa-clipboard"></i></div>
                                         </div>
-                                        <input type="hidden" id="textRange" name="pgs_persen" value="">
+                                        <input type="text" id="pgs_note" name="pgs_note" class="form-control" disabled>
                                     </div>
                                 </div>
 
                             </div>
                         </div>
 
-                        <div class="col-md-12 mb-3">
-                            <label for="pgs_note"> Note: </label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text"><i class="fas fa-clipboard"></i></div>
-                                </div>
-                                <input type="text" id="pgs_note" name="pgs_note" class="form-control" value=" ">
-                            </div>
-                        </div>
 
                         <div class="col-md-6 mb-3">
                             <label for="Photo"> Photo: </label>
-                            <input type="hidden" name="photoLama" value="">
-                            <input type="hidden" name="photoBaru" id="photoBaru">
-                            <img src="<?= base_url('public/progress/') ?>" class="img-fluid" id="pgs_photo">
-                            <div class="custom-file form-control-sm mt-3">
-                                <input type="file" class="custom-file-input" name="pgs_photo" onchange="photoPreview()">
-                                <label class="custom-file-label" for="Photo">Ganti photo ...</label>
-                            </div>
+                            <img src="" class="img-fluid" id="pgs_photo">
                         </div>
 
-                        <div class="col-md-6 mb-3">
-                            <label for="informasi"> Informasi </label>
-                            <ul class="list-group list-group-unbordered mt-2">
-                                <li class="list-group-item">
-                                    <i class="fas fa-calendar-alt"></i>&nbsp; <b>Date Created</b> <span class="float-right"> </span>
-                                </li>
-                                <li class="list-group-item">
-                                    <i class="fas fa-calendar-alt"></i>&nbsp; <b>Date Updated</b> <span class="float-right"> </span>
-                                </li>
-                                <li class="list-group-item">
-                                    <i class="fas fa-user-edit"></i>&nbsp; <b>User Update</b> <span class="float-right"> </span>
-                                </li>
-                            </ul>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <label> Date Created: </label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text"><i class="fas fa-calendar-alt"></i></div>
+                                        </div>
+                                        <input type="text" id="created_at" class="form-control" disabled>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 mb-3">
+                                    <label> Date Updated: </label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text"><i class="fas fa-calendar-alt"></i></div>
+                                        </div>
+                                        <input type="text" id="updated_at" class="form-control" disabled>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 mb-3">
+                                    <label> User Update: </label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text"><i class="fas fa-user-edit"></i></div>
+                                        </div>
+                                        <input type="text" id="id_users" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-success" id="edit-form-btn">Update</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </form>
             </div>

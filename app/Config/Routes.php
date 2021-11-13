@@ -47,6 +47,7 @@ $routes->setAutoRoute(true);
 // $routes->addPlaceholder('uuid', '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}');
 // $routes->get('/', 'Home::index');
 // $routes->get('client/(:num)', 'Home::index/$1');
+// $routes->get('/(:num)', 'Home::index/$1'); // client dashboard
 $routes->get('home/(:num)', 'Home::index/$1'); // client dashboard
 $routes->get('users/profil/(:num)', 'Users::profil/$1'); // all profile
 $routes->get('progress', 'Progress::index');

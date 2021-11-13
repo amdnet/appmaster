@@ -16,6 +16,10 @@ table.dataTable tbody td {
   vertical-align: middle;
 }
 
+.progress {
+  height: 38px;
+}
+
 .select2-container {
   width: 100% !important;
 }
@@ -40,7 +44,7 @@ input:focus {
   font-size: 40px;
   font-weight: bold;
   transition: 0.3s;
-  color: #000;
+  color: #fff;
 }
 
 .modal-header .close:hover,
