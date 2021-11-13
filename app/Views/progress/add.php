@@ -283,7 +283,6 @@
                                         <div class="input-group-prepend">
                                             <div class="input-group-text"><i class="fas fa-car"></i></div>
                                         </div>
-                                        <input type="text" id="noMesin" name="noMesin" class="form-control" value="">
                                     </div>
                                 </div>
 
