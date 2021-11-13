@@ -366,21 +366,6 @@
 <?= $this->section('script') ?>
 <?php include_once "app/views/layout/tabeljs.php"; ?>
 <script>
-    const _R = document.querySelector('[type=range]');
-    _R.style.setProperty('--val', +_R.value);
-    _R.style.setProperty('--max', +_R.max);
-    _R.style.setProperty('--min', +_R.min);
-
-    document.documentElement.classList.add('js');
-
-    _R.addEventListener('input', e => {
-        _R.style.setProperty('--val', +_R.value);
-    }, false);
-
-    function updateTextInput(val) {
-        document.getElementById('textRange').value = val;
-    }
-
     $(function() {
         $(".datepicker").datepicker({
             format: 'yyyy-mm-dd',
